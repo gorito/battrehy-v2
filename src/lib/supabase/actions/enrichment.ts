@@ -5,6 +5,8 @@ import { supabase } from '../client';
 import { revalidatePath } from 'next/cache';
 
 // A mapping from raw scraped Bokadirekt treatment names to our 9 Bättrehy categories
+const GENERIC_BOKADIREKT_LOGO = 'c9e021de-9b06-40d5-9334-1b5fc3425431';
+
 function mapTreatmentToCategory(rawName: string): string | null {
     const name = rawName.toLowerCase();
 
@@ -48,6 +50,54 @@ function mapTreatmentToCategory(rawName: string): string | null {
     return null;
 }
 
+/**
+ * Shared logic to map raw service strings to Bättrehy categories and update the junction table.
+ */
+async function saveMappedTreatments(clinicId: string, rawServices: string[]) {
+    if (!rawServices || rawServices.length === 0) return { matchedCount: 0, matchedNames: [] };
+
+    const matchedCategories = new Set<string>();
+    rawServices.forEach(serviceName => {
+        const mappedSlug = mapTreatmentToCategory(serviceName);
+        if (mappedSlug) {
+            matchedCategories.add(mappedSlug);
+        }
+    });
+
+    if (matchedCategories.size === 0) return { matchedCount: 0, matchedNames: [] };
+
+    // Fetch our global treatments that match these slugs
+    const { data: globalTreatments, error: gtErr } = await supabase
+        .from('treatments')
+        .select('id, slug, name')
+        .in('slug', Array.from(matchedCategories));
+
+    if (gtErr || !globalTreatments || globalTreatments.length === 0) {
+        return { matchedCount: 0, matchedNames: [] };
+    }
+
+    // Prepare the Junction Table inserts
+    const inserts = globalTreatments.map((t: any) => ({
+        clinic_id: clinicId,
+        treatment_id: t.id
+    }));
+
+    // Delete existing links to avoid dupes/errors
+    await supabase.from('clinic_treatments').delete().eq('clinic_id', clinicId);
+
+    // Insert new links
+    const { error: insertErr } = await supabase.from('clinic_treatments').insert(inserts);
+
+    if (insertErr) {
+        throw new Error(`DB Error: Kunde inte spara behandlingarna: ${insertErr.message}`);
+    }
+
+    return { 
+        matchedCount: globalTreatments.length, 
+        matchedNames: globalTreatments.map((t: any) => t.name) 
+    };
+}
+
 export async function enrichClinicTreatmentsAction(clinicId: string, url: string) {
     if (!url || !url.includes('bokadirekt.se')) {
         throw new Error('Måste vara en giltig Bokadirekt-URL för att berika behandlingar.');
@@ -73,8 +123,10 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
 
         // Extract the hero image from meta tags
         let scrapedImageUrl = $('meta[property="og:image"]').attr('content') || '';
+        let scrapedPhone = '';
 
-        $('script').each((_, el) => {
+        const scripts = $('script').toArray();
+        for (const el of scripts) {
             const text = $(el).html();
             if (text && text.includes('window.__PRELOADED_STATE__ = {')) {
                 try {
@@ -94,25 +146,50 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
                         }
 
                         // Try to find a real image instead of the generic logo
-                        const betterImages = place.mainImages || place.galleryImages || place.images;
-                        if (betterImages && Array.isArray(betterImages) && betterImages.length > 0) {
-                            scrapedImageUrl = betterImages[0];
+                        // Research has shown that images are nested inside place.about
+                        const possibleImageSources = [
+                            place.about?.mainImages,
+                            place.about?.photos?.map((p: any) => p.url),
+                            place.about?.galleryImages,
+                            place.about?.images,
+                            place.mainImages,
+                            place.galleryImages,
+                            place.images,
+                            place.photos?.map((p: any) => p.url)
+                        ];
+
+                        for (const arr of possibleImageSources) {
+                            if (arr && Array.isArray(arr)) {
+                                const validImage = arr.find(img => 
+                                    img && typeof img === 'string' && !img.includes(GENERIC_BOKADIREKT_LOGO)
+                                );
+                                if (validImage) {
+                                    scrapedImageUrl = validImage;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        if (scrapedImageUrl) {
+                            console.log(`[Enrichment] Selected image: ${scrapedImageUrl}`);
                         }
 
-                            place.services.forEach((category: any) => {
+                        if (place.services) {
+                            for (const category of place.services) {
                                 if (category.services) {
-                                    category.services.forEach((service: any) => {
+                                    for (const service of category.services) {
                                         if (service.name) rawServices.add(service.name as string);
-                                    });
+                                    }
                                 }
-                            });
-                            foundData = true;
+                            }
                         }
-                    } catch (e) {
-                        console.error("Failed to parse PRELOADED_STATE JSON", e);
+                        foundData = true;
                     }
+                } catch (e) {
+                    console.error("Failed to parse PRELOADED_STATE JSON", e);
                 }
-            });
+            }
+        }
 
         const extractedServices = Array.from(rawServices);
 
@@ -124,10 +201,10 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
             throw new Error('Hittade inga behandlingar på sidan.');
         }
 
-        let scrapedPhone = '';
-        $('a[href^="tel:"]').each((_, el) => {
+        const telLinks = $('a[href^="tel:"]').toArray();
+        for (const el of telLinks) {
             if (!scrapedPhone) scrapedPhone = $(el).text().trim();
-        });
+        }
 
         // 1. Update image and description if they are missing
         const { data: currentClinic } = await supabase.from('clinics').select('primary_image_url, description, phone').eq('id', clinicId).single();
@@ -135,11 +212,10 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         const updates: any = {};
         let fieldsUpdated = [];
 
-        const genericBokadirektLogo = 'c9e021de-9b06-40d5-9334-1b5fc3425431';
         const hasNoImage = !currentClinic?.primary_image_url;
-        const hasGenericImage = currentClinic?.primary_image_url?.includes(genericBokadirektLogo);
+        const hasGenericImage = currentClinic?.primary_image_url?.includes(GENERIC_BOKADIREKT_LOGO);
 
-        if (currentClinic && (hasNoImage || hasGenericImage) && scrapedImageUrl && !scrapedImageUrl.includes(genericBokadirektLogo)) {
+        if (currentClinic && (hasNoImage || hasGenericImage) && scrapedImageUrl && !scrapedImageUrl.includes(GENERIC_BOKADIREKT_LOGO)) {
             updates.primary_image_url = scrapedImageUrl.replace('http://', 'https://');
             fieldsUpdated.push('bild');
         }
@@ -165,54 +241,16 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
 
         const bonusMsg = fieldsUpdated.length > 0 ? ` (La även till saknad ${fieldsUpdated.join(' och ')}!)` : '';
 
-        // Map them to our internal slugs
-        const matchedCategories = new Set<string>();
+        // Map and save treatments using shared logic
+        const mappingResult = await saveMappedTreatments(clinicId, extractedServices);
 
-        Array.from(rawServices).forEach(serviceName => {
-            const mappedSlug = mapTreatmentToCategory(serviceName);
-            if (mappedSlug) {
-                matchedCategories.add(mappedSlug);
-            }
-        });
-
-        if (matchedCategories.size === 0) {
+        if (mappingResult.matchedCount === 0) {
             if (Object.keys(updates).length > 0) {
                 revalidatePath('/admin/kliniker');
                 revalidatePath(`/admin/kliniker/[slug]`, 'page');
                 revalidatePath('/');
             }
             return { success: true, message: `Hittade ${rawServices.size} behandlingar på Bokadirekt, men de matchade ingen huvudkategori.${bonusMsg}` };
-        }
-
-        // 2. Fetch our global treatments that match these slugs
-        const { data: globalTreatments, error: gtErr } = await supabase
-            .from('treatments')
-            .select('id, slug, name')
-            .in('slug', Array.from(matchedCategories));
-
-        if (gtErr || !globalTreatments || globalTreatments.length === 0) {
-            if (Object.keys(updates).length > 0) {
-                revalidatePath('/admin/kliniker');
-                revalidatePath(`/admin/kliniker/[slug]`, 'page');
-                revalidatePath('/');
-            }
-            return { success: true, message: `Matchade kategorier, men kunde inte slå upp dem i vår databas.${bonusMsg}` };
-        }
-
-        // 3. Prepare the Junction Table inserts
-        const inserts = globalTreatments.map((t: any) => ({
-            clinic_id: clinicId,
-            treatment_id: t.id
-        }));
-
-        // 4. Delete existing links to avoid dupes/errors
-        await supabase.from('clinic_treatments').delete().eq('clinic_id', clinicId);
-
-        // 5. Insert new links
-        const { error: insertErr } = await supabase.from('clinic_treatments').insert(inserts);
-
-        if (insertErr) {
-            throw new Error(`DB Error: Kunde inte spara behandlingarna: ${insertErr.message}`);
         }
 
         // Revalidate the cache so the edit page checks the boxes automatically
@@ -222,8 +260,8 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
 
         return {
             success: true,
-            message: `Berikning lyckades! ${globalTreatments.length} Bättrehy-behandlingar matchades från ${rawServices.size} st på Bokadirekt.${bonusMsg}`,
-            matched: globalTreatments.map((t: any) => t.name)
+            message: `Berikning lyckades! ${mappingResult.matchedCount} Bättrehy-behandlingar matchades från ${rawServices.size} st på Bokadirekt.${bonusMsg}`,
+            matched: mappingResult.matchedNames
         };
 
     } catch (error: any) {
@@ -273,15 +311,17 @@ export async function fetchClinicMetadataAction(url: string) {
         description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || '';
         name = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
         
-        $('a[href^="tel:"]').each((_, el) => {
+        const telLinks = $('a[href^="tel:"]').toArray();
+        for (const el of telLinks) {
             if (!phone) phone = $(el).text().trim();
-        });
+        }
 
         // BOKADIREKT SPECIFIC OVERRIDES
         if (targetUrl.includes('bokadirekt.se')) {
             let foundData = false;
-            $('script').each((_, el) => {
-                if (foundData) return;
+            const bdScripts = $('script').toArray();
+            for (const el of bdScripts) {
+                if (foundData) break;
                 const text = $(el).html();
                 if (text && text.includes('window.__PRELOADED_STATE__ = {')) {
                     try {
@@ -296,23 +336,114 @@ export async function fetchClinicMetadataAction(url: string) {
                             if (place.about && place.about.description) {
                                 description = place.about.description;
                             }
-                            if (place.services) {
-                                place.services.forEach((category: any) => {
-                                    if (category.services) {
-                                        category.services.forEach((service: any) => {
-                                            if (service.name) services.push(service.name as string);
-                                        });
+                            
+                            // Try to find a real image instead of the generic logo
+                            const possibleImageSources = [
+                                place.about?.mainImages,
+                                place.about?.photos?.map((p: any) => p.url),
+                                place.about?.galleryImages,
+                                place.about?.images,
+                                place.mainImages,
+                                place.galleryImages,
+                                place.images,
+                                place.photos?.map((p: any) => p.url)
+                            ];
+
+                            for (const arr of possibleImageSources) {
+                                if (arr && Array.isArray(arr)) {
+                                    const validImage = arr.find(img => 
+                                        img && typeof img === 'string' && !img.includes(GENERIC_BOKADIREKT_LOGO)
+                                    );
+                                    if (validImage) {
+                                        image = validImage;
+                                        break;
                                     }
-                                });
+                                }
+                            }
+
+                            if (image) {
+                                console.log(`[Metadata] Selected image: ${image}`);
+                            }
+
+                            if (place.services) {
+                                for (const category of place.services) {
+                                    if (category.services) {
+                                        for (const service of category.services) {
+                                            if (service.name) services.push(service.name as string);
+                                        }
+                                    }
+                                }
                             }
                             foundData = true;
                         }
                     } catch (e) {}
                 }
-            });
+            }
             // Clean up Bokadirekt title if it picked up the meta title
             if (name.includes('| Bokadirekt')) {
                 name = name.split('|')[0].trim();
+            }
+        } else {
+            // GENERIC WEBSITE SCRAPING for services/treatments
+            const possibleTreatments = new Set<string>();
+            
+            // 1. Look for links with "behandling" or "tjanst"
+            $('a').each((_, el) => {
+                const text = $(el).text().trim();
+                const href = $(el).attr('href') || '';
+                
+                if (text && text.length > 3 && text.length < 50) {
+                    if (mapTreatmentToCategory(text) || href.includes('behandling') || href.includes('tjanster')) {
+                        // Only add if it's likely a treatment name
+                        if (mapTreatmentToCategory(text)) {
+                            possibleTreatments.add(text);
+                        }
+                    }
+                }
+            });
+
+            // 2. Look for headings that match our categories
+            $('h2, h3, h4').each((_, el) => {
+                const text = $(el).text().trim();
+                if (text && text.length > 3 && text.length < 50) {
+                    if (mapTreatmentToCategory(text)) {
+                        possibleTreatments.add(text);
+                    }
+                }
+            });
+
+            services = Array.from(possibleTreatments);
+
+            // 3. SUBPATH CHECK if nothing found on home page
+            if (services.length === 0 && (targetUrl.endsWith('.se') || targetUrl.endsWith('.se/') || targetUrl.endsWith('.com') || targetUrl.endsWith('.com/'))) {
+                const subpaths = ['behandlingar', 'tjanster', 'vara-behandlingar', 'våra-behandlingar'];
+                for (const sub of subpaths) {
+                    try {
+                        const baseUrl = targetUrl.endsWith('/') ? targetUrl : targetUrl + '/';
+                        const subUrl = baseUrl + sub;
+                        const subRes = await fetch(subUrl, { 
+                            headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' },
+                            signal: AbortSignal.timeout(5000)
+                        });
+                        if (subRes.ok) {
+                            const subHtml = await subRes.text();
+                            const $sub = cheerio.load(subHtml);
+                            const subTreatments = new Set<string>();
+                            
+                            $sub('a, h2, h3').each((_, el) => {
+                                const subText = $sub(el).text().trim();
+                                if (subText && subText.length > 3 && subText.length < 50 && mapTreatmentToCategory(subText)) {
+                                    subTreatments.add(subText);
+                                }
+                            });
+                            
+                            if (subTreatments.size > 0) {
+                                services = Array.from(subTreatments);
+                                break;
+                            }
+                        }
+                    } catch (e) {}
+                }
             }
         }
 
@@ -375,10 +506,22 @@ export async function enrichClinicFromWebsiteAction(clinicId: string, url: strin
             if (updateErr) {
                 throw new Error(`Kunde inte spara till databasen: ${updateErr.message}`);
             }
+        }
+
+        // Map and save treatments using shared logic
+        let mappingMsg = '';
+        if (services && services.length > 0) {
+            const mappingResult = await saveMappedTreatments(clinicId, services);
+            if (mappingResult.matchedCount > 0) {
+                mappingMsg = ` samt matchade ${mappingResult.matchedCount} behandlingar`;
+            }
+        }
+
+        if (Object.keys(updates).length > 0 || mappingMsg) {
             revalidatePath('/admin/kliniker');
             revalidatePath(`/admin/kliniker/[slug]`, 'page');
             revalidatePath('/');
-            return { success: true, message: `Berikade metadata (${fieldsUpdated.join(', ')}) från hemsidan.` };
+            return { success: true, message: `Berikade metadata (${fieldsUpdated.join(', ') || 'behandlingar'})${mappingMsg} från hemsidan.` };
         } else {
             return { success: true, message: `Hittade ingen ny information från hemsidan (eller fälten var redan ifyllda).` };
         }
