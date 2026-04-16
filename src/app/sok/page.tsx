@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Search, Image as ImageIcon } from 'lucide-react';
 import HomeSearch from '@/components/home/HomeSearch';
 
+export const dynamic = 'force-dynamic';
+
 export default async function SearchResultsPage({
     searchParams,
 }: {

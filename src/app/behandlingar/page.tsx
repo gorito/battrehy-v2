@@ -1,6 +1,8 @@
 import { getTreatments } from '@/lib/supabase/actions/queries';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default async function TreatmentsPage() {
     const treatments = await getTreatments();
 

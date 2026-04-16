@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import EditClinicForm from '@/components/admin/EditClinicForm';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditClinicPage({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
     const resolvedParams = await params;
     const clinic = await getClinicBySlug(resolvedParams.slug);

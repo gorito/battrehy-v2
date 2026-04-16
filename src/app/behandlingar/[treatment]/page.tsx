@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { getTreatments, getClinics } from '@/lib/supabase/actions/queries';
 import { Image as ImageIcon } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 export default async function TreatmentPage({ params }: { params: Promise<{ treatment: string }> | { treatment: string } }) {
     const resolvedParams = await params;
 

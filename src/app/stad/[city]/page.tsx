@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getCities, getClinics } from '@/lib/supabase/actions/queries';
 
+export const dynamic = 'force-dynamic';
+
 export default async function CityPage({ params }: { params: Promise<{ city: string }> | { city: string } }) {
     const resolvedParams = await params;
 

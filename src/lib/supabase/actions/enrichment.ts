@@ -7,6 +7,29 @@ import { revalidatePath } from 'next/cache';
 // A mapping from raw scraped Bokadirekt treatment names to our 9 Bättrehy categories
 const GENERIC_BOKADIREKT_LOGO = 'c9e021de-9b06-40d5-9334-1b5fc3425431';
 
+const GENERIC_IMAGE_KEYWORDS = [
+    'placeholder', 'generic', 'avatar', 'default', 'social', 'sharing', 'pixel', 'spacer', 'favicon', 'icon-'
+];
+
+/**
+ * Checks if an image URL is likely a generic placeholder or logo.
+ */
+function isGenericImage(url: string | null | undefined): boolean {
+    if (!url) return true;
+    const lowerUrl = url.toLowerCase();
+    
+    // Check for Bokadirekt generic logo
+    if (lowerUrl.includes(GENERIC_BOKADIREKT_LOGO)) return true;
+    
+    // Check for common keywords that usually indicate a non-photo image
+    if (GENERIC_IMAGE_KEYWORDS.some(keyword => lowerUrl.includes(keyword))) return true;
+    
+    // Check for common non-photo file types
+    if (lowerUrl.endsWith('.ico') || lowerUrl.endsWith('.svg')) return true;
+    
+    return false;
+}
+
 function mapTreatmentToCategory(rawName: string): string | null {
     const name = rawName.toLowerCase();
 
@@ -213,9 +236,9 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         let fieldsUpdated = [];
 
         const hasNoImage = !currentClinic?.primary_image_url;
-        const hasGenericImage = currentClinic?.primary_image_url?.includes(GENERIC_BOKADIREKT_LOGO);
+        const currentIsGeneric = isGenericImage(currentClinic?.primary_image_url);
 
-        if (currentClinic && (hasNoImage || hasGenericImage) && scrapedImageUrl && !scrapedImageUrl.includes(GENERIC_BOKADIREKT_LOGO)) {
+        if (currentClinic && (hasNoImage || currentIsGeneric) && scrapedImageUrl && !isGenericImage(scrapedImageUrl)) {
             updates.primary_image_url = scrapedImageUrl.replace('http://', 'https://');
             fieldsUpdated.push('bild');
         }
@@ -447,6 +470,60 @@ export async function fetchClinicMetadataAction(url: string) {
             }
         }
 
+        // 4. HEURISTIC IMAGE SCRAPING if meta tags are missing or generic
+        if (!image || isGenericImage(image)) {
+            const possibleImages: { url: string; score: number }[] = [];
+            
+            $('img').each((_, el) => {
+                let src = $(el).attr('src') || '';
+                const alt = $(el).attr('alt')?.toLowerCase() || '';
+                const className = $(el).attr('class')?.toLowerCase() || '';
+                const id = $(el).attr('id')?.toLowerCase() || '';
+                
+                if (!src) return;
+                
+                // Absolute URL resolution
+                if (src.startsWith('/')) {
+                    try {
+                        const urlObj = new URL(targetUrl);
+                        src = `${urlObj.origin}${src}`;
+                    } catch (e) {}
+                }
+                
+                if (!src.startsWith('http')) return;
+                
+                let score = 0;
+                
+                // Keywords that suggest a good clinic/hero image
+                const goodKeywords = ['clinic', 'hero', 'salon', 'about', 'facility', 'premises', 'interior', 'exterior', 'treatment', 'portrait'];
+                goodKeywords.forEach(kw => {
+                    if (src.toLowerCase().includes(kw) || alt.includes(kw) || className.includes(kw) || id.includes(kw)) score += 20;
+                });
+                
+                // Keywords that suggest a bad image (logo, icons, etc)
+                const badKeywords = ['logo', 'icon', 'small', 'thumb', 'avatar', 'generic', 'placeholder', 'social', 'facebook', 'instagram', 'twitter', 'linkedin'];
+                badKeywords.forEach(kw => {
+                    if (src.toLowerCase().includes(kw) || alt.includes(kw) || className.includes(kw) || id.includes(kw)) score -= 30;
+                });
+                
+                // File extension check
+                if (src.match(/\.(jpg|jpeg|png|webp)$/i)) score += 10;
+                if (src.match(/\.(svg|ico)$/i)) score -= 50;
+                
+                if (score > 10) {
+                    possibleImages.push({ url: src, score });
+                }
+            });
+            
+            if (possibleImages.length > 0) {
+                possibleImages.sort((a, b) => b.score - a.score);
+                const bestImage = possibleImages[0].url;
+                if (!isGenericImage(bestImage)) {
+                    image = bestImage;
+                }
+            }
+        }
+
         return { 
             success: true, 
             data: {
@@ -481,7 +558,9 @@ export async function enrichClinicFromWebsiteAction(clinicId: string, url: strin
         const updates: any = {};
         let fieldsUpdated = [];
 
-        if (image && !currentClinic?.primary_image_url) {
+        const currentIsGeneric = isGenericImage(currentClinic?.primary_image_url);
+
+        if (image && (currentIsGeneric || !currentClinic?.primary_image_url)) {
             updates.primary_image_url = image;
             fieldsUpdated.push('bild');
         }

@@ -3,6 +3,8 @@ import { updateTreatmentAction } from '@/lib/supabase/actions/mutations';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
+export const dynamic = 'force-dynamic';
+
 export default async function EditTreatmentPage({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
     // Next.js 15+ safely awaits params, while falling back for older versions
     const resolvedParams = await params;

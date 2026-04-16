@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { getClinicBySlug } from '@/lib/supabase/actions/queries';
 import { MapPin, Globe, Phone, Calendar } from 'lucide-react';
 
+export const dynamic = 'force-dynamic';
+
 type Props = {
     params: Promise<{ city: string, slug: string }> | { city: string, slug: string }
 };

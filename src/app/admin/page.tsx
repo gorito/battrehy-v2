@@ -2,6 +2,8 @@ import { getAdminStats } from '@/lib/supabase/actions/queries';
 import { Building2, Crown, ShieldAlert, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminDashboardPage() {
     const stats = await getAdminStats();
 
