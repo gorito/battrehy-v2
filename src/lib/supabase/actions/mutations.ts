@@ -1,9 +1,10 @@
 'use server';
 
-import { supabase } from '../client';
+import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 export async function createClinicAction(formData: FormData) {
+    const supabase = await createClient();
     // Extract form values
     const name = formData.get('name') as string;
     const city = formData.get('city') as string;
@@ -51,6 +52,7 @@ export async function createClinicAction(formData: FormData) {
 }
 
 export async function updateTreatmentAction(formData: FormData) {
+    const supabase = await createClient();
     const id = formData.get('id') as string;
     const description = formData.get('description') as string;
     const image_url = formData.get('image_url') as string;
@@ -77,6 +79,7 @@ export async function updateTreatmentAction(formData: FormData) {
 }
 
 export async function updateClinicAction(formData: FormData) {
+    const supabase = await createClient();
     const id = formData.get('id') as string;
     const slug = formData.get('slug') as string;
 
@@ -151,6 +154,7 @@ export async function updateClinicAction(formData: FormData) {
 }
 
 export async function deleteClinicAction(formData: FormData) {
+    const supabase = await createClient();
     const id = formData.get('id') as string;
 
     const { error } = await supabase

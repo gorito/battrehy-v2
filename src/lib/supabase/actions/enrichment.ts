@@ -1,7 +1,7 @@
 'use server';
 
 import * as cheerio from 'cheerio';
-import { supabase } from '../client';
+import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 
 // A mapping from raw scraped Bokadirekt treatment names to our 9 Bättrehy categories
@@ -76,7 +76,7 @@ function mapTreatmentToCategory(rawName: string): string | null {
 /**
  * Shared logic to map raw service strings to Bättrehy categories and update the junction table.
  */
-async function saveMappedTreatments(clinicId: string, rawServices: string[]) {
+async function saveMappedTreatments(supabase: any, clinicId: string, rawServices: string[]) {
     if (!rawServices || rawServices.length === 0) return { matchedCount: 0, matchedNames: [] };
 
     const matchedCategories = new Set<string>();
@@ -125,6 +125,8 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
     if (!url || !url.includes('bokadirekt.se')) {
         throw new Error('Måste vara en giltig Bokadirekt-URL för att berika behandlingar.');
     }
+
+    const supabase = await createClient();
 
     try {
         const res = await fetch(url, {
@@ -265,7 +267,7 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         const bonusMsg = fieldsUpdated.length > 0 ? ` (La även till saknad ${fieldsUpdated.join(' och ')}!)` : '';
 
         // Map and save treatments using shared logic
-        const mappingResult = await saveMappedTreatments(clinicId, extractedServices);
+        const mappingResult = await saveMappedTreatments(supabase, clinicId, extractedServices);
 
         if (mappingResult.matchedCount === 0) {
             if (Object.keys(updates).length > 0) {
@@ -545,6 +547,8 @@ export async function fetchClinicMetadataAction(url: string) {
 export async function enrichClinicFromWebsiteAction(clinicId: string, url: string) {
     if (!url) throw new Error("URL saknas");
 
+    const supabase = await createClient();
+
     try {
         const metadataRes = await fetchClinicMetadataAction(url);
         if (!metadataRes.success || !metadataRes.data) {
@@ -590,7 +594,7 @@ export async function enrichClinicFromWebsiteAction(clinicId: string, url: strin
         // Map and save treatments using shared logic
         let mappingMsg = '';
         if (services && services.length > 0) {
-            const mappingResult = await saveMappedTreatments(clinicId, services);
+            const mappingResult = await saveMappedTreatments(supabase, clinicId, services);
             if (mappingResult.matchedCount > 0) {
                 mappingMsg = ` samt matchade ${mappingResult.matchedCount} behandlingar`;
             }

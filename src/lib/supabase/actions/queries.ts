@@ -1,9 +1,10 @@
-import { supabase } from '@/lib/supabase/client';
+import { createClient } from '@/lib/supabase/server';
 import { Clinic, City, Treatment } from '../types';
 
 export async function getClinics(
     params?: { query?: string; page?: number; limit?: number }
 ): Promise<{ data: Clinic[], count: number }> {
+    const supabase = await createClient();
     const page = params?.page || 1;
     const limit = params?.limit || 50;
     const from = (page - 1) * limit;
@@ -31,7 +32,7 @@ export async function getClinics(
         return { data: [], count: 0 };
     }
 
-    const transformedData = data.map(clinic => ({
+    const transformedData = (data as any[]).map(clinic => ({
         ...clinic,
         treatments: clinic.clinic_treatments?.map((ct: any) => ct.treatments) || []
     }));
@@ -40,6 +41,7 @@ export async function getClinics(
 }
 
 export async function getFeaturedClinics(limit: number = 12): Promise<Clinic[]> {
+    const supabase = await createClient();
     const { data, error } = await supabase
         .from('clinics')
         .select(`
@@ -59,13 +61,14 @@ export async function getFeaturedClinics(limit: number = 12): Promise<Clinic[]> 
         return [];
     }
 
-    return data.map(clinic => ({
+    return (data as any[]).map(clinic => ({
         ...clinic,
         treatments: clinic.clinic_treatments?.map((ct: any) => ct.treatments) || []
     }));
 }
 
 export async function getClinicBySlug(slug: string): Promise<Clinic | null> {
+    const supabase = await createClient();
     const { data, error } = await supabase
         .from('clinics')
         .select(`
@@ -91,6 +94,7 @@ export async function getClinicBySlug(slug: string): Promise<Clinic | null> {
 }
 
 export async function getCities(): Promise<City[]> {
+    const supabase = await createClient();
     const { data, error } = await supabase
         .from('cities')
         .select('*')
@@ -104,6 +108,7 @@ export async function getCities(): Promise<City[]> {
 }
 
 export async function getUniqueCities(): Promise<string[]> {
+    const supabase = await createClient();
     const { data, error } = await supabase
         .from('clinics')
         .select('city');
@@ -121,6 +126,7 @@ export async function getUniqueCities(): Promise<string[]> {
 }
 
 export async function getTreatments(): Promise<Treatment[]> {
+    const supabase = await createClient();
     const { data, error } = await supabase
         .from('treatments')
         .select('*')
@@ -134,6 +140,7 @@ export async function getTreatments(): Promise<Treatment[]> {
 }
 
 export async function getTreatmentBySlug(slug: string): Promise<Treatment | null> {
+    const supabase = await createClient();
     const { data, error } = await supabase
         .from('treatments')
         .select('*')
@@ -146,7 +153,9 @@ export async function getTreatmentBySlug(slug: string): Promise<Treatment | null
     }
     return data;
 }
+
 export async function getAdminStats() {
+    const supabase = await createClient();
     const [total, premium, unverified] = await Promise.all([
         supabase.from('clinics').select('*', { count: 'exact', head: true }),
         supabase.from('clinics').select('*', { count: 'exact', head: true }).eq('tier', 'premium'),

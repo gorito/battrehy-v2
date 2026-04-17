@@ -14,9 +14,8 @@ export default function Navbar() {
 
                     {/* Logo Section */}
                     <div className="flex-shrink-0 flex items-center">
-                        <Link href="/" className="text-2xl font-bold flex items-center gap-2">
-                            <span className="text-rose-500">Bättre</span>
-                            <span className="text-charcoal-900">hy.se</span>
+                        <Link href="/" className="text-2xl font-bold flex items-center">
+                            <span className="text-rose-500">Bättre</span><span className="text-charcoal-900">hy.se</span>
                         </Link>
                     </div>
 
@@ -30,10 +29,6 @@ export default function Navbar() {
                         </Link>
                         <Link href="/blogg" className="text-charcoal-700 hover:text-rose-500 font-medium transition-colors">
                             Blogg
-                        </Link>
-                        <div className="text-gray-300">|</div>
-                        <Link href="/admin" className="text-charcoal-700 hover:text-rose-500 font-medium transition-colors">
-                            För Kliniker (Admin)
                         </Link>
                     </div>
 
@@ -87,13 +82,6 @@ export default function Navbar() {
                             className="block px-3 py-4 text-base font-medium text-charcoal-700 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
                         >
                             Blogg
-                        </Link>
-                        <Link 
-                            href="/admin" 
-                            onClick={() => setIsMenuOpen(false)}
-                            className="block px-3 py-4 text-base font-medium text-charcoal-700 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
-                        >
-                            För Kliniker (Admin)
                         </Link>
                         <div className="pt-4 px-3">
                             <Link
