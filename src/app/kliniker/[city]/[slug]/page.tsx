@@ -24,14 +24,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         return { title: 'Kliniken hittades inte' };
     }
 
+    const title = `${clinic.name} i ${clinic.city} | Boka hos Bättrehy.se`;
+    
     return {
-        title: `${clinic.name} i ${clinic.city} | Boka behandlingar`,
+        title: title.length > 60 ? clinic.name : title,
         description: clinic.description || `Se behandlingar och boka tid hos ${clinic.name} i ${clinic.city} på Bättrehy.se.`,
+        alternates: {
+            canonical: `/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`,
+        },
         openGraph: {
             title: `${clinic.name} - Estetiska behandlingar i ${clinic.city}`,
             description: clinic.description || `Boka tid eller läs mer om ${clinic.name}.`,
             url: `https://battrehy.se/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`,
-            images: [{ url: clinic.primary_image_url || 'https://battrehy.se/default-og.jpg' }]
+            images: [{ url: clinic.primary_image_url || 'https://battrehy.se/og-image.jpg' }]
         }
     };
 }
@@ -55,7 +60,7 @@ export default async function ClinicProfilePage({ params }: Props) {
 
     const jsonLd = {
         '@context': 'https://schema.org',
-        '@type': 'LocalBusiness',
+        '@type': 'MedicalBusiness',
         name: clinic.name,
         image: primaryImage,
         '@id': `https://battrehy.se/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`,
@@ -70,11 +75,40 @@ export default async function ClinicProfilePage({ params }: Props) {
         description: clinic.description || `Boka behandlingar på ${clinic.name} i ${clinic.city} via Bättrehy.se`,
     };
 
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: clinic.city,
+                item: `https://battrehy.se/stad/${resolvedParams.city}`
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: clinic.name,
+                item: `https://battrehy.se/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
             />
             <div className="max-w-4xl mx-auto">
                 {/* Breadcrumbs */}
@@ -108,7 +142,7 @@ export default async function ClinicProfilePage({ params }: Props) {
                                 </span>
                             )}
                         </div>
-                        <p className="text-gray-600 text-lg leading-relaxed">
+                        <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap">
                             {clinic.description || `${clinic.name} är en klinik belägen i ${clinic.city}.`}
                         </p>
                     </div>

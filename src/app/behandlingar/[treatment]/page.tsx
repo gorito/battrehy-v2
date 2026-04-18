@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTreatments, getClinics } from '@/lib/supabase/actions/queries';
@@ -5,7 +6,32 @@ import { Image as ImageIcon } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
-export default async function TreatmentPage({ params }: { params: Promise<{ treatment: string }> | { treatment: string } }) {
+type Props = {
+    params: Promise<{ treatment: string }> | { treatment: string }
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const resolvedParams = await params;
+    const treatments = await getTreatments();
+    const treatment = treatments.find(t => t.slug === resolvedParams.treatment);
+
+    if (!treatment) return { title: 'Behandling hittades inte' };
+
+    return {
+        title: `${treatment.name} i Sverige | Hitta Certifierade Kliniker`,
+        description: treatment.description || `Hitta och jämför de bästa klinikerna för ${treatment.name} i Sverige. Se priser, omdömen och boka direkt på Bättrehy.se.`,
+        alternates: {
+            canonical: `/behandlingar/${treatment.slug}`,
+        },
+        openGraph: {
+            title: `${treatment.name} - Expertkliniker i Sverige`,
+            description: `Hitta certifierade experter för ${treatment.name}.`,
+            url: `https://battrehy.se/behandlingar/${treatment.slug}`,
+        }
+    };
+}
+
+export default async function TreatmentPage({ params }: Props) {
     const resolvedParams = await params;
 
     // We fetch everything in parallel for speed. Limit set to 1000 since it is a public page rendering all.
@@ -24,8 +50,37 @@ export default async function TreatmentPage({ params }: { params: Promise<{ trea
         c => c.treatments?.some((t: any) => t.id === treatment.id)
     );
 
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Behandlingar',
+                item: 'https://battrehy.se/behandlingar'
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: treatment.name,
+                item: `https://battrehy.se/behandlingar/${treatment.slug}`
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-gray-50 p-8">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             <div className="max-w-4xl mx-auto">
                 {/* Breadcrumbs */}
                 <nav className="text-sm text-gray-500 mb-6">
@@ -59,7 +114,10 @@ export default async function TreatmentPage({ params }: { params: Promise<{ trea
                                             <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full font-bold">Verifierad</span>
                                         )}
                                     </div>
-                                    <p className="text-gray-600 mb-4">{clinic.city}</p>
+                                    <p className="text-gray-600 mb-2 truncate font-medium">{clinic.city}</p>
+                                    {clinic.description && (
+                                        <p className="text-gray-500 text-sm line-clamp-2 max-w-xl">{clinic.description}</p>
+                                    )}
                                 </div>
 
                                 <div 

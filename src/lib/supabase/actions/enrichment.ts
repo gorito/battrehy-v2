@@ -3,6 +3,7 @@
 import * as cheerio from 'cheerio';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { refineClinicDescription } from '@/lib/ai/gemini';
 
 // A mapping from raw scraped Bokadirekt treatment names to our 9 Bättrehy categories
 const GENERIC_BOKADIREKT_LOGO = 'c9e021de-9b06-40d5-9334-1b5fc3425431';
@@ -10,6 +11,75 @@ const GENERIC_BOKADIREKT_LOGO = 'c9e021de-9b06-40d5-9334-1b5fc3425431';
 const GENERIC_IMAGE_KEYWORDS = [
     'placeholder', 'generic', 'avatar', 'default', 'social', 'sharing', 'pixel', 'spacer', 'favicon', 'icon-'
 ];
+
+const SWEDISH_STOP_WORDS = ['och', 'det', 'att', 'i', 'en', 'jag', 'hon', 'som', 'han', 'på', 'den', 'med', 'var', 'sig', 'för', 'så', 'till', 'är', 'men', 'ett', 'om', 'hade', 'de', 'av', 'icke', 'mig', 'du', 'henne', 'då', 'sin', 'nu', 'har', 'inte', 'hans', 'honom', 'skulle', 'hennes', 'där', 'min', 'man', 'ej', 'vid', 'kunde', 'något', 'från', 'ut', 'när', 'efter', 'upp', 'vi', 'dem', 'vara', 'vad', 'över', 'än', 'dig', 'kan', 'sina', 'utav', 'skall', 'andra', 'själv', 'mer', 'dessa', 'någon', 'eller', 'under', 'några', 'nu', 'sedan', 'ju', 'denna', 'själva', 'omkring', 'varit', 'blivit', 'båda', 'mitt', 'vilka', 'bli', 'mina', 'vars', 'blir', 'mina', 'allt', 'vilket', 'eller', 'om', 'oss', 'skulle', 'idag', 'under', 'efter', 'kunnat', 'komma', 'skall', 'borde'];
+
+const CLINIC_KEYWORDS = ['klinik', 'behandling', 'legitimerad', 'estetisk', 'skönhet', 'specialist', 'trygghet', 'erfarenhet', 'hudvård', 'injektion', 'bokadirekt', 'vård', 'patient', 'kvalitet', 'resultat'];
+
+function scoreText(text: string): number {
+    if (!text || text.length < 50) return 0;
+    const lower = text.toLowerCase();
+    let score = 0;
+    
+    // Length score (up to 40 points)
+    score += Math.min(text.length / 50, 40);
+    
+    // Swedish language score (up to 50 points)
+    let swedishHits = 0;
+    SWEDISH_STOP_WORDS.forEach(word => {
+        if (lower.includes(' ' + word + ' ')) swedishHits++;
+    });
+    score += Math.min(swedishHits * 5, 50);
+    
+    // Clinic keyword score (up to 30 points)
+    let clinicHits = 0;
+    CLINIC_KEYWORDS.forEach(word => {
+        if (lower.includes(word)) clinicHits++;
+    });
+    score += Math.min(clinicHits * 5, 30);
+
+    return score;
+}
+
+function extractRichDescription($: cheerio.CheerioAPI): string {
+    const candidates: { text: string; score: number }[] = [];
+    
+    // Skip noisy elements
+    $('nav, footer, script, style, header, .menu, .nav, #footer, #header, .sr-only, [aria-hidden="true"], .skip-link, .top-of-page').remove();
+
+    // Look at paragraphs and divs with text
+    $('p, h1, h2, h3, h4, div, section').each((_, el) => {
+        // IMPROVED: Instead of just .text(), we use a helper to ensure spaces/periods between children
+        let text = $(el).contents().map(function() {
+            if (this.type === 'text') return $(this).text();
+            // If it's a block-like child, add a period if it doesn't have one
+            const childText = $(this).text().trim();
+            if (!childText) return '';
+            return childText + (/[.!?]$/.test(childText) ? ' ' : '. ');
+        }).get().join(' ').trim().replace(/\s+/g, ' ');
+
+        // Junk filter for common navigational residue
+        if (text.toLowerCase().includes('top of page') || text.toLowerCase().includes('bottom of page')) {
+            text = text.replace(/top of page/gi, '').replace(/bottom of page/gi, '').trim();
+        }
+
+        if (text.length > 50 && text.length < 2500) {
+            candidates.push({ text, score: scoreText(text) });
+        }
+    });
+
+    if (candidates.length === 0) return '';
+    
+    // Sort by score descending
+    candidates.sort((a, b) => b.score - a.score);
+    
+    // Return the highest scoring block if it's "good enough"
+    if (candidates[0].score > 20) {
+        return candidates[0].text;
+    }
+    
+    return '';
+}
 
 /**
  * Checks if an image URL is likely a generic placeholder or logo.
@@ -246,7 +316,7 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         }
 
         if (currentClinic && !currentClinic.description && scrapedDescription) {
-            updates.description = scrapedDescription.substring(0, 1000);
+            updates.description = scrapedDescription.substring(0, 3000);
             fieldsUpdated.push('text');
         }
 
@@ -333,12 +403,19 @@ export async function fetchClinicMetadataAction(url: string) {
             } catch (e) {}
         }
         
-        description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || '';
-        name = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
-        
         const telLinks = $('a[href^="tel:"]').toArray();
         for (const el of telLinks) {
             if (!phone) phone = $(el).text().trim();
+        }
+
+        // Try to get a rich description from the body first (prioritizing Swedish)
+        const richDesc = extractRichDescription($);
+        description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || '';
+        name = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
+        
+        // If we found a good body description, use it instead of possibly junk/English meta tags
+        if (richDesc && (scoreText(richDesc) > scoreText(description))) {
+            description = richDesc;
         }
 
         // BOKADIREKT SPECIFIC OVERRIDES
@@ -439,9 +516,9 @@ export async function fetchClinicMetadataAction(url: string) {
 
             services = Array.from(possibleTreatments);
 
-            // 3. SUBPATH CHECK if nothing found on home page
-            if (services.length === 0 && (targetUrl.endsWith('.se') || targetUrl.endsWith('.se/') || targetUrl.endsWith('.com') || targetUrl.endsWith('.com/'))) {
-                const subpaths = ['behandlingar', 'tjanster', 'vara-behandlingar', 'våra-behandlingar'];
+            // 3. SUBPATH CHECK if nothing found on home page OR if description is very short
+            if ((services.length === 0 || description.length < 100) && (targetUrl.endsWith('.se') || targetUrl.endsWith('.se/') || targetUrl.endsWith('.com') || targetUrl.endsWith('.com/'))) {
+                const subpaths = ['om-oss', 'om-kliniken', 'kliniken', 'behandlingar', 'tjanster', 'vara-behandlingar', 'våra-behandlingar'];
                 for (const sub of subpaths) {
                     try {
                         const baseUrl = targetUrl.endsWith('/') ? targetUrl : targetUrl + '/';
@@ -453,8 +530,16 @@ export async function fetchClinicMetadataAction(url: string) {
                         if (subRes.ok) {
                             const subHtml = await subRes.text();
                             const $sub = cheerio.load(subHtml);
-                            const subTreatments = new Set<string>();
                             
+                            // Try to get description if current one is weak
+                            if (description.length < 200) {
+                                const subDesc = extractRichDescription($sub);
+                                if (subDesc && scoreText(subDesc) > scoreText(description)) {
+                                    description = subDesc;
+                                }
+                            }
+
+                            const subTreatments = new Set<string>();
                             $sub('a, h2, h3').each((_, el) => {
                                 const subText = $sub(el).text().trim();
                                 if (subText && subText.length > 3 && subText.length < 50 && mapTreatmentToCategory(subText)) {
@@ -463,8 +548,7 @@ export async function fetchClinicMetadataAction(url: string) {
                             });
                             
                             if (subTreatments.size > 0) {
-                                services = Array.from(subTreatments);
-                                break;
+                                services = [...new Set([...services, ...Array.from(subTreatments)])];
                             }
                         }
                     } catch (e) {}
@@ -526,11 +610,18 @@ export async function fetchClinicMetadataAction(url: string) {
             }
         }
 
+        // NEW: AI Refinement step
+        let finalDescription = description;
+        if (description && description.length > 100) {
+            console.log(`[AI] Refining description for ${name}...`);
+            finalDescription = await refineClinicDescription(description, name);
+        }
+
         return { 
             success: true, 
             data: {
                 name: name.trim(),
-                description: description.trim().substring(0, 1000),
+                description: finalDescription.substring(0, 3000),
                 image,
                 phone: phone.substring(0, 20),
                 website: targetUrl,

@@ -1,10 +1,36 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getCities, getClinics } from '@/lib/supabase/actions/queries';
 
 export const dynamic = 'force-dynamic';
 
-export default async function CityPage({ params }: { params: Promise<{ city: string }> | { city: string } }) {
+type Props = {
+    params: Promise<{ city: string }> | { city: string }
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+    const resolvedParams = await params;
+    const cities = await getCities();
+    const city = cities.find(c => c.slug === resolvedParams.city);
+
+    if (!city) return { title: 'Stad hittades inte' };
+
+    return {
+        title: `Skönhetskliniker i ${city.name} | Hitta & Jämför`,
+        description: city.description || `Jämför de bästa skönhetsklinikerna i ${city.name}. Se omdömen, priser och boka tid direkt på Bättrehy.se.`,
+        alternates: {
+            canonical: `/stad/${city.slug}`,
+        },
+        openGraph: {
+            title: `Bästa skönhetsklinikerna i ${city.name}`,
+            description: `Hitta certifierade kliniker i ${city.name}.`,
+            url: `https://battrehy.se/stad/${city.slug}`,
+        }
+    };
+}
+
+export default async function CityPage({ params }: Props) {
     const resolvedParams = await params;
 
     // We fetch everything in parallel for speed. Limit set to 1000 since it is a public page rendering all.
@@ -18,13 +44,35 @@ export default async function CityPage({ params }: { params: Promise<{ city: str
         notFound();
     }
 
-    // Filter clinics by this city
     const cityClinics = clinics.filter(
         c => c.city.toLowerCase() === city.name.toLowerCase()
     );
 
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: city.name,
+                item: `https://battrehy.se/stad/${city.slug}`
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-gray-50 p-8">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             <div className="max-w-4xl mx-auto">
                 {/* Breadcrumbs */}
                 <nav className="text-sm text-gray-500 mb-6">
