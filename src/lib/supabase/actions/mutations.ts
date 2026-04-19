@@ -14,6 +14,7 @@ export async function createClinicAction(formData: FormData) {
     const booking_url = formData.get('booking_url') as string;
     const description = formData.get('description') as string;
     const primary_image_url = formData.get('primary_image_url') as string;
+    const is_shr_member = formData.get('is_shr_member') === 'on';
 
     // Create slug from name
     const slug = name.toLowerCase().trim().replace(/[åä]/g, 'a').replace(/ö/g, 'o').replace(/[^a-z0-9]+/g, '-');
@@ -31,7 +32,8 @@ export async function createClinicAction(formData: FormData) {
             description,
             primary_image_url: primary_image_url || null,
             tier: 'free',
-            is_verified: false
+            is_verified: false,
+            is_shr_member
         }])
         .select()
         .single();
@@ -92,6 +94,7 @@ export async function updateClinicAction(formData: FormData) {
     const description = formData.get('description') as string;
     const primary_image_url = formData.get('primary_image_url') as string;
     const is_verified = formData.get('is_verified') === 'on';
+    const is_shr_member = formData.get('is_shr_member') === 'on';
     const tier = formData.get('tier') as string;
 
     const { error } = await supabase
@@ -106,6 +109,7 @@ export async function updateClinicAction(formData: FormData) {
             description,
             primary_image_url: primary_image_url || null,
             is_verified,
+            is_shr_member,
             tier
         })
         .eq('id', id);

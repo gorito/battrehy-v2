@@ -136,10 +136,17 @@ export default async function ClinicProfilePage({ params }: Props) {
                                     Premium
                                 </span>
                             )}
-                            {clinic.is_verified && (
+                             {clinic.is_verified && (
                                 <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                                     ✓ Verifierad
                                 </span>
+                            )}
+                            {clinic.is_shr_member && (
+                                <div className="flex items-center gap-1.5 bg-rose-50 border border-rose-100 px-3 py-1 rounded-full group cursor-help transition-all hover:bg-rose-100" title="Auktoriserad Medlem SHR">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src="/shr-badge.png" alt="SHR" className="w-5 h-5 object-contain" />
+                                    <span className="text-rose-700 text-[10px] font-black uppercase tracking-tighter">SHR</span>
+                                </div>
                             )}
                         </div>
                         <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap">
@@ -264,8 +271,33 @@ export default async function ClinicProfilePage({ params }: Props) {
                                         </a>
                                     </li>
                                 )}
-                            </ul>
+                             </ul>
                         </div>
+
+                        {clinic.is_shr_member && (
+                            <div className="bg-gradient-to-br from-white to-rose-50/30 rounded-2xl p-6 border border-rose-100 relative overflow-hidden group">
+                                <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src="/shr-badge.png" alt="" className="w-32 h-32 object-contain rotate-12" />
+                                </div>
+                                <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src="/shr-badge.png" alt="SHR" className="w-6 h-6 object-contain" />
+                                    Certifiering
+                                </h3>
+                                <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                                    Denna klinik är en **Auktoriserad Medlem** i Sveriges Hudterapeuters Riksorganisation (SHR). Det innebär att personalen är välutbildad och arbetar enligt etik- och kvalitetskrav.
+                                </p>
+                                <a 
+                                    href="https://www.shr.nu" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="text-xs font-bold text-rose-600 hover:text-rose-700 underline decoration-rose-200"
+                                >
+                                    Läs mer om SHR
+                                </a>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>

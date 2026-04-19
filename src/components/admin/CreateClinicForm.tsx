@@ -217,6 +217,21 @@ export default function CreateClinicForm({ cities }: CreateClinicFormProps) {
                     </div>
                 </div>
 
+                <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                    <h3 className="font-semibold text-gray-900 mb-4">Status & Medlemskap</h3>
+                    <div className="flex items-center gap-6">
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                id="is_shr_member"
+                                name="is_shr_member"
+                                className="w-5 h-5 text-rose-500 rounded border-gray-300 focus:ring-rose-500"
+                            />
+                            <label htmlFor="is_shr_member" className="text-sm font-medium text-gray-700">Auktoriserad SHR-medlem?</label>
+                        </div>
+                    </div>
+                </div>
+
                 <div className="pt-4 border-t border-gray-100 flex justify-end">
                     <button
                         type="submit"

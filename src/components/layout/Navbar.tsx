@@ -48,7 +48,7 @@ export default function Navbar() {
                     {/* Logo Section */}
                     <div className="flex-shrink-0 flex items-center">
                         <Link href="/" className="text-2xl font-bold flex items-center">
-                            <span className="text-rose-500">Bättre</span><span className="text-charcoal-900">hy - LIVE</span>
+                            <span className="text-rose-500">Bättre</span><span className="text-charcoal-900">hy.se</span>
                         </Link>
                     </div>
 

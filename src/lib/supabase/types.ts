@@ -36,6 +36,7 @@ export interface Clinic {
     tier: Tier;
     primary_image_url?: string;
     is_verified: boolean;
+    is_shr_member: boolean;
     extracted_services?: string[];
     created_at: string;
     updated_at: string;

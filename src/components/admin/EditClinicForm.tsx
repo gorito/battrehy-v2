@@ -208,6 +208,17 @@ export default function EditClinicForm({ clinic, uniqueCities }: EditClinicFormP
                         <div className="flex items-center gap-2 pt-6">
                             <input
                                 type="checkbox"
+                                id="is_shr_member"
+                                name="is_shr_member"
+                                defaultChecked={clinic.is_shr_member}
+                                className="w-5 h-5 text-rose-500 rounded border-gray-300 focus:ring-rose-500"
+                            />
+                            <label htmlFor="is_shr_member" className="text-sm font-medium text-gray-700">Auktoriserad SHR-medlem?</label>
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-6">
+                            <input
+                                type="checkbox"
                                 id="is_verified"
                                 name="is_verified"
                                 defaultChecked={clinic.is_verified}
