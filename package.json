@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "enrich-all": "npx tsx scripts/enrich_all_intelligent.ts"
+    "enrich-all": "npx tsx scripts/enrich_all_intelligent.ts",
+    "backup": "npx tsx scripts/backup_data.ts"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
