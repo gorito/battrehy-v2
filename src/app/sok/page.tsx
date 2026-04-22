@@ -2,6 +2,14 @@ import { getClinics } from '@/lib/supabase/actions/queries';
 import Link from 'next/link';
 import { Search, Image as ImageIcon } from 'lucide-react';
 import HomeSearch from '@/components/home/HomeSearch';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Sökresultat | Bättrehy.se',
+    robots: {
+        index: false,
+    },
+};
 
 export const dynamic = 'force-dynamic';
 

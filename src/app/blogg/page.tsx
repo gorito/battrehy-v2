@@ -1,3 +1,13 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Blogg | Bättrehy.se - Artiklar om skönhet & behandlingar',
+    description: 'Snart lanserar vi vår blogg med guider, tips och artiklar om skönhet, hudvård och estetiska behandlingar.',
+    alternates: {
+        canonical: '/blogg',
+    },
+};
+
 export default function BlogLandingPage() {
     return (
         <main className="min-h-screen bg-gray-50 p-8 pb-24 flex flex-col items-center justify-center text-center">

@@ -17,7 +17,10 @@ export const metadata: Metadata = {
   },
   description: "Jämför och boka estetiska behandlingar hos certifierade och verifierade kliniker i hela Sverige. Bättrehy.se är din guide till skönhet och välmående.",
   alternates: {
-    canonical: "/",
+    canonical: "https://battrehy.se",
+  },
+  verification: {
+    google: "0qFq1JR89-wZQKGcJuWVXU4a51qk9-M2wGQxqdpGwvA",
   },
   openGraph: {
     type: "website",
