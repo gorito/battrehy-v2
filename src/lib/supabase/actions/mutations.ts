@@ -153,13 +153,16 @@ export async function updateClinicAction(formData: FormData) {
     revalidatePath('/admin/kliniker');
     revalidatePath(`/kliniker/${city}/${slug}`);
 
-    const { redirect } = await import('next/navigation');
-    redirect('/admin/kliniker');
+    return { success: true };
 }
 
 export async function deleteClinicAction(formData: FormData) {
     const supabase = await createClient();
     const id = formData.get('id') as string;
+
+    if (!id) return { success: false, error: 'Klinik-ID saknas' };
+
+    console.log(`[Admin] Attempting to delete clinic: ${id}`);
 
     const { error } = await supabase
         .from('clinics')
@@ -167,11 +170,46 @@ export async function deleteClinicAction(formData: FormData) {
         .eq('id', id);
 
     if (error) {
-        console.error('Error deleting clinic:', error);
+        console.error('Error deleting clinic:', {
+            id,
+            message: error.message,
+            details: error.details,
+            hint: error.hint,
+            code: error.code
+        });
+        return { success: false, error: error.message };
+    }
+
+    console.log(`[Admin] Successfully deleted clinic: ${id}`);
+
+    revalidatePath('/admin/kliniker');
+    return { success: true };
+}
+
+export async function updateCityAction(formData: FormData) {
+    const supabase = await createClient();
+    const id = formData.get('id') as string;
+    const name = formData.get('name') as string;
+    const description = formData.get('description') as string;
+
+    const { error } = await supabase
+        .from('cities')
+        .update({
+            name,
+            description: description || null
+        })
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error updating city:', error);
         throw new Error(error.message);
     }
 
-    revalidatePath('/admin/kliniker');
+    revalidatePath('/admin/stader');
+    // Also revalidate the public city page
+    const slug = name.toLowerCase().replace(/[åä]/g, 'a').replace(/ö/g, 'o').replace(/[^a-z0-9]+/g, '-');
+    revalidatePath(`/kliniker/${slug}`);
+
     const { redirect } = await import('next/navigation');
-    redirect('/admin/kliniker');
+    redirect('/admin/stader');
 }

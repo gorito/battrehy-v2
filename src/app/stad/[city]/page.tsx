@@ -1,7 +1,9 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { getCities, getClinics } from '@/lib/supabase/actions/queries';
+import { getCities, getClinics, getUniqueCities } from '@/lib/supabase/actions/queries';
+import { slugifyCity } from '@/lib/utils';
+import { City } from '@/lib/supabase/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,21 +13,36 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
-    const cities = await getCities();
-    const city = cities.find(c => c.slug === resolvedParams.city);
+    const [cities, uniqueCityNames] = await Promise.all([getCities(), getUniqueCities()]);
+    
+    // Try to find the city in our cities table first
+    let city: Partial<City> | undefined = cities.find(c => slugifyCity(c.name) === resolvedParams.city);
+    
+    // If not found in cities table, check if it exists in clinics by name
+    if (!city) {
+        const cityName = uniqueCityNames.find(name => slugifyCity(name) === resolvedParams.city);
+        if (cityName) {
+            city = {
+                name: cityName,
+                slug: slugifyCity(cityName),
+            };
+        }
+    }
 
     if (!city) return { title: 'Stad hittades inte' };
+
+    const displaySlug = slugifyCity(city.name!);
 
     return {
         title: `Skönhetskliniker i ${city.name} | Hitta & Jämför`,
         description: city.description || `Jämför de bästa skönhetsklinikerna i ${city.name}. Se omdömen, priser och boka tid direkt på Bättrehy.se.`,
         alternates: {
-            canonical: `/stad/${city.slug}`,
+            canonical: `/stad/${displaySlug}`,
         },
         openGraph: {
             title: `Bästa skönhetsklinikerna i ${city.name}`,
             description: `Hitta certifierade kliniker i ${city.name}.`,
-            url: `https://battrehy.se/stad/${city.slug}`,
+            url: `https://battrehy.se/stad/${displaySlug}`,
         }
     };
 }
@@ -33,20 +50,37 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CityPage({ params }: Props) {
     const resolvedParams = await params;
 
-    // We fetch everything in parallel for speed. Limit set to 1000 since it is a public page rendering all.
-    const [cities, clinicsResponse] = await Promise.all([getCities(), getClinics({ limit: 1000 })]);
+    // Use a high limit for public rendering
+    const [cities, clinicsResponse, uniqueCityNames] = await Promise.all([
+        getCities(), 
+        getClinics({ limit: 1000 }),
+        getUniqueCities()
+    ]);
     const clinics = clinicsResponse.data;
 
-    // Try to find the city in our real data
-    const city = cities.find(c => c.slug === resolvedParams.city);
+    // Try to find the city in our cities table first
+    let city: Partial<City> | undefined = cities.find(c => slugifyCity(c.name) === resolvedParams.city);
+    
+    // If not found in cities table, check if it exists in clinics by name
+    if (!city) {
+        const cityName = uniqueCityNames.find(name => slugifyCity(name) === resolvedParams.city);
+        if (cityName) {
+            city = {
+                name: cityName,
+                slug: slugifyCity(cityName),
+            };
+        }
+    }
 
     if (!city) {
         notFound();
     }
 
     const cityClinics = clinics.filter(
-        c => c.city.toLowerCase() === city.name.toLowerCase()
+        c => c.city.toLowerCase() === city!.name!.toLowerCase()
     );
+
+    const displaySlug = slugifyCity(city.name!);
 
     const breadcrumbLd = {
         '@context': 'https://schema.org',
@@ -62,7 +96,7 @@ export default async function CityPage({ params }: Props) {
                 '@type': 'ListItem',
                 position: 2,
                 name: city.name,
-                item: `https://battrehy.se/stad/${city.slug}`
+                item: `https://battrehy.se/stad/${displaySlug}`
             }
         ]
     };
@@ -95,7 +129,7 @@ export default async function CityPage({ params }: Props) {
                                 <div>
                                     <div className="flex items-center gap-3 mb-2">
                                         <h2 className="text-xl font-bold text-gray-900">
-                                            <Link href={`/kliniker/${city.slug}/${clinic.slug}`} className="hover:text-primary">
+                                            <Link href={`/kliniker/${displaySlug}/${clinic.slug}`} className="hover:text-primary">
                                                 {clinic.name}
                                             </Link>
                                         </h2>

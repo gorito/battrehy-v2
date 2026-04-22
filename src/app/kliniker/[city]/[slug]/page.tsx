@@ -25,17 +25,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     const title = `${clinic.name} i ${clinic.city} | Boka hos Bättrehy.se`;
+    const canonicalUrl = `/kliniker/${clinicCitySlug}/${clinic.slug}`;
     
     return {
         title: title.length > 60 ? clinic.name : title,
         description: clinic.description || `Se behandlingar och boka tid hos ${clinic.name} i ${clinic.city} på Bättrehy.se.`,
         alternates: {
-            canonical: `/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`,
+            canonical: canonicalUrl,
         },
         openGraph: {
             title: `${clinic.name} - Estetiska behandlingar i ${clinic.city}`,
             description: clinic.description || `Boka tid eller läs mer om ${clinic.name}.`,
-            url: `https://battrehy.se/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`,
+            url: `https://battrehy.se${canonicalUrl}`,
             images: [{ url: clinic.primary_image_url || 'https://battrehy.se/og-image.jpg' }]
         }
     };
@@ -141,13 +142,7 @@ export default async function ClinicProfilePage({ params }: Props) {
                                     ✓ Verifierad
                                 </span>
                             )}
-                            {clinic.is_shr_member && (
-                                <div className="flex items-center gap-1.5 bg-rose-50 border border-rose-100 px-3 py-1 rounded-full group cursor-help transition-all hover:bg-rose-100" title="Auktoriserad Medlem SHR">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src="/shr-badge.png" alt="SHR" className="w-5 h-5 object-contain" />
-                                    <span className="text-rose-700 text-[10px] font-black uppercase tracking-tighter">SHR</span>
-                                </div>
-                            )}
+
                         </div>
                         <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap">
                             {clinic.description || `${clinic.name} är en klinik belägen i ${clinic.city}.`}
@@ -275,26 +270,25 @@ export default async function ClinicProfilePage({ params }: Props) {
                         </div>
 
                         {clinic.is_shr_member && (
-                            <div className="bg-gradient-to-br from-white to-rose-50/30 rounded-2xl p-6 border border-rose-100 relative overflow-hidden group">
-                                <div className="absolute -right-4 -top-4 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity">
+                            <div className="bg-white rounded-2xl p-6 border border-rose-100 relative overflow-hidden group shadow-sm text-center">
+                                <div className="mb-4 flex justify-center">
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src="/shr-badge.png" alt="" className="w-32 h-32 object-contain rotate-12" />
+                                    <img src="/shr-logo.jpg" alt="SHR Auktoriserad Medlem" className="w-44 h-auto object-contain transition-transform group-hover:scale-105 duration-500" />
                                 </div>
-                                <h3 className="font-bold text-gray-900 mb-3 flex items-center gap-2">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src="/shr-badge.png" alt="SHR" className="w-6 h-6 object-contain" />
-                                    Certifiering
+                                <h3 className="font-bold text-gray-900 mb-3">
+                                    Certifierad Hudterapeut
                                 </h3>
-                                <p className="text-sm text-gray-600 leading-relaxed mb-4">
+                                <p className="text-sm text-gray-600 leading-relaxed mb-4 text-left">
                                     Denna klinik är en **Auktoriserad Medlem** i Sveriges Hudterapeuters Riksorganisation (SHR). Det innebär att personalen är välutbildad och arbetar enligt etik- och kvalitetskrav.
                                 </p>
                                 <a 
                                     href="https://www.shr.nu" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
-                                    className="text-xs font-bold text-rose-600 hover:text-rose-700 underline decoration-rose-200"
+                                    className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-600 hover:text-rose-700 underline decoration-rose-200"
                                 >
                                     Läs mer om SHR
+                                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
                                 </a>
                             </div>
                         )}

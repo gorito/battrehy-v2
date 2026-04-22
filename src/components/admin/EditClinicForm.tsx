@@ -5,15 +5,18 @@ import Link from 'next/link';
 import { updateClinicAction } from '@/lib/supabase/actions/mutations';
 import ImageUpload from '@/components/admin/ImageUpload';
 import EnrichButton from '@/components/admin/EnrichButton';
+import DeleteClinicButton from '@/components/admin/DeleteClinicButton';
 
 interface EditClinicFormProps {
     clinic: any;
     uniqueCities: string[];
+    returnPage?: string;
 }
 
-export default function EditClinicForm({ clinic, uniqueCities }: EditClinicFormProps) {
+export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' }: EditClinicFormProps) {
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState('');
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -26,6 +29,11 @@ export default function EditClinicForm({ clinic, uniqueCities }: EditClinicFormP
             if (res && res.error) {
                 setSaveError(res.error);
                 setIsSaving(false);
+            } else {
+                setShowSuccess(true);
+                setIsSaving(false);
+                // Hide success message after 5 seconds
+                setTimeout(() => setShowSuccess(false), 5000);
             }
         } catch (error: any) {
             setSaveError(error.message || 'Ett oväntat fel uppstod vid uppdatering.');
@@ -35,6 +43,15 @@ export default function EditClinicForm({ clinic, uniqueCities }: EditClinicFormP
 
     return (
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+            {showSuccess && (
+                <div className="bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl p-4 mb-6 flex items-center justify-between animate-in fade-in slide-in-from-top-2 duration-300">
+                    <div className="flex items-center gap-2">
+                        <span className="text-xl">✅</span>
+                        <p className="font-semibold text-sm">Ändringarna har sparats!</p>
+                    </div>
+                </div>
+            )}
+
             {saveError && (
                 <div className="bg-red-50 border border-red-200 text-red-800 rounded-xl p-4 mb-6">
                     <p className="font-semibold text-sm">{saveError}</p>
@@ -238,13 +255,27 @@ export default function EditClinicForm({ clinic, uniqueCities }: EditClinicFormP
                         Visa publik profilsida &rarr;
                     </Link>
 
-                    <button
-                        type="submit"
-                        disabled={isSaving}
-                        className="bg-primary hover:bg-primary-hover disabled:opacity-50 text-white px-8 py-3 rounded-lg font-bold transition-colors"
-                    >
-                        {isSaving ? 'Sparar...' : 'Spara Ändringar'}
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <Link
+                            href={`/admin/kliniker?page=${returnPage}`}
+                            className="bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg font-bold transition-colors"
+                        >
+                            Stäng
+                        </Link>
+                        <DeleteClinicButton 
+                            id={clinic.id} 
+                            clinicName={clinic.name} 
+                            variant="button" 
+                            redirectOnDelete={true} 
+                        />
+                        <button
+                            type="submit"
+                            disabled={isSaving}
+                            className="bg-primary hover:bg-primary-hover disabled:opacity-50 text-white px-8 py-3 rounded-lg font-bold transition-colors shadow-lg shadow-rose-100"
+                        >
+                            {isSaving ? 'Sparar...' : 'Spara Ändringar'}
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

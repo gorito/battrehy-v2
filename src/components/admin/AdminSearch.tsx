@@ -13,6 +13,10 @@ export default function AdminSearch() {
 
     // Debounced search
     useEffect(() => {
+        // Only trigger search if the term has changed relative to the URL
+        const currentQuery = searchParams.get('query') || '';
+        if (term === currentQuery) return;
+
         const delayDebounceFn = setTimeout(() => {
             startTransition(() => {
                 const params = new URLSearchParams(searchParams.toString());
@@ -21,7 +25,7 @@ export default function AdminSearch() {
                 } else {
                     params.delete('query');
                 }
-                params.delete('page'); // Reset pagination on search
+                params.delete('page'); // Reset pagination ON SEARCH
                 router.push(`${pathname}?${params.toString()}`);
             });
         }, 300);

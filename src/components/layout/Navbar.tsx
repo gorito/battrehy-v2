@@ -63,6 +63,9 @@ export default function Navbar() {
                         <Link href="/blogg" className="text-charcoal-700 hover:text-rose-500 font-medium transition-colors">
                             Blogg
                         </Link>
+                        <Link href="/kontakt" className="text-charcoal-700 hover:text-rose-500 font-medium transition-colors">
+                            Kontakt
+                        </Link>
                     </div>
 
                     {/* CTA Button */}
@@ -123,6 +126,13 @@ export default function Navbar() {
                             className="block px-3 py-4 text-base font-medium text-charcoal-700 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
                         >
                             Blogg
+                        </Link>
+                        <Link 
+                            href="/kontakt" 
+                            onClick={() => setIsMenuOpen(false)}
+                            className="block px-3 py-4 text-base font-medium text-charcoal-700 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-all"
+                        >
+                            Kontakt
                         </Link>
                     </div>
                 </div>

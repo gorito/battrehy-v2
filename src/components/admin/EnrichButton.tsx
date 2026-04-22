@@ -33,7 +33,12 @@ export default function EnrichButton({ clinicId, bookingUrl }: Props) {
 
         try {
             const result = await enrichClinicTreatmentsAction(clinicId, urlToUse);
-            setMessage({ text: result.message, isError: false });
+            setMessage({ text: result.message, isError: !result.success });
+            
+            if (result.success) {
+                // Refresh to show the new description/phone etc in the form
+                setTimeout(() => window.location.reload(), 2000);
+            }
         } catch (error: any) {
             setMessage({ text: error.message || 'Något gick fel', isError: true });
         } finally {

@@ -6,8 +6,17 @@ import EditClinicForm from '@/components/admin/EditClinicForm';
 
 export const dynamic = 'force-dynamic';
 
-export default async function EditClinicPage({ params }: { params: Promise<{ slug: string }> | { slug: string } }) {
+export default async function EditClinicPage({ 
+    params, 
+    searchParams 
+}: { 
+    params: Promise<{ slug: string }> | { slug: string },
+    searchParams?: Promise<{ returnPage?: string }> | { returnPage?: string }
+}) {
     const resolvedParams = await params;
+    const resolvedSearchParams = await searchParams;
+    const returnPage = resolvedSearchParams?.returnPage || '1';
+    
     const clinic = await getClinicBySlug(resolvedParams.slug);
 
     if (!clinic) {
@@ -21,11 +30,11 @@ export default async function EditClinicPage({ params }: { params: Promise<{ slu
     return (
         <div className="max-w-2xl mx-auto">
             <div className="mb-6 flex items-center gap-4">
-                <Link href="/admin/kliniker" className="text-gray-500 hover:text-primary">&larr; Tillbaka</Link>
+                <Link href={`/admin/kliniker?page=${returnPage}`} className="text-gray-500 hover:text-primary">&larr; Tillbaka</Link>
                 <h1 className="text-3xl font-bold text-gray-900">Redigera {clinic.name}</h1>
             </div>
 
-            <EditClinicForm clinic={clinic} uniqueCities={uniqueCities} />
+            <EditClinicForm clinic={clinic} uniqueCities={uniqueCities} returnPage={returnPage} />
         </div>
     );
 }

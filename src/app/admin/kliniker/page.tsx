@@ -65,7 +65,7 @@ export default async function AdminClinicsPage({
                                 clinics.map((clinic: Clinic) => (
                                     <tr key={clinic.id} className="hover:bg-gray-50 transition-colors">
                                         <td className="p-4">
-                                            <Link href={`/admin/kliniker/${clinic.slug}`} className="block w-12 h-12 rounded-lg bg-gray-100 border border-gray-100 overflow-hidden flex items-center justify-center relative group">
+                                            <Link href={`/admin/kliniker/${clinic.slug}?returnPage=${currentPage}`} className="block w-12 h-12 rounded-lg bg-gray-100 border border-gray-100 overflow-hidden flex items-center justify-center relative group">
                                                 {clinic.primary_image_url ? (
                                                     <img 
                                                         src={clinic.primary_image_url} 
@@ -81,7 +81,7 @@ export default async function AdminClinicsPage({
                                             </Link>
                                         </td>
                                         <td className="p-4 text-nowrap">
-                                            <Link href={`/admin/kliniker/${clinic.slug}`} className="group">
+                                            <Link href={`/admin/kliniker/${clinic.slug}?returnPage=${currentPage}`} className="group">
                                                 <div className="font-bold text-gray-900 group-hover:text-primary transition-colors group-hover:underline">{clinic.name}</div>
                                                 <div className="text-sm text-gray-500 hidden sm:block">{clinic.slug}</div>
                                             </Link>
@@ -113,7 +113,7 @@ export default async function AdminClinicsPage({
                                             )}
                                         </td>
                                         <td className="p-4 flex gap-2 justify-end">
-                                            <Link href={`/admin/kliniker/${clinic.slug}`} className="p-2 text-gray-400 hover:text-primary transition-colors">
+                                            <Link href={`/admin/kliniker/${clinic.slug}?returnPage=${currentPage}`} className="p-2 text-gray-400 hover:text-primary transition-colors">
                                                 <Edit size={18} />
                                             </Link>
                                             <DeleteClinicButton id={clinic.id} clinicName={clinic.name} />

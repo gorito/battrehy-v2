@@ -17,8 +17,18 @@ const SWEDISH_STOP_WORDS = ['och', 'det', 'att', 'i', 'en', 'jag', 'hon', 'som',
 const CLINIC_KEYWORDS = ['klinik', 'behandling', 'legitimerad', 'estetisk', 'skönhet', 'specialist', 'trygghet', 'erfarenhet', 'hudvård', 'injektion', 'bokadirekt', 'vård', 'patient', 'kvalitet', 'resultat'];
 
 function scoreText(text: string): number {
-    if (!text || text.length < 50) return 0;
+    if (!text || text.length < 20) return 0;
     const lower = text.toLowerCase();
+    
+    // Check for common the generic placeholders or AI-generated defaults
+    const isGeneric = 
+        lower.includes('is a professional beauty and aesthetic clinic') || 
+        lower.includes('visit us for high-quality treatments') ||
+        lower.includes('här kan du boka tid') ||
+        lower.includes('vår klinik erbjuder');
+        
+    if (isGeneric) return 5; // Very low score for generic placeholders
+
     let score = 0;
     
     // Length score (up to 40 points)
@@ -202,11 +212,15 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         const res = await fetch(url, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)' // Prevent basic bot blocking
-            }
+            },
+            signal: AbortSignal.timeout(15000) // Increased timeout for slower profiles
         });
 
         if (!res.ok) {
-            throw new Error(`Kunde inte ladda Bokadirekt (Status: ${res.status})`);
+            return { 
+                success: false, 
+                message: `Kunde inte ladda Bokadirekt (Status: ${res.status}). Det kan vara en tillfällig störning eller så är länken ogiltig.` 
+            };
         }
 
         const html = await res.text();
@@ -215,86 +229,125 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         let rawServices = new Set<string>();
         let foundData = false;
         let scrapedDescription = '';
-
-        // Extract the hero image from meta tags
-        let scrapedImageUrl = $('meta[property="og:image"]').attr('content') || '';
+        let scrapedImageUrl = '';
         let scrapedPhone = '';
 
-        const scripts = $('script').toArray();
-        for (const el of scripts) {
-            const text = $(el).html();
-            if (text && text.includes('window.__PRELOADED_STATE__ = {')) {
-                try {
-                    const jsonStart = text.indexOf('{');
-                    const jsonEnd = text.lastIndexOf('}') + 1;
-                    const jsonStr = text.substring(jsonStart, jsonEnd);
-                    const data = JSON.parse(jsonStr);
+        // Check for "unverified" profile links which lack the PRELOADED_STATE JSON
+        if (url.includes('/profile-places/')) {
+            const title = $('meta[property="og:title"]').attr('content') || $('title').text() || '';
+            const description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || '';
+            
+            return {
+                success: false,
+                message: `Detta är en obekräftad profil på Bokadirekt (${title}). Den saknar tyvärr det tekniska dataformat som krävs för att automatiskt hämta behandlingar och telefonnummer.`
+            };
+        }
 
-                    const place = data?.place;
-                    if (place) {
-                        if (place.about && place.about.description) {
-                            scrapedDescription = place.about.description;
-                        }
-                        
-                        if (place.contact && place.contact.phone) {
-                            scrapedPhone = place.contact.phone;
-                        }
+        // Extract the hero image from meta tags
+        scrapedImageUrl = $('meta[property="og:image"]').attr('content') || '';
 
-                        // Try to find a real image instead of the generic logo
-                        // Research has shown that images are nested inside place.about
-                        const possibleImageSources = [
-                            place.about?.mainImages,
-                            place.about?.photos?.map((p: any) => p.url),
-                            place.about?.galleryImages,
-                            place.about?.images,
-                            place.mainImages,
-                            place.galleryImages,
-                            place.images,
-                            place.photos?.map((p: any) => p.url)
-                        ];
-
-                        for (const arr of possibleImageSources) {
-                            if (arr && Array.isArray(arr)) {
-                                const validImage = arr.find(img => 
-                                    img && typeof img === 'string' && !img.includes(GENERIC_BOKADIREKT_LOGO)
-                                );
-                                if (validImage) {
-                                    scrapedImageUrl = validImage;
+        // BOKADIREKT SPECIFIC EXTRACTION
+        if (url.includes('bokadirekt.se')) {
+            const scripts = $('script').toArray();
+            for (const el of scripts) {
+                const text = $(el).html();
+                if (text && text.includes('__PRELOADED_STATE__')) {
+                    try {
+                        const jsonStart = text.indexOf('{');
+                        // Use balanced brace matching to extract the JSON object, 
+                        // as there might be more JS after the initialization.
+                        let jsonStr = '';
+                        let depth = 0;
+                        for (let i = jsonStart; i < text.length; i++) {
+                            if (text[i] === '{') depth++;
+                            else if (text[i] === '}') {
+                                depth--;
+                                if (depth === 0) {
+                                    jsonStr = text.substring(jsonStart, i + 1);
                                     break;
                                 }
                             }
                         }
-                        
-                        if (scrapedImageUrl) {
-                            console.log(`[Enrichment] Selected image: ${scrapedImageUrl}`);
-                        }
 
-                        if (place.services) {
-                            for (const category of place.services) {
-                                if (category.services) {
-                                    for (const service of category.services) {
-                                        if (service.name) rawServices.add(service.name as string);
+                        if (!jsonStr) continue;
+                        const data = JSON.parse(jsonStr);
+
+                        const place = data?.place;
+                        if (place) {
+                            // Merge description and welcomeText for a richer result
+                            const bdDesc = place.about?.description || '';
+                            const bdWelcome = place.about?.welcomeText || '';
+                            
+                            // Heuristic: If welcome text is unique and long enough, prepend it
+                            if (bdWelcome && bdWelcome.length > 20 && !bdDesc.includes(bdWelcome.substring(0, 20))) {
+                                scrapedDescription = `${bdWelcome}\n\n${bdDesc}`.trim();
+                            } else {
+                                scrapedDescription = bdDesc || bdWelcome;
+                            }
+
+                            if (place.contact && place.contact.phone) {
+                                scrapedPhone = place.contact.phone;
+                            }
+
+                            const possibleImageSources = [
+                                place.about?.mainImages,
+                                place.about?.photos?.map((p: any) => p.url),
+                                place.about?.galleryImages,
+                                place.about?.images,
+                                place.mainImages,
+                                place.galleryImages,
+                                place.images,
+                                place.photos?.map((p: any) => p.url)
+                            ];
+
+                            for (const arr of possibleImageSources) {
+                                if (arr && Array.isArray(arr)) {
+                                    const validImage = arr.find(img => 
+                                        img && typeof img === 'string' && !img.includes(GENERIC_BOKADIREKT_LOGO)
+                                    );
+                                    if (validImage) {
+                                        scrapedImageUrl = validImage;
+                                        break;
                                     }
                                 }
                             }
+
+                            if (place.services) {
+                                for (const category of place.services) {
+                                    if (category.services) {
+                                        for (const service of category.services) {
+                                            if (service.name) rawServices.add(service.name as string);
+                                        }
+                                    }
+                                }
+                            }
+                            foundData = true;
                         }
-                        foundData = true;
+                    } catch (e) {
+                        console.error("Failed to parse Bokadirekt state", e);
                     }
-                } catch (e) {
-                    console.error("Failed to parse PRELOADED_STATE JSON", e);
                 }
             }
         }
 
+        if (!foundData || rawServices.size === 0) {
+            // Fallback: If we didn't find JSON data, let's at least see if there are any <h3>/<h4> or list items that look like services
+            const headings = $('h3, h4, .service-name, .treatment-title').toArray();
+            for (const h of headings) {
+                const text = $(h).text().trim();
+                if (text.length > 3 && text.length < 60) rawServices.add(text);
+            }
+            
+            if (rawServices.size === 0) {
+                return { 
+                    success: false, 
+                    message: 'Kunde inte hitta några behandlingar eller detaljerad information på denna sida. Bokadirekt-sidan kan ha ett format som ännu inte stöds.' 
+                };
+            }
+            foundData = true; // Proceed with scraped headings as raw services
+        }
+
         const extractedServices = Array.from(rawServices);
-
-        if (!foundData) {
-            throw new Error('Kunde inte hitta behandlingsdata på sidan.');
-        }
-
-        if (rawServices.size === 0) {
-            throw new Error('Hittade inga behandlingar på sidan.');
-        }
 
         const telLinks = $('a[href^="tel:"]').toArray();
         for (const el of telLinks) {
@@ -315,9 +368,26 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
             fieldsUpdated.push('bild');
         }
 
-        if (currentClinic && !currentClinic.description && scrapedDescription) {
-            updates.description = scrapedDescription.substring(0, 3000);
-            fieldsUpdated.push('text');
+        const currentDescription = currentClinic?.description || '';
+        const currentDescScore = scoreText(currentDescription);
+        const newDescScore = scoreText(scrapedDescription);
+
+        // Update description if it's currently very poor OR if the new one is much better
+        if (scrapedDescription && (currentDescScore < 20 || newDescScore > currentDescScore * 1.2)) {
+            console.log(`[Enrichment] Updating description. Old score: ${currentDescScore}, New score: ${newDescScore}`);
+            
+            // AI Refinement for better formatting
+            let finalDescription = scrapedDescription;
+            try {
+                const { data: clinicNameData } = await supabase.from('clinics').select('name').eq('id', clinicId).single();
+                const clinicName = clinicNameData?.name || 'Kliniken';
+                finalDescription = await refineClinicDescription(scrapedDescription, clinicName);
+            } catch (e) {
+                console.warn("[AI] Refinement failed, using raw description", e);
+            }
+            
+            updates.description = finalDescription.substring(0, 3000);
+            fieldsUpdated.push(currentDescription ? 'uppdaterad text' : 'text');
         }
 
         if (currentClinic && !currentClinic.phone && scrapedPhone) {
@@ -361,7 +431,10 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
 
     } catch (error: any) {
         console.error('Enrichment failed:', error);
-        throw new Error(error.message || 'Något gick fel vid berikningen.');
+        return {
+            success: false,
+            message: error.message || 'Ett oväntat fel uppstod vid berikningen.'
+        };
     }
 }
 
@@ -425,18 +498,39 @@ export async function fetchClinicMetadataAction(url: string) {
             for (const el of bdScripts) {
                 if (foundData) break;
                 const text = $(el).html();
-                if (text && text.includes('window.__PRELOADED_STATE__ = {')) {
+                if (text && text.includes('__PRELOADED_STATE__')) {
                     try {
                         const jsonStart = text.indexOf('{');
-                        const jsonEnd = text.lastIndexOf('}') + 1;
-                        const jsonStr = text.substring(jsonStart, jsonEnd);
+                        // Use balanced brace matching to extract the JSON object, 
+                        // as there might be more JS after the initialization.
+                        let jsonStr = '';
+                        let depth = 0;
+                        for (let i = jsonStart; i < text.length; i++) {
+                            if (text[i] === '{') depth++;
+                            else if (text[i] === '}') {
+                                depth--;
+                                if (depth === 0) {
+                                    jsonStr = text.substring(jsonStart, i + 1);
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (!jsonStr) continue;
                         const data = JSON.parse(jsonStr);
 
                         const place = data?.place;
                         if (place) {
                             if (place.name) name = place.name;
-                            if (place.about && place.about.description) {
-                                description = place.about.description;
+                            
+                            // Merge description and welcomeText
+                            const bdDesc = place.about?.description || '';
+                            const bdWelcome = place.about?.welcomeText || '';
+                            
+                            if (bdWelcome && bdWelcome.length > 20 && !bdDesc.includes(bdWelcome.substring(0, 20))) {
+                                description = `${bdWelcome}\n\n${bdDesc}`.trim();
+                            } else {
+                                description = bdDesc || bdWelcome;
                             }
                             
                             // Try to find a real image instead of the generic logo
@@ -463,10 +557,6 @@ export async function fetchClinicMetadataAction(url: string) {
                                 }
                             }
 
-                            if (image) {
-                                console.log(`[Metadata] Selected image: ${image}`);
-                            }
-
                             if (place.services) {
                                 for (const category of place.services) {
                                     if (category.services) {
@@ -478,7 +568,9 @@ export async function fetchClinicMetadataAction(url: string) {
                             }
                             foundData = true;
                         }
-                    } catch (e) {}
+                    } catch (e) {
+                        console.error("Failed to parse Bokadirekt metadata", e);
+                    }
                 }
             }
             // Clean up Bokadirekt title if it picked up the meta title

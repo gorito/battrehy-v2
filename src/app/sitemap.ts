@@ -1,14 +1,16 @@
 import { MetadataRoute } from 'next';
-import { getClinics, getTreatments, getCities } from '@/lib/supabase/actions/queries';
+import { getClinics, getTreatments, getCities, getUniqueCities } from '@/lib/supabase/actions/queries';
+import { slugifyCity } from '@/lib/utils';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://battrehy.se';
 
     // Fetch all dynamic content in parallel
-    const [clinicsResponse, treatments, cities] = await Promise.all([
+    const [clinicsResponse, treatments, dbCities, uniqueCityNames] = await Promise.all([
         getClinics({ limit: 2000 }), // High limit for sitemap
         getTreatments(),
-        getCities()
+        getCities(),
+        getUniqueCities()
     ]);
 
     const clinics = clinicsResponse.data;
@@ -22,12 +24,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/blogg`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
     ];
 
-    const clinicPages: MetadataRoute.Sitemap = clinics.map((clinic) => ({
-        url: `${baseUrl}/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`,
-        lastModified: new Date(clinic.updated_at || clinic.created_at),
-        changeFrequency: 'weekly',
-        priority: 0.7,
-    }));
+    const clinicPages: MetadataRoute.Sitemap = clinics.map((clinic) => {
+        // Use slugifyCity to ensure ASCII slugs consistent with Google requirements
+        const citySlug = slugifyCity(clinic.city);
+        
+        return {
+            url: `${baseUrl}/kliniker/${citySlug}/${clinic.slug}`,
+            lastModified: new Date(clinic.updated_at || clinic.created_at),
+            changeFrequency: 'weekly',
+            priority: 0.7,
+        };
+    });
 
     const treatmentPages: MetadataRoute.Sitemap = treatments.map((treatment) => ({
         url: `${baseUrl}/behandlingar/${treatment.slug}`,
@@ -36,8 +43,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.8,
     }));
 
-    const cityPages: MetadataRoute.Sitemap = cities.map((city) => ({
-        url: `${baseUrl}/stad/${city.slug}`,
+    // Generate city pages for EVERY unique city found in clinics OR in the cities table
+    // This ensures no city page is missing from Google's index
+    const allCityNames = Array.from(new Set([
+        ...dbCities.map(c => c.name),
+        ...uniqueCityNames
+    ]));
+
+    const cityPages: MetadataRoute.Sitemap = allCityNames.map((cityName) => ({
+        url: `${baseUrl}/stad/${slugifyCity(cityName)}`,
         lastModified: new Date(),
         changeFrequency: 'weekly',
         priority: 0.8,

@@ -107,6 +107,21 @@ export async function getCities(): Promise<City[]> {
     return data;
 }
 
+export async function getCityBySlug(slug: string): Promise<City | null> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('cities')
+        .select('*')
+        .eq('slug', slug)
+        .single();
+
+    if (error) {
+        console.error('Error fetching city by slug:', error);
+        return null;
+    }
+    return data;
+}
+
 export async function getUniqueCities(): Promise<string[]> {
     const supabase = await createClient();
     const { data, error } = await supabase
