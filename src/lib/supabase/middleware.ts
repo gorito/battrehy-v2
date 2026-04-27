@@ -43,7 +43,7 @@ export async function updateSession(request: NextRequest) {
     }
 
     // restrict to specific email
-    const ALLOWED_EMAILS = ['info@gorito.com'];
+    const ALLOWED_EMAILS = ['info@battrehy.se', 'info@gorito.com'];
     if (!user.email || !ALLOWED_EMAILS.includes(user.email)) {
       console.warn(`Unauthorized access attempt to /admin by ${user.email}`);
       const url = request.nextUrl.clone()

@@ -89,11 +89,11 @@ export default function Footer() {
                         <h3 className="text-charcoal-900 font-bold mb-6">Kontakt</h3>
                         <ul className="space-y-4">
                             <li>
-                                <a href="mailto:info@gorito.com" className="flex items-center gap-3 text-gray-500 hover:text-rose-500 transition-colors text-sm group">
+                                <a href="mailto:info@battrehy.se" className="flex items-center gap-3 text-gray-500 hover:text-rose-500 transition-colors text-sm group">
                                     <div className="p-2 bg-rose-50 text-rose-500 rounded-lg group-hover:bg-rose-100 transition-colors">
                                         <Mail size={16} />
                                     </div>
-                                    info@gorito.com
+                                    info@battrehy.se
                                 </a>
                             </li>
                             <li className="flex items-center gap-3 text-gray-500 text-sm">

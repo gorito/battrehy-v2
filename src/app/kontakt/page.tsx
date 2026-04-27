@@ -25,7 +25,7 @@ export default function KontaktPage() {
                     </div>
                     <h1 className="text-3xl font-bold text-charcoal-900">Tack för ditt meddelande!</h1>
                     <p className="text-gray-600 leading-relaxed">
-                        Vi har tagit emot ditt ärende och kommer att återkomma till dig på <strong>info@gorito.com</strong> så snart som möjligt.
+                        Vi har tagit emot ditt ärende och kommer att återkomma till dig på <strong>info@battrehy.se</strong> så snart som möjligt.
                     </p>
                     <button 
                         onClick={() => setStatus('idle')}
@@ -68,8 +68,8 @@ export default function KontaktPage() {
                             </div>
                             <h3 className="text-xl font-bold text-charcoal-900 mb-2">E-post</h3>
                             <p className="text-gray-500 mb-4 text-sm">För generella frågor och samarbeten.</p>
-                            <a href="mailto:info@gorito.com" className="text-rose-500 font-bold hover:underline">
-                                info@gorito.com
+                            <a href="mailto:info@battrehy.se" className="text-rose-500 font-bold hover:underline">
+                                info@battrehy.se
                             </a>
                         </div>
 
@@ -80,7 +80,7 @@ export default function KontaktPage() {
                                 <p className="text-gray-300 text-sm leading-relaxed mb-6">
                                     Vill du att din klinik ska synas på Bättrehy.se? Kontakta oss för att höra mer om våra företagspaket.
                                 </p>
-                                <a href="mailto:info@gorito.com" className="inline-flex items-center gap-2 bg-white text-charcoal-900 px-6 py-3 rounded-xl font-bold hover:bg-rose-50 transition-colors">
+                                <a href="mailto:info@battrehy.se" className="inline-flex items-center gap-2 bg-white text-charcoal-900 px-6 py-3 rounded-xl font-bold hover:bg-rose-50 transition-colors">
                                     Bli partner <ArrowRight size={18} />
                                 </a>
                             </div>
