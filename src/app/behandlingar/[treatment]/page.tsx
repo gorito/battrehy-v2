@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTreatments, getClinics } from '@/lib/supabase/actions/queries';
 import { Image as ImageIcon } from 'lucide-react';
+import { createClient } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,9 +18,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     if (!treatment) return { title: 'Behandling hittades inte' };
 
+    const supabase = await createClient();
+    const { count } = await supabase.from('clinics').select('id', { count: 'exact', head: true }).contains('extracted_services', [treatment.name]);
+
     return {
-        title: `${treatment.name} i Sverige | Hitta Certifierade Kliniker`,
-        description: treatment.description || `Hitta och jämför de bästa klinikerna för ${treatment.name} i Sverige. Se priser, omdömen och boka direkt på Bättrehy.se.`,
+        title: `${treatment.name} – ${count || ''} Kliniker i Sverige | Bättrehy.se`,
+        description: treatment.description || `Hitta och jämför ${count ? `de ${count} ` : ''}bästa klinikerna för ${treatment.name} i Sverige. Se priser, omdömen och boka direkt på Bättrehy.se.`,
         alternates: {
             canonical: `/behandlingar/${treatment.slug}`,
         },
@@ -90,7 +94,7 @@ export default async function TreatmentPage({ params }: Props) {
                 </nav>
 
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                    Kliniker som erbjuder {treatment.name}
+                    Bästa klinikerna för {treatment.name} i Sverige
                 </h1>
                 <p className="text-lg text-gray-700 mb-12">
                     {treatment.description || `Läs mer om ${treatment.name} och hitta certifierade experter nära dig.`}

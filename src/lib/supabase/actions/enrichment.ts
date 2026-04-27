@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio';
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { refineClinicDescription } from '@/lib/ai/gemini';
+import { importExternalImage } from '../storage';
 
 // A mapping from raw scraped Bokadirekt treatment names to our 9 Bättrehy categories
 const GENERIC_BOKADIREKT_LOGO = 'c9e021de-9b06-40d5-9334-1b5fc3425431';
@@ -360,12 +361,17 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         const updates: any = {};
         let fieldsUpdated = [];
 
+        const isExternal = currentClinic?.primary_image_url && !currentClinic.primary_image_url.includes('supabase.co');
         const hasNoImage = !currentClinic?.primary_image_url;
         const currentIsGeneric = isGenericImage(currentClinic?.primary_image_url);
 
-        if (currentClinic && (hasNoImage || currentIsGeneric) && scrapedImageUrl && !isGenericImage(scrapedImageUrl)) {
-            updates.primary_image_url = scrapedImageUrl.replace('http://', 'https://');
-            fieldsUpdated.push('bild');
+        if (scrapedImageUrl && !isGenericImage(scrapedImageUrl)) {
+            // Only update if: 1. No image, 2. Current is generic, or 3. Current is external (to host it)
+            if (hasNoImage || currentIsGeneric || isExternal) {
+                const hostedUrl = await importExternalImage(scrapedImageUrl.replace('http://', 'https://'));
+                updates.primary_image_url = hostedUrl;
+                fieldsUpdated.push('bild');
+            }
         }
 
         const currentDescription = currentClinic?.description || '';
@@ -745,11 +751,14 @@ export async function enrichClinicFromWebsiteAction(clinicId: string, url: strin
         const updates: any = {};
         let fieldsUpdated = [];
 
+        const isExternal = currentClinic?.primary_image_url && !currentClinic.primary_image_url.includes('supabase.co');
         const currentIsGeneric = isGenericImage(currentClinic?.primary_image_url);
 
-        if (image && (currentIsGeneric || !currentClinic?.primary_image_url)) {
-            updates.primary_image_url = image;
-            fieldsUpdated.push('bild');
+        if (image && !isGenericImage(image)) {
+            if (currentIsGeneric || !currentClinic?.primary_image_url || isExternal) {
+                updates.primary_image_url = await importExternalImage(image);
+                fieldsUpdated.push('bild');
+            }
         }
 
         if (description && !currentClinic?.description) {

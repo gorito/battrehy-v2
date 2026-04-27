@@ -140,6 +140,23 @@ export async function getUniqueCities(): Promise<string[]> {
     return uniqueCities as string[];
 }
 
+export async function getCityClinicCounts(): Promise<Record<string, number>> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('clinics')
+        .select('city');
+
+    if (error || !data) return {};
+
+    const counts: Record<string, number> = {};
+    data.forEach(c => {
+        if (c.city) {
+            counts[c.city] = (counts[c.city] || 0) + 1;
+        }
+    });
+    return counts;
+}
+
 export async function getTreatments(): Promise<Treatment[]> {
     const supabase = await createClient();
     const { data, error } = await supabase

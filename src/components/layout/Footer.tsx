@@ -7,7 +7,7 @@ export default function Footer() {
     return (
         <footer className="bg-white border-t border-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-12">
                     
                     {/* Brand Section */}
                     <div className="space-y-6">
@@ -42,6 +42,28 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link href="/kontakt" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Kontakt</Link>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* Popular Cities */}
+                    <div>
+                        <h3 className="text-charcoal-900 font-bold mb-6">Städer</h3>
+                        <ul className="space-y-4">
+                            <li>
+                                <Link href="/kliniker/stockholm" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Stockholm</Link>
+                            </li>
+                            <li>
+                                <Link href="/kliniker/goteborg" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Göteborg</Link>
+                            </li>
+                            <li>
+                                <Link href="/kliniker/malmo" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Malmö</Link>
+                            </li>
+                            <li>
+                                <Link href="/kliniker/uppsala" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Uppsala</Link>
+                            </li>
+                            <li>
+                                <Link href="/kliniker/vasteras" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Västerås</Link>
                             </li>
                         </ul>
                     </div>

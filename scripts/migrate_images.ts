@@ -1,130 +1,121 @@
 import { createClient } from '@supabase/supabase-js';
 import * as dotenv from 'dotenv';
-import { resolve } from 'path';
+import { randomUUID } from 'crypto';
 
-// Load env
-dotenv.config({ path: resolve(process.cwd(), '.env.local') });
+dotenv.config({ path: '.env.local' });
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!; // Anon key allows uploads based on our UI code
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 if (!supabaseUrl || !supabaseKey) {
-    console.error("Missing credentials");
+    console.error('Missing Supabase environment variables');
     process.exit(1);
 }
 
-const s = createClient(supabaseUrl, supabaseKey);
+const supabase = createClient(supabaseUrl, supabaseKey);
 
-const OLD_URL_PREFIX = 'https://uxuhmizabvduptruonnr.supabase.co/storage/v1/object/public/company-images/';
+async function importExternalImage(url: string, folder: string = 'clinics'): Promise<string> {
+    if (!url) return url;
+    if (url.includes('supabase.co/storage/v1/object/public/')) return url;
+    if (!url.startsWith('http')) return url;
 
-async function migrateImages() {
-    console.log("Starting image migration from old bucket to new bucket...");
-
-    // 1. Process Treatments
-    console.log("\n--- Processing Treatments ---");
-    const { data: treatments, error: errT } = await s.from('treatments').select('id, name, image_url');
-    if (errT) throw errT;
-
-    let updatedT = 0;
-    for (const t of treatments) {
-        if (t.image_url && t.image_url.startsWith(OLD_URL_PREFIX)) {
-            console.log(`Migrating treatment: ${t.name}`);
-            try {
-                // Fetch the image from the old bucket
-                const response = await fetch(t.image_url);
-                if (!response.ok) {
-                    console.error(`Failed to download ${t.image_url}: ${response.statusText}`);
-                    continue;
-                }
-                const blob = await response.blob();
-                
-                // Extract relative path from the url (e.g. services/service-1772657469675.jpg)
-                const relativePath = t.image_url.replace(OLD_URL_PREFIX, '');
-
-                // Upload to the new bucket
-                const { error: uploadError } = await s.storage
-                    .from('company-images')
-                    .upload(relativePath, blob, { upsert: true });
-
-                if (uploadError) {
-                    console.error(`Failed to upload ${relativePath}:`, uploadError);
-                    continue;
-                }
-
-                // Get new public URL
-                const { data: { publicUrl } } = s.storage.from('company-images').getPublicUrl(relativePath);
-
-                // Update row
-                const { error: updateError } = await s.from('treatments')
-                    .update({ image_url: publicUrl })
-                    .eq('id', t.id);
-
-                if (updateError) {
-                    console.error("Failed to update db row for", t.name, updateError);
-                } else {
-                    console.log(`✅ Success: ${t.name}`);
-                    updatedT++;
-                }
-
-            } catch(e: any) {
-                console.error("Error on", t.name, e.message);
+    try {
+        const response = await fetch(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
             }
+        });
+
+        if (!response.ok) return url;
+
+        const buffer = await response.arrayBuffer();
+        const contentType = response.headers.get('content-type') || 'image/jpeg';
+        
+        let ext = 'jpg';
+        if (contentType.includes('png')) ext = 'png';
+        else if (contentType.includes('webp')) ext = 'webp';
+        
+        const urlExt = url.split('.').pop()?.split(/[?#]/)[0];
+        if (urlExt && ['jpg', 'jpeg', 'png', 'webp'].includes(urlExt.toLowerCase())) {
+            ext = urlExt.toLowerCase();
         }
-    }
-    console.log(`Finished integrating ${updatedT} treatment images.`);
 
-    // 2. Process Clinics
-    console.log("\n--- Processing Clinics ---");
-    // Fetch clinics where primary_image_url starts with old url
-    const { data: clinics, error: errC } = await s.from('clinics')
-        .select('id, name, primary_image_url')
-        .not('primary_image_url', 'is', null);
+        const fileName = `${randomUUID()}.${ext}`;
+        const filePath = folder ? `${folder}/${fileName}` : fileName;
 
-    if (errC) throw errC;
+        const { error: uploadError } = await supabase.storage
+            .from('company-images')
+            .upload(filePath, buffer, {
+                contentType,
+                upsert: true
+            });
 
-    let updatedC = 0;
-    for (const c of clinics) {
-        if (c.primary_image_url && c.primary_image_url.startsWith(OLD_URL_PREFIX)) {
-            console.log(`Migrating clinic: ${c.name}`);
-            try {
-                const response = await fetch(c.primary_image_url);
-                if (!response.ok) {
-                    console.error(`Failed to download ${c.primary_image_url}: ${response.statusText}`);
-                    continue;
-                }
-                const blob = await response.blob();
-                
-                const relativePath = c.primary_image_url.replace(OLD_URL_PREFIX, '');
-
-                const { error: uploadError } = await s.storage
-                    .from('company-images')
-                    .upload(relativePath, blob, { upsert: true });
-
-                if (uploadError) {
-                    console.error(`Failed to upload ${relativePath}:`, uploadError);
-                    continue;
-                }
-
-                const { data: { publicUrl } } = s.storage.from('company-images').getPublicUrl(relativePath);
-
-                const { error: updateError } = await s.from('clinics')
-                    .update({ primary_image_url: publicUrl })
-                    .eq('id', c.id);
-
-                if (updateError) {
-                    console.error("Failed to update db row for", c.name, updateError);
-                } else {
-                    console.log(`✅ Success: ${c.name}`);
-                    updatedC++;
-                }
-            } catch(e: any) {
-                console.error("Error on", c.name, e.message);
-            }
+        if (uploadError) {
+            console.error(`Error uploading ${url}:`, uploadError);
+            return url;
         }
-    }
-    console.log(`Finished integrating ${updatedC} clinic images.`);
 
-    console.log("\nMigration Complete!");
+        const { data: { publicUrl } } = supabase.storage
+            .from('company-images')
+            .getPublicUrl(filePath);
+
+        return publicUrl;
+    } catch (e) {
+        console.error(`Failed to import ${url}:`, e);
+        return url;
+    }
 }
 
-migrateImages().catch(console.error);
+async function migrate() {
+    console.log('Starting image migration...');
+
+    // 1. Migrate primary_image_url in clinics
+    const { data: clinics, error: clinicErr } = await supabase
+        .from('clinics')
+        .select('id, name, primary_image_url');
+
+    if (clinicErr) {
+        console.error('Error fetching clinics:', clinicErr);
+        return;
+    }
+
+    console.log(`Found ${clinics.length} clinics.`);
+
+    for (const clinic of clinics) {
+        if (clinic.primary_image_url && !clinic.primary_image_url.includes('supabase.co')) {
+            console.log(`Importing primary image for ${clinic.name}...`);
+            const newUrl = await importExternalImage(clinic.primary_image_url);
+            if (newUrl !== clinic.primary_image_url) {
+                await supabase.from('clinics').update({ primary_image_url: newUrl }).eq('id', clinic.id);
+                console.log(`Updated ${clinic.name}`);
+            }
+        }
+    }
+
+    // 2. Migrate gallery images
+    const { data: images, error: imageErr } = await supabase
+        .from('clinic_images')
+        .select('id, url');
+
+    if (imageErr) {
+        console.error('Error fetching gallery images:', imageErr);
+        return;
+    }
+
+    console.log(`Found ${images.length} gallery images.`);
+
+    for (const img of images) {
+        if (img.url && !img.url.includes('supabase.co')) {
+            console.log(`Importing gallery image ${img.id}...`);
+            const newUrl = await importExternalImage(img.url);
+            if (newUrl !== img.url) {
+                await supabase.from('clinic_images').update({ url: newUrl }).eq('id', img.id);
+                console.log(`Updated gallery image ${img.id}`);
+            }
+        }
+    }
+
+    console.log('Migration finished!');
+}
+
+migrate();

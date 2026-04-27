@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { importExternalImage } from '../storage';
 
 export async function createClinicAction(formData: FormData) {
     const supabase = await createClient();
@@ -30,7 +31,7 @@ export async function createClinicAction(formData: FormData) {
             website,
             booking_url,
             description,
-            primary_image_url: primary_image_url || null,
+            primary_image_url: primary_image_url ? await importExternalImage(primary_image_url) : null,
             tier: 'free',
             is_verified: false,
             is_shr_member
@@ -107,7 +108,7 @@ export async function updateClinicAction(formData: FormData) {
             website,
             booking_url,
             description,
-            primary_image_url: primary_image_url || null,
+            primary_image_url: primary_image_url ? await importExternalImage(primary_image_url) : null,
             is_verified,
             is_shr_member,
             tier
@@ -130,7 +131,7 @@ export async function updateClinicAction(formData: FormData) {
             if (imgUrl && imgUrl.trim() !== '') {
                 galleryImages.push({
                     clinic_id: id,
-                    url: imgUrl.trim(),
+                    url: await importExternalImage(imgUrl.trim()),
                     sort_order: i
                 });
             }
