@@ -22,8 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const { count } = await supabase.from('clinics').select('id', { count: 'exact', head: true }).contains('extracted_services', [treatment.name]);
 
     return {
-        title: `${treatment.name} – ${count || ''} Kliniker i Sverige | Bättrehy.se`,
-        description: treatment.description || `Hitta och jämför ${count ? `de ${count} ` : ''}bästa klinikerna för ${treatment.name} i Sverige. Se priser, omdömen och boka direkt på Bättrehy.se.`,
+        title: `${treatment.name} – Hitta kliniker nära dig | Bättrehy.se`,
+        description: `Jämför och hitta de bästa klinikerna för ${treatment.name.toLowerCase()} i Sverige. Certifierade kliniker, enkelt att boka.`,
         alternates: {
             canonical: `/behandlingar/${treatment.slug}`,
         },

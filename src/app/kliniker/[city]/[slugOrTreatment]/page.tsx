@@ -57,8 +57,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (clinicCitySlug !== citySlug) return { title: 'Sidan hittades inte' };
 
     return {
-        title: `${clinic.name} i ${clinic.city} | Boka hos Bättrehy.se`,
-        description: clinic.description || `Se behandlingar och boka tid hos ${clinic.name} i ${clinic.city} på Bättrehy.se.`,
+        title: `${clinic.name} i ${clinic.city} – Boka behandling | Bättrehy.se`,
+        description: `Läs mer om ${clinic.name} i ${clinic.city} och boka din behandling enkelt via Bättrehy.se.`,
         alternates: {
             canonical: `/kliniker/${clinicCitySlug}/${clinic.slug}`,
         },
