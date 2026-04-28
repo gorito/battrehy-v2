@@ -109,11 +109,11 @@ export default function Footer() {
                 {/* Bottom Bar */}
                 <div className="mt-16 pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
                     <p className="text-gray-400 text-xs text-center md:text-left">
-                        © {currentYear} Bättrehy.se. Alla rättigheter förbehållna.
+                        © {currentYear} battrehy.se. Alla rättigheter förbehållna.
                     </p>
                     <div className="flex gap-6">
                         <Link href="/om-oss" className="text-gray-400 hover:text-gray-600 text-xs transition-colors">Om oss</Link>
-                        <Link href="#" className="text-gray-400 hover:text-gray-600 text-xs transition-colors">Användarvillkor</Link>
+                        <Link href="/anvandarvillkor" className="text-gray-400 hover:text-gray-600 text-xs transition-colors">Användarvillkor</Link>
                         <Link href="#" className="text-gray-400 hover:text-gray-600 text-xs transition-colors">Integritetspolicy</Link>
                     </div>
                 </div>
