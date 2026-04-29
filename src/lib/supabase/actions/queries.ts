@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Clinic, City, Treatment } from '../types';
 
 export async function getClinics(
-    params?: { query?: string; page?: number; limit?: number }
+    params?: { query?: string; page?: number; limit?: number; locationCity?: string }
 ): Promise<{ data: Clinic[], count: number }> {
     const supabase = await createClient();
     const page = params?.page || 1;
@@ -11,7 +11,10 @@ export async function getClinics(
     const to = from + limit - 1;
 
     let query = supabase
-        .from('clinics')
+        .rpc('search_clinics', {
+            p_query: params?.query || '',
+            p_location_city: params?.locationCity || ''
+        })
         .select(`
             *,
             clinic_treatments (
@@ -19,12 +22,7 @@ export async function getClinics(
             )
         `, { count: 'exact' });
 
-    if (params?.query) {
-        query = query.or(`name.ilike.%${params.query}%,city.ilike.%${params.query}%`);
-    }
-
     const { data, count, error } = await query
-        .order('created_at', { ascending: false })
         .range(from, to);
 
     if (error) {
@@ -40,16 +38,23 @@ export async function getClinics(
     return { data: transformedData, count: count || 0 };
 }
 
-export async function getFeaturedClinics(limit: number = 12): Promise<Clinic[]> {
+export async function getFeaturedClinics(limit: number = 12, city?: string): Promise<Clinic[]> {
     const supabase = await createClient();
-    const { data, error } = await supabase
+    
+    let query = supabase
         .from('clinics')
         .select(`
             *,
             clinic_treatments (
                 treatments (*)
             )
-        `)
+        `);
+
+    if (city) {
+        query = query.ilike('city', city);
+    }
+
+    const { data, error } = await query
         // tier starts with v (verified), p (premium), or f (free)
         // descending order puts them in exact priority order v > p > f
         .order('tier', { ascending: false })

@@ -78,7 +78,7 @@ export default function KontaktPage() {
                             <div className="relative z-10">
                                 <h3 className="text-xl font-bold mb-4 italic">Klinikägare?</h3>
                                 <p className="text-gray-300 text-sm leading-relaxed mb-6">
-                                    Vill du att din klinik ska synas på Bättrehy.se? Kontakta oss för att höra mer om våra företagspaket.
+                                    Vill du att din klinik ska synas på battrehy.se? Kontakta oss för att höra mer om våra företagspaket.
                                 </p>
                                 <a href="mailto:info@battrehy.se" className="inline-flex items-center gap-2 bg-white text-charcoal-900 px-6 py-3 rounded-xl font-bold hover:bg-rose-50 transition-colors">
                                     Bli partner <ArrowRight size={18} />

@@ -18,7 +18,7 @@ async function main() {
         .from('clinics')
         .select('id, name, city, website, primary_image_url, description, phone')
         .is('primary_image_url', null)
-        .limit(3);
+        .limit(100);
 
     if (error || !clinics || clinics.length === 0) {
         console.error('No clinics found or error:', error);

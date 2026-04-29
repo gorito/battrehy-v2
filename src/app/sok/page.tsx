@@ -2,10 +2,12 @@ import { getClinics } from '@/lib/supabase/actions/queries';
 import Link from 'next/link';
 import { Search, Image as ImageIcon } from 'lucide-react';
 import HomeSearch from '@/components/home/HomeSearch';
+import LocationPill from '@/components/search/LocationPill';
 import { Metadata } from 'next';
+import { headers } from 'next/headers';
 
 export const metadata: Metadata = {
-    title: 'Sökresultat | Bättrehy.se',
+    title: 'Sökresultat',
     robots: {
         index: false,
     },
@@ -16,14 +18,33 @@ export const dynamic = 'force-dynamic';
 export default async function SearchResultsPage({
     searchParams,
 }: {
-    searchParams?: Promise<{ q?: string }> | { q?: string };
+    searchParams?: Promise<{ q?: string; city?: string }> | { q?: string; city?: string };
 }) {
     const resolvedParams = await searchParams;
     const query = resolvedParams?.q || '';
+    let locationCity = resolvedParams?.city || '';
+
+    // Fallback to Vercel IP header if no explicit city is provided
+    if (!locationCity) {
+        const headersList = await headers();
+        const vercelCity = headersList.get('x-vercel-ip-city');
+        if (vercelCity) {
+            locationCity = decodeURIComponent(vercelCity);
+        }
+    }
 
     // Use the existing getClinics function which handles text search on name/city
     // We limit to 100 for public search to keep it fast
-    const { data: clinics } = await getClinics({ query, limit: 100 });
+    const { data: clinics } = await getClinics({ query, locationCity, limit: 100 });
+
+    // Determine if there are zero local matches
+    let isLocalEmpty = false;
+    if (locationCity && clinics.length > 0) {
+        // Since matching clinics get rank 0, if the first clinic isn't from the requested city, there are none
+        if (clinics[0].city?.toLowerCase() !== locationCity.toLowerCase()) {
+            isLocalEmpty = true;
+        }
+    }
 
     return (
         <main className="min-h-screen bg-gray-50 flex flex-col">
@@ -36,6 +57,8 @@ export default async function SearchResultsPage({
             </div>
 
             <div className="max-w-4xl mx-auto w-full px-4 pb-16">
+                <LocationPill initialCity={locationCity} isLocalEmpty={isLocalEmpty} />
+
                 <div className="mb-6 flex justify-between items-end">
                     <h2 className="text-2xl font-bold text-gray-900">
                         {query ? `Resultat för "${query}"` : 'Alla kliniker'}

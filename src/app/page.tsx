@@ -1,25 +1,52 @@
 import Link from 'next/link';
-import { getTreatments, getFeaturedClinics, getUniqueCities, getCityClinicCounts } from '@/lib/supabase/actions/queries';
+import { getTreatments, getFeaturedClinics } from '@/lib/supabase/actions/queries';
 import HomeSearch from '@/components/home/HomeSearch';
-import HomeBrowse from '@/components/home/HomeBrowse';
 import { slugifyCity } from '@/lib/utils';
-import { MapPin } from 'lucide-react';
+import { MapPin, ChevronDown } from 'lucide-react';
+import { headers } from 'next/headers';
 
 export default async function Home() {
-  const [treatments, featuredClinics, uniqueCities, cityCounts] = await Promise.all([
-    getTreatments(),
-    getFeaturedClinics(12),
-    getUniqueCities(),
-    getCityClinicCounts()
+  const headersList = await headers();
+  const userCityHeader = headersList.get('x-vercel-ip-city');
+  // Fallback to Stockholm if no Vercel city header is found (e.g. local dev)
+  const userCity = userCityHeader ? decodeURIComponent(userCityHeader) : 'Stockholm';
+
+  const [treatments] = await Promise.all([
+    getTreatments()
   ]);
 
-  // Pre-sort cities by clinic count for "Popular" section to avoid hydration mismatch
-  const sortedCities = [...uniqueCities]
-    .sort((a, b) => (cityCounts[b] || 0) - (cityCounts[a] || 0))
-    .slice(0, 12); // Show top 12 popular cities
+  let featuredClinics = await getFeaturedClinics(12, userCity);
+  let displayCity = userCity;
+
+  // Fallback to general featured clinics if no clinics in location
+  if (featuredClinics.length === 0) {
+    featuredClinics = await getFeaturedClinics(12);
+    displayCity = 'Stockholm'; // Default to Stockholm if we literally have no idea or no clinics
+  }
+
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'battrehy.se',
+      url: 'https://battrehy.se',
+      description: 'Sveriges tryggaste guide för skönhetskliniker – jämför och boka estetiska behandlingar hos certifierade kliniker.'
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'battrehy.se',
+      url: 'https://battrehy.se',
+      email: 'info@battrehy.se'
+    }
+  ];
 
   return (
     <main className="min-h-screen bg-[#fffafa] flex flex-col items-center">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Hero Section */}
       <div className="w-full pt-24 pb-16 px-8 text-center bg-gradient-to-b from-rose-50/50 to-transparent">
         <div className="max-w-4xl mx-auto">
@@ -31,61 +58,26 @@ export default async function Home() {
           </p>
 
           <HomeSearch />
-          
-          <HomeBrowse 
-            cities={sortedCities} 
-            cityCounts={cityCounts} 
-            treatments={treatments} 
-          />
-        </div>
-      </div>
-
-      {/* Popular Treatments Grid */}
-      <div className="max-w-7xl w-full mx-auto px-8 pb-16 mt-8">
-        <div className="flex justify-between items-end mb-10">
-          <div>
-            <h2 className="text-3xl font-black text-charcoal-900 mb-2">Populära behandlingar</h2>
-            <p className="text-charcoal-500">Utforska våra mest eftertraktade skönhetsingrepp</p>
-          </div>
-          <Link href="/behandlingar" className="text-[#e8234a] font-bold hover:underline text-sm">Visa alla &rarr;</Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {treatments.slice(0, 6).map(treatment => (
-            <Link
-              key={treatment.id}
-              href={`/behandlingar/${treatment.slug}`}
-              className="group relative h-72 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 block bg-charcoal-900"
-            >
-              {treatment.image_url ? (
-                <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-50"
-                  style={{ backgroundImage: `url(${treatment.image_url})` }}
-                />
-              ) : (
-                <div className="absolute inset-0 bg-gradient-to-br from-charcoal-800 to-charcoal-900 opacity-80" />
-              )}
-
-              <div className="absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
-                <h3 className="text-2xl font-black text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  {treatment.name}
-                </h3>
-                <p className="text-white/80 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 translate-y-8 group-hover:translate-y-0 transition-all duration-300 delay-75">
-                  {treatment.description || `Utforska certifierade kliniker som erbjuder ${treatment.name.toLowerCase()} nära dig.`}
-                </p>
-              </div>
-            </Link>
-          ))}
         </div>
       </div>
 
       {/* Featured Clinics Grid */}
-      <div className="max-w-7xl w-full mx-auto px-8 pb-32 mt-16">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
-          <h2 className="text-3xl font-black text-charcoal-900">Utvalda kliniker</h2>
-          <div className="h-px flex-grow bg-gray-100 hidden md:block mx-8" />
-          <Link href="/sok" className="text-[#e8234a] font-bold hover:underline flex items-center gap-2 group">
-            Visa alla kliniker <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
-          </Link>
+      <div className="max-w-7xl w-full mx-auto px-8 pb-16 mt-8">
+        <div className="flex flex-col mb-8">
+          <div className="flex justify-between items-center mb-1">
+            <Link href="/sok" className="text-sm font-bold text-charcoal-400 flex items-center gap-1.5 hover:text-charcoal-600 transition-colors group">
+              <MapPin size={14} className="text-[#e8234a]" />
+              Baserat på din plats &mdash; <span className="text-[#e8234a] border-b border-dashed border-[#e8234a]/30 group-hover:border-[#e8234a] transition-colors">{displayCity}</span>
+              <ChevronDown size={14} className="text-charcoal-400 group-hover:translate-y-0.5 transition-transform" />
+            </Link>
+            
+            <Link href="/sok" className="text-[#e8234a] font-bold text-sm hover:underline flex items-center gap-1.5 group">
+              Visa alla <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
+            </Link>
+          </div>
+          <h2 className="text-[28px] md:text-3xl font-black text-charcoal-900 leading-tight">
+            Utvalda kliniker nära dig
+          </h2>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -127,6 +119,44 @@ export default async function Home() {
                     </span>
                   )}
                 </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Popular Treatments Grid */}
+      <div className="max-w-7xl w-full mx-auto px-8 pb-32 mt-16">
+        <div className="flex justify-between items-end mb-10">
+          <div>
+            <h2 className="text-3xl font-black text-charcoal-900 mb-2">Populära behandlingar</h2>
+            <p className="text-charcoal-500">Utforska våra mest eftertraktade skönhetsingrepp</p>
+          </div>
+          <Link href="/behandlingar" className="text-[#e8234a] font-bold hover:underline text-sm">Visa alla &rarr;</Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {treatments.slice(0, 6).map(treatment => (
+            <Link
+              key={treatment.id}
+              href={`/behandlingar/${treatment.slug}`}
+              className="group relative h-72 rounded-[2rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 block bg-charcoal-900"
+            >
+              {treatment.image_url ? (
+                <div
+                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-50"
+                  style={{ backgroundImage: `url(${treatment.image_url})` }}
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-charcoal-800 to-charcoal-900 opacity-80" />
+              )}
+
+              <div className="absolute inset-0 p-8 flex flex-col justify-end bg-gradient-to-t from-black/80 via-black/20 to-transparent">
+                <h3 className="text-2xl font-black text-white mb-2 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                  {treatment.name}
+                </h3>
+                <p className="text-white/80 text-sm line-clamp-2 opacity-0 group-hover:opacity-100 translate-y-8 group-hover:translate-y-0 transition-all duration-300 delay-75">
+                  {treatment.description || `Utforska certifierade kliniker som erbjuder ${treatment.name.toLowerCase()} nära dig.`}
+                </p>
               </div>
             </Link>
           ))}

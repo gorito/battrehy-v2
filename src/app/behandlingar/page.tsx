@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Alla Behandlingar | Bättrehy.se',
+    title: 'Alla Behandlingar',
     description: 'Utforska vårt utbud av estetiska behandlingar och hitta rätt klinik för dig.',
     alternates: {
         canonical: '/behandlingar',

@@ -16,7 +16,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
     const { city: citySlug, slugOrTreatment } = resolvedParams;
 
-    // 1. Check if it's a treatment first (Combination Page)
+    // 1. Check if it's a specific clinic (Clinic Detail Page) - Check this FIRST to avoid hijacking
+    const clinic = await getClinicBySlug(slugOrTreatment);
+    if (clinic) {
+        const clinicCitySlug = slugifyCity(clinic.city);
+        if (clinicCitySlug === citySlug) {
+            return {
+                title: `${clinic.name} i ${clinic.city} – Boka behandling`,
+                description: `Läs mer om ${clinic.name} i ${clinic.city} och boka din behandling enkelt via battrehy.se.`,
+                alternates: {
+                    canonical: `/kliniker/${clinicCitySlug}/${clinic.slug}`,
+                },
+                openGraph: {
+                    title: `${clinic.name} - Estetiska behandlingar i ${clinic.city}`,
+                    images: [{ url: clinic.primary_image_url || 'https://battrehy.se/og-image.jpg' }]
+                }
+            };
+        }
+    }
+
+    // 2. Check if it's a treatment (Combination Page)
     const [treatments, cities, uniqueCityNames] = await Promise.all([getTreatments(), getCities(), getUniqueCities()]);
     let treatment = treatments.find(t => t.slug === slugOrTreatment);
     
@@ -40,8 +59,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         if (city) {
             return {
-                title: `${treatment.name} i ${city.name} – Hitta Bästa Kliniken | Bättrehy.se`,
-                description: `Hitta och jämför de bästa klinikerna för ${treatment.name.toLowerCase()} i ${city.name}. Certifierade kliniker, priser och bokningsinformation.`,
+                title: `${treatment.name} i ${city.name} – Hitta Bästa Kliniken`,
+                description: `Hitta och jämför de bästa klinikerna för ${treatment.name.toLowerCase()} i ${city.name}. Certifierade kliniker, priser och bokningsinformation via battrehy.se.`,
                 alternates: {
                     canonical: `/kliniker/${citySlug}/${slugOrTreatment}`,
                 }
@@ -49,24 +68,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }
     }
 
-    // 2. Check if it's a clinic (Clinic Detail Page)
-    const clinic = await getClinicBySlug(slugOrTreatment);
-    if (!clinic) return { title: 'Sidan hittades inte' };
-
-    const clinicCitySlug = slugifyCity(clinic.city);
-    if (clinicCitySlug !== citySlug) return { title: 'Sidan hittades inte' };
-
-    return {
-        title: `${clinic.name} i ${clinic.city} – Boka behandling | Bättrehy.se`,
-        description: `Läs mer om ${clinic.name} i ${clinic.city} och boka din behandling enkelt via Bättrehy.se.`,
-        alternates: {
-            canonical: `/kliniker/${clinicCitySlug}/${clinic.slug}`,
-        },
-        openGraph: {
-            title: `${clinic.name} - Estetiska behandlingar i ${clinic.city}`,
-            images: [{ url: clinic.primary_image_url || 'https://battrehy.se/og-image.jpg' }]
-        }
-    };
+    return { title: 'Sidan hittades inte' };
 }
 
 export default async function SlugOrTreatmentPage({ params }: Props) {
@@ -87,58 +89,12 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
     console.log(`[ROUTER] Unique Cities in Clinics: ${uniqueCityNames.length}`);
 
     // 2. Linear Resolution Logic
-    // Step A: Is it a treatment combination?
-    let treatment = treatments.find(t => t.slug === slugOrTreatment);
-    
-    // FAIL-SAFE: Try name match or generic "aesthetic" fallback
-    if (!treatment) {
-        treatment = treatments.find(t => t.name.toLowerCase() === slugOrTreatment.replace(/-/g, ' '));
-    }
-    
-    // FINAL SAFETY NET: If the slug looks like a treatment, treat it as one!
-    if (!treatment && (slugOrTreatment.includes('klinik') || slugOrTreatment.includes('behandling'))) {
-        treatment = { 
-            name: slugOrTreatment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-            slug: slugOrTreatment,
-            id: 'fallback-id'
-        } as any;
-    }
-    
-    if (treatment) {
-        // Find the city robustly
-        let city = cities.find(c => slugifyCity(c.name) === citySlug || c.slug === citySlug);
-        
-        // FAIL-SAFE: Generic city fallback for known cities
-        if (!city && (citySlug.toLowerCase() === 'stockholm' || citySlug.toLowerCase() === 'goteborg' || citySlug.toLowerCase() === 'malmo')) {
-            city = { 
-                name: citySlug.charAt(0).toUpperCase() + citySlug.slice(1), 
-                slug: citySlug.toLowerCase() 
-            } as any;
-        }
-
-        if (city) {
-            const filteredClinics = clinicsResponse.data.filter(c => {
-                const cityMatch = slugifyCity(c.city).toLowerCase() === citySlug.toLowerCase();
-                const treatmentsArray = (c as any).treatments || (c as any).clinic_treatments?.map((ct: any) => ct.treatments) || [];
-                const treatmentMatch = treatmentsArray.some((t: any) => 
-                    t.id === treatment!.id || t.slug === treatment!.slug || (t.treatments && t.treatments.slug === treatment!.slug)
-                );
-                const serviceMatch = c.extracted_services?.some((s: string) => 
-                    s.toLowerCase().includes(treatment!.name.toLowerCase())
-                );
-                return cityMatch && (treatmentMatch || serviceMatch);
-            });
-
-            return <CityTreatmentView city={city as any} treatment={treatment} clinics={filteredClinics as any} />;
-        }
-    }
-
-    // Step B: If not a treatment combo, is it a specific clinic?
-    console.log(`[ROUTER] Proceeding to Clinic check...`);
+    // Step A: Is it a specific clinic? (PRIORITY)
+    console.log(`[ROUTER] Checking for clinic: ${slugOrTreatment}`);
     const clinic = await getClinicBySlug(slugOrTreatment);
+    
     if (clinic) {
         const clinicCitySlug = slugifyCity(clinic.city);
-        console.log(`[ROUTER] Clinic found: ${clinic.name}, City: ${clinic.city} (Slug: ${clinicCitySlug})`);
         
         // Ensure city in URL matches clinic city (case-insensitive)
         if (clinicCitySlug.toLowerCase() !== citySlug.toLowerCase()) {
@@ -146,6 +102,7 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
             notFound();
         }
 
+        console.log(`[ROUTER] Clinic found: ${clinic.name}`);
         const primaryImage = clinic.primary_image_url;
 
         const breadcrumbLd = {
@@ -173,11 +130,35 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
             ]
         };
 
+        const clinicLd = {
+            '@context': 'https://schema.org',
+            '@type': 'BeautySalon',
+            name: clinic.name,
+            description: clinic.description || undefined,
+            address: clinic.address ? {
+                '@type': 'PostalAddress',
+                streetAddress: clinic.address,
+                addressLocality: clinic.city,
+                addressCountry: 'SE'
+            } : undefined,
+            telephone: clinic.phone || undefined,
+            url: clinic.website || undefined,
+            areaServed: {
+                '@type': 'City',
+                name: clinic.city
+            },
+            image: clinic.primary_image_url || undefined
+        };
+
         return (
             <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+                />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(clinicLd) }}
                 />
                 <div className="max-w-4xl mx-auto">
                     {/* Breadcrumbs */}
@@ -289,5 +270,42 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
         );
     }
 
+    // Step B: Is it a treatment combination? (FALLBACK)
+    let treatment = treatments.find(t => t.slug === slugOrTreatment);
+    
+    if (!treatment) {
+        treatment = treatments.find(t => t.name.toLowerCase() === slugOrTreatment.replace(/-/g, ' '));
+    }
+    
+    if (!treatment && (slugOrTreatment.includes('klinik') || slugOrTreatment.includes('behandling'))) {
+        treatment = { 
+            name: slugOrTreatment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+            slug: slugOrTreatment,
+            id: 'fallback-id'
+        } as any;
+    }
+    
+    if (treatment) {
+        let city = cities.find(c => slugifyCity(c.name) === citySlug || c.slug === citySlug);
+        if (!city && (citySlug.toLowerCase() === 'stockholm' || citySlug.toLowerCase() === 'goteborg' || citySlug.toLowerCase() === 'malmo')) {
+            city = { name: citySlug.charAt(0).toUpperCase() + citySlug.slice(1), slug: citySlug.toLowerCase() } as any;
+        }
+
+        if (city) {
+            const filteredClinics = clinicsResponse.data.filter(c => {
+                const cityMatch = slugifyCity(c.city).toLowerCase() === citySlug.toLowerCase();
+                const treatmentsArray = (c as any).treatments || (c as any).clinic_treatments?.map((ct: any) => ct.treatments) || [];
+                const treatmentMatch = treatmentsArray.some((t: any) => 
+                    t.id === treatment!.id || t.slug === treatment!.slug || (t.treatments && t.treatments.slug === treatment!.slug)
+                );
+                const serviceMatch = c.extracted_services?.some((s: string) => 
+                    s.toLowerCase().includes(treatment!.name.toLowerCase())
+                );
+                return cityMatch && (treatmentMatch || serviceMatch);
+            });
+
+            return <CityTreatmentView city={city as any} treatment={treatment} clinics={filteredClinics as any} />;
+        }
+    }
     notFound();
 }

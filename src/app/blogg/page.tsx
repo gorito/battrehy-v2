@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Blogg | Bättrehy.se - Artiklar om skönhet & behandlingar',
+    title: 'Blogg - Artiklar om skönhet & behandlingar',
     description: 'Snart lanserar vi vår blogg med guider, tips och artiklar om skönhet, hudvård och estetiska behandlingar.',
     alternates: {
         canonical: '/blogg',

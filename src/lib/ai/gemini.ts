@@ -16,7 +16,7 @@ export async function refineClinicDescription(rawText: string, clinicName: strin
         const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 
         const prompt = `
-        Du är en professionell copywriter och SEO-specialist för den exklusiva klinikguiden Bättrehy.se.
+        Du är en professionell copywriter och SEO-specialist för den exklusiva klinikguiden battrehy.se.
         Ditt uppdrag är att transformera den bifogade råtexten från en kliniks hemsida till en välskriven, informativ och inbjudande beskrivning som rankar högt på Google.
 
         SEO & STRUKTUR:

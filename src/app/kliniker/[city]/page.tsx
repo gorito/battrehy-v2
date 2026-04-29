@@ -31,15 +31,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }
     }
 
-    if (!city) return { title: 'Skönhetskliniker - Bättrehy.se' };
+    if (!city) return { title: 'Skönhetskliniker' };
 
     const cityName = city.name!;
     const supabase = await createClient();
     const { count } = await supabase.from('clinics').select('id', { count: 'exact', head: true }).ilike('city', cityName);
 
     return {
-        title: `${count || ''} Skönhetskliniker i ${cityName} – Bättrehy.se`,
-        description: city.description || `Hitta och jämför ${count ? `de ${count} ` : ''}bästa skönhetsklinikerna i ${cityName}. Certifierade kliniker med omdömen och bokningsinformation på Bättrehy.se.`,
+        title: `${count || ''} Skönhetskliniker i ${cityName}`,
+        description: city.description || `Hitta och jämför ${count ? `de ${count} ` : ''}bästa skönhetsklinikerna i ${cityName}. Certifierade kliniker med omdömen och bokningsinformation på battrehy.se.`,
         alternates: {
             canonical: `/kliniker/${resolvedParams.city}`,
         },

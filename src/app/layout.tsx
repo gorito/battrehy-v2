@@ -12,10 +12,10 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://battrehy.se"),
   title: {
-    template: "%s | Bättrehy.se",
-    default: "Bättrehy.se - Hitta Sveriges bästa skönhetskliniker",
+    template: "%s | battrehy.se",
+    default: "battrehy.se - Hitta Sveriges bästa skönhetskliniker",
   },
-  description: "Jämför och boka estetiska behandlingar hos certifierade och verifierade kliniker i hela Sverige. Bättrehy.se är din guide till skönhet och välmående.",
+  description: "Jämför och boka estetiska behandlingar hos certifierade och verifierade kliniker i hela Sverige. battrehy.se är din guide till skönhet och välmående.",
   alternates: {
     canonical: "https://battrehy.se",
   },
@@ -26,19 +26,19 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sv_SE",
     url: "https://battrehy.se",
-    siteName: "Bättrehy.se",
+    siteName: "battrehy.se",
     images: [
       {
         url: "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "Bättrehy.se - Din guide till skönhetskliniker i Sverige",
+        alt: "battrehy.se - Din guide till skönhetskliniker i Sverige",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bättrehy.se",
+    title: "battrehy.se",
     description: "Hitta Sveriges bästa skönhetskliniker",
     images: ["/og-image.jpg"],
   },
