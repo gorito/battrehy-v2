@@ -114,9 +114,9 @@ function isGenericImage(url: string | null | undefined): boolean {
 function mapTreatmentToCategory(rawName: string): string | null {
     const name = rawName.toLowerCase();
 
-    // 1. Dermal fillers
+    // 1. Fillerbehandling
     if (name.includes('filler') || name.includes('läppförstoring') || name.includes('juvederm') || name.includes('restylane') || name.includes('tear trough')) {
-        return 'dermal-fillers'; // using slug for matching
+        return 'fillerbehandling'; // using slug for matching
     }
     // 2. Botoxbehandling
     if (name.includes('botox') || name.includes('rynkbehandling') || name.includes('kråksparkar') || name.includes('glabella') || name.includes('botulinumtoxin') || name.includes('pannrynkor')) {

@@ -1,8 +1,10 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Blogg - Artiklar om skönhet & behandlingar',
-    description: 'Snart lanserar vi vår blogg med guider, tips och artiklar om skönhet, hudvård och estetiska behandlingar.',
+    title: 'Blogg - Guider och artiklar om skönhet & hudvård | battrehy.se',
+    description: 'Läs våra senaste guider, tips och artiklar om hudvård, estetiska behandlingar och hur du väljer rätt klinik.',
     alternates: {
         canonical: '/blogg',
     },
@@ -10,14 +12,59 @@ export const metadata: Metadata = {
 
 export default function BlogLandingPage() {
     return (
-        <main className="min-h-screen bg-gray-50 p-8 pb-24 flex flex-col items-center justify-center text-center">
-            <div className="max-w-2xl mx-auto">
-                <h1 className="text-4xl font-bold text-gray-900 mb-4">Blogg</h1>
-                <p className="text-lg text-gray-700 mb-8">
-                    Snart lanserar vi vår blogg med guider, tips och artiklar om skönhet, hudvård och estetiska behandlingar.
-                </p>
-                <div className="bg-rose-50 border border-rose-100 p-6 rounded-2xl inline-block">
-                    <p className="text-rose-700 font-medium">Bokmärk sidan – Innehåll är på väg!</p>
+        <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
+            <div className="max-w-4xl mx-auto">
+                <div className="mb-12">
+                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Skönhetsbloggen</h1>
+                    <p className="text-lg text-gray-600 leading-relaxed">
+                        Läs våra guider, tips och djupdykningar inom hudvård och estetiska behandlingar. Vi hjälper dig att fatta välinformerade beslut.
+                    </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {/* Article Card */}
+                    <Link href="/blogg/ansiktsbehandling-den-kompletta-guiden" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
+                        <div className="h-48 bg-gray-100 relative overflow-hidden">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src="/images/blogg/ansiktsbehandling.jpeg" alt="Klassisk ansiktsbehandling på hudvårdsklinik" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <h2 className="absolute bottom-4 left-6 text-2xl font-bold text-white z-10 drop-shadow-sm">Ansiktsbehandling<br/><span className="text-sm font-medium opacity-90">Den kompletta guiden 2026</span></h2>
+                        </div>
+                        <div className="p-6 flex flex-col flex-grow">
+                            <div className="text-xs text-primary font-bold tracking-wide uppercase mb-2">Guide</div>
+                            <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                                Ansiktsbehandling: Den kompletta guiden 2026 — typer, priser och val av klinik
+                            </h2>
+                            <p className="text-gray-600 text-sm mb-6 line-clamp-3">
+                                En genomgång av 8 vanliga behandlingar, vad de faktiskt gör, vad de kostar och hur du undviker fallgroparna. Allt du behöver veta innan du bokar.
+                            </p>
+                            <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
+                                Läs hela guiden <ArrowRight size={16} className="ml-1" />
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* Article Card 2 */}
+                    <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
+                        <div className="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center border-b border-gray-100">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src="/images/blogg/botox_hero.jpeg" alt="Botoxbehandling utförs av legitimerad personal" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <h2 className="absolute bottom-4 left-6 text-2xl font-bold text-white z-10 drop-shadow-sm">Botoxbehandling<br/><span className="text-sm font-medium opacity-90">Den kompletta guiden 2026</span></h2>
+                        </div>
+                        <div className="p-6 flex flex-col flex-grow">
+                            <div className="text-xs text-primary font-bold tracking-wide uppercase mb-2">Guide</div>
+                            <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                                Botoxbehandling i Sverige 2026 — priser, säkerhet och kliniker
+                            </h2>
+                            <p className="text-gray-600 text-sm mb-6 line-clamp-3">
+                                En komplett guide till botox: från hur mycket det kostar (medianpris per område) och vilka risker som finns, till hur du kollar att kliniken följer IVO-kraven.
+                            </p>
+                            <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
+                                Läs hela guiden <ArrowRight size={16} className="ml-1" />
+                            </div>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </main>

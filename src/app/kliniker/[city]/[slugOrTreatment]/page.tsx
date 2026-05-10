@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getClinicBySlug, getTreatments, getClinics, getCities, getUniqueCities } from '@/lib/supabase/actions/queries';
 import { MapPin, Globe, Phone, Calendar, Image as ImageIcon } from 'lucide-react';
 import { slugifyCity } from '@/lib/utils';
@@ -74,6 +74,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function SlugOrTreatmentPage({ params }: Props) {
     const resolvedParams = await params;
     const { city: citySlug, slugOrTreatment } = resolvedParams;
+    const asciiCitySlug = slugifyCity(citySlug);
+    const asciiSlugOrTreatment = slugifyCity(slugOrTreatment);
+
+    if (citySlug !== asciiCitySlug || slugOrTreatment !== asciiSlugOrTreatment) {
+        permanentRedirect(`/kliniker/${asciiCitySlug}/${asciiSlugOrTreatment}`);
+    }
 
     // 1. Fetch ALL data first to avoid multiple round-trips
     const [treatments, cities, uniqueCityNames, clinicsResponse] = await Promise.all([
@@ -289,6 +295,11 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
         let city = cities.find(c => slugifyCity(c.name) === citySlug || c.slug === citySlug);
         if (!city && (citySlug.toLowerCase() === 'stockholm' || citySlug.toLowerCase() === 'goteborg' || citySlug.toLowerCase() === 'malmo')) {
             city = { name: citySlug.charAt(0).toUpperCase() + citySlug.slice(1), slug: citySlug.toLowerCase() } as any;
+        }
+
+        if (!city) {
+            const cityName = uniqueCityNames.find(name => slugifyCity(name) === citySlug);
+            if (cityName) city = { name: cityName, slug: slugifyCity(cityName) } as any;
         }
 
         if (city) {

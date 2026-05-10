@@ -19,6 +19,25 @@ const nextConfig: any = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  async redirects() {
+    return [
+      {
+        source: '/behandlingar/dermal-fillers',
+        destination: '/behandlingar/fillerbehandling',
+        permanent: true,
+      },
+      {
+        source: '/stad/:city',
+        destination: '/kliniker/:city',
+        permanent: true,
+      },
+      {
+        source: '/stad/:city/:slug*',
+        destination: '/kliniker/:city/:slug*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

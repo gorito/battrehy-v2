@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { notFound, permanentRedirect } from 'next/navigation';
 import { getCities, getClinics, getUniqueCities, getTreatments } from '@/lib/supabase/actions/queries';
 import { slugifyCity } from '@/lib/utils';
 import { City } from '@/lib/supabase/types';
@@ -53,6 +53,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function CityPage({ params }: Props) {
     const resolvedParams = await params;
+    const citySlug = resolvedParams.city;
+    const asciiCitySlug = slugifyCity(citySlug);
+
+    if (citySlug !== asciiCitySlug) {
+        permanentRedirect(`/kliniker/${asciiCitySlug}`);
+    }
 
     // Fetch data for the page
     const [cities, clinicsResponse, uniqueCityNames, treatments] = await Promise.all([

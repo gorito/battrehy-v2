@@ -116,15 +116,76 @@ async function fetchMetadata(targetUrl: string, clinicName: string) {
         const $ = cheerio.load(html);
 
         let rawDescription = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || '';
-        const richDesc = extractRichDescription($);
-        if (richDesc && (scoreText(richDesc) > scoreText(rawDescription))) {
-            rawDescription = richDesc;
+        let image = $('meta[property="og:image"]').attr('content') || '';
+
+        // Bokadirekt specific logic
+        if (targetUrl.includes('bokadirekt.se')) {
+            const scripts = $('script').toArray();
+            for (const el of scripts) {
+                const text = $(el).html();
+                if (text && text.includes('__PRELOADED_STATE__')) {
+                    try {
+                        const jsonStart = text.indexOf('{');
+                        let jsonStr = '';
+                        let depth = 0;
+                        for (let i = jsonStart; i < text.length; i++) {
+                            if (text[i] === '{') depth++;
+                            else if (text[i] === '}') {
+                                depth--;
+                                if (depth === 0) {
+                                    jsonStr = text.substring(jsonStart, i + 1);
+                                    break;
+                                }
+                            }
+                        }
+                        if (jsonStr) {
+                            const data = JSON.parse(jsonStr);
+                            const place = data?.place;
+                            if (place) {
+                                const bdDesc = place.about?.description || '';
+                                const bdWelcome = place.about?.welcomeText || '';
+                                if (bdWelcome && bdWelcome.length > 20 && !bdDesc.includes(bdWelcome.substring(0, 20))) {
+                                    rawDescription = `${bdWelcome}\n\n${bdDesc}`.trim();
+                                } else {
+                                    rawDescription = bdDesc || bdWelcome || rawDescription;
+                                }
+                                
+                                const possibleImages = [
+                                    place.about?.mainImages,
+                                    place.about?.galleryImages,
+                                    place.mainImages,
+                                    place.galleryImages
+                                ];
+                                for (const arr of possibleImages) {
+                                    if (arr && Array.isArray(arr)) {
+                                        const validImage = arr.find(img => img && typeof img === 'string' && !img.includes('c9e021de'));
+                                        if (validImage) {
+                                            image = validImage;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } catch (e) {
+                        console.error("Bokadirekt parse error", e);
+                    }
+                }
+            }
+        } else {
+            const richDesc = extractRichDescription($);
+            if (richDesc && (scoreText(richDesc) > scoreText(rawDescription))) {
+                rawDescription = richDesc;
+            }
+        }
+
+        if (rawDescription.includes('Discover and connect with verified local businesses')) {
+            rawDescription = '';
         }
 
         // AI Refinement
         const refinedDescription = await refineDescription(rawDescription, clinicName);
 
-        let image = $('meta[property="og:image"]').attr('content') || '';
         return { description: refinedDescription.substring(0, 3000), image };
     } catch (e) {
         return null;
@@ -151,6 +212,8 @@ async function main() {
         c.description.length < 100 || 
         c.description.length === 1000 || 
         c.description.includes('Boka tid') || 
+        c.description.includes('is a professional beauty and aesthetic clinic located in') ||
+        c.description.includes('Discover and connect with verified local businesses worldwide') ||
         !c.primary_image_url
     );
 
