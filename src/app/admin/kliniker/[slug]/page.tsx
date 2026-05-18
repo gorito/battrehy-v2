@@ -29,9 +29,15 @@ export default async function EditClinicPage({
 
     return (
         <div className="max-w-2xl mx-auto">
-            <div className="mb-6 flex items-center gap-4">
+            <div className="mb-6 flex items-center gap-4 flex-wrap">
                 <Link href={`/admin/kliniker?page=${returnPage}`} className="text-gray-500 hover:text-primary">&larr; Tillbaka</Link>
-                <h1 className="text-3xl font-bold text-gray-900">Redigera {clinic.name}</h1>
+                <h1 className="text-3xl font-bold text-gray-900 flex-1">Redigera {clinic.name}</h1>
+                <Link 
+                    href="/admin/forsaljning" 
+                    className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5"
+                >
+                    ↗ Försäljning / CRM
+                </Link>
             </div>
 
             <EditClinicForm clinic={clinic} uniqueCities={uniqueCities} returnPage={returnPage} />

@@ -117,7 +117,10 @@ export default function SalesDashboard({ initialClinics }: { initialClinics: Cli
                                         {expandedClinicId === clinic.id ? <ChevronUp size={16} className="text-gray-400" /> : <ChevronDown size={16} className="text-gray-400" />}
                                     </div>
                                     <div className="text-gray-500 text-xs mt-1">{clinic.city}</div>
-                                    <a href={`/kliniker/${slugifyCity(clinic.city || '')}/${clinic.slug}`} target="_blank" className="text-rose-500 hover:underline text-xs mt-1 inline-block" onClick={(e) => e.stopPropagation()}>Visa profil ↗</a>
+                                    <div className="flex items-center gap-3 mt-1" onClick={(e) => e.stopPropagation()}>
+                                        <a href={`/kliniker/${slugifyCity(clinic.city || '')}/${clinic.slug}`} target="_blank" className="text-rose-500 hover:underline text-xs inline-block">Visa profil ↗</a>
+                                        <a href={`/admin/kliniker/${clinic.slug}`} className="text-blue-500 hover:underline text-xs inline-block">Redigera ✏️</a>
+                                    </div>
                                 </td>
                                 
                                 <td className="px-4 py-4">
