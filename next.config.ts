@@ -27,6 +27,11 @@ const nextConfig: any = {
         permanent: true,
       },
       {
+        source: '/kliniker/:city/dermal-fillers',
+        destination: '/kliniker/:city/fillerbehandling',
+        permanent: true,
+      },
+      {
         source: '/stad/:city',
         destination: '/kliniker/:city',
         permanent: true,

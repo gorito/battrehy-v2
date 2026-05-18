@@ -214,3 +214,21 @@ export async function updateCityAction(formData: FormData) {
     const { redirect } = await import('next/navigation');
     redirect('/admin/stader');
 }
+
+export async function updateClinicSalesInfoAction(id: string, data: { email?: string, phone?: string, contact_name?: string, sales_status?: string, sales_notes?: string }) {
+    const supabase = await createClient();
+    
+    // We only update the keys that are provided
+    const { error } = await supabase
+        .from('clinics')
+        .update(data)
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error updating sales info:', error);
+        return { success: false, error: error.message };
+    }
+
+    revalidatePath('/admin/forsaljning');
+    return { success: true };
+}

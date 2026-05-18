@@ -24,6 +24,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                             </Link>
                         </li>
                         <li>
+                            <Link href="/admin/forsaljning" className="block px-4 py-2 rounded-lg hover:bg-charcoal-800 transition-colors text-rose-400 font-medium">
+                                Försäljning (CRM)
+                            </Link>
+                        </li>
+                        <li>
                             <Link href="/admin/stader" className="block px-4 py-2 rounded-lg hover:bg-charcoal-800 transition-colors">
                                 Städer
                             </Link>

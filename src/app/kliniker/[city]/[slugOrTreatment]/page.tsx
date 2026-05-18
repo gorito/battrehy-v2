@@ -5,6 +5,8 @@ import { getClinicBySlug, getTreatments, getClinics, getCities, getUniqueCities 
 import { MapPin, Globe, Phone, Calendar, Image as ImageIcon } from 'lucide-react';
 import { slugifyCity } from '@/lib/utils';
 import CityTreatmentView from '@/components/seo/CityTreatmentView';
+import ClinicTracker from '@/components/analytics/ClinicTracker';
+import TrackedLink from '@/components/analytics/TrackedLink';
 
 export const dynamic = 'force-dynamic';
 
@@ -166,6 +168,7 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(clinicLd) }}
                 />
+                <ClinicTracker clinicId={clinic.id} />
                 <div className="max-w-4xl mx-auto">
                     {/* Breadcrumbs */}
                     <nav className="text-sm text-gray-500 mb-6 flex flex-wrap gap-2 items-center">
@@ -200,10 +203,15 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                         </div>
 
                         {clinic.booking_url ? (
-                            <a href={clinic.booking_url} target="_blank" rel="noopener noreferrer" className="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 transition-all shadow-md w-full md:w-auto justify-center shrink-0">
+                            <TrackedLink 
+                                clinicId={clinic.id}
+                                eventType="booking_click"
+                                href={clinic.booking_url} 
+                                className="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 transition-all shadow-md w-full md:w-auto justify-center shrink-0"
+                            >
                                 <Calendar size={20} />
                                 Boka tid
-                            </a>
+                            </TrackedLink>
                         ) : (
                             <div className="bg-gray-100 text-gray-400 px-8 py-4 rounded-xl font-bold flex items-center gap-2 w-full md:w-auto justify-center shrink-0 cursor-not-allowed">
                                 Ingen bokningslänk
@@ -264,7 +272,14 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                                     {clinic.website && (
                                         <li className="flex items-center gap-3">
                                             <Globe className="text-gray-400 shrink-0" size={20} />
-                                            <a href={clinic.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate">Besök hemsida</a>
+                                            <TrackedLink 
+                                                clinicId={clinic.id}
+                                                eventType="website_click"
+                                                href={clinic.website} 
+                                                className="text-primary hover:underline truncate"
+                                            >
+                                                Besök hemsida
+                                            </TrackedLink>
                                         </li>
                                     )}
                                 </ul>
