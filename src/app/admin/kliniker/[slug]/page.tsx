@@ -33,7 +33,7 @@ export default async function EditClinicPage({
                 <Link href={`/admin/kliniker?page=${returnPage}`} className="text-gray-500 hover:text-primary">&larr; Tillbaka</Link>
                 <h1 className="text-3xl font-bold text-gray-900 flex-1">Redigera {clinic.name}</h1>
                 <Link 
-                    href="/admin/forsaljning" 
+                    href={`/admin/forsaljning#${clinic.slug}`} 
                     className="text-sm bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1.5"
                 >
                     ↗ Försäljning / CRM

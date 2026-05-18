@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { updateClinicSalesInfoAction } from '@/lib/supabase/actions/mutations';
 import { getClinicStats } from '@/lib/supabase/actions/analytics';
 import { Search, Save, CheckCircle2, XCircle, ChevronDown, ChevronUp, BarChart2, Globe, Calendar } from 'lucide-react';
@@ -44,6 +44,25 @@ export default function SalesDashboard({ initialClinics }: { initialClinics: Cli
             }
         }
     };
+
+    // Auto-scroll and expand clinic from URL hash (e.g. #active-care-sweden)
+    useEffect(() => {
+        const hash = window.location.hash.slice(1);
+        if (!hash) return;
+        const clinic = clinics.find(c => c.slug === hash);
+        if (!clinic) return;
+        // Small delay to let the table render
+        setTimeout(() => {
+            const el = document.getElementById(`clinic-row-${hash}`);
+            if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                el.classList.add('ring-2', 'ring-rose-400', 'ring-offset-1');
+                setTimeout(() => el.classList.remove('ring-2', 'ring-rose-400', 'ring-offset-1'), 3000);
+            }
+            toggleExpand(clinic.id);
+        }, 200);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const handleUpdate = async (id: string, field: string, value: string) => {
         // Optimistic update locally
@@ -110,7 +129,7 @@ export default function SalesDashboard({ initialClinics }: { initialClinics: Cli
                     <tbody className="divide-y divide-gray-100">
                         {filteredClinics.map(clinic => (
                             <React.Fragment key={clinic.id}>
-                            <tr className="hover:bg-gray-50/50 transition-colors group">
+                            <tr id={`clinic-row-${clinic.slug}`} className="hover:bg-gray-50/50 transition-colors group rounded">
                                 <td className="px-4 py-4 cursor-pointer" onClick={() => toggleExpand(clinic.id)}>
                                     <div className="flex items-center gap-2">
                                         <div className="font-bold text-gray-900 truncate max-w-[200px]">{clinic.name}</div>
@@ -162,9 +181,17 @@ export default function SalesDashboard({ initialClinics }: { initialClinics: Cli
                                             placeholder="E-post..."
                                             className={`w-40 border border-transparent hover:border-gray-300 focus:border-rose-500 rounded px-2 py-1 outline-none transition-colors bg-transparent focus:bg-white ${clinic.email_status === 'invalid' ? 'text-red-500 line-through' : ''}`}
                                             defaultValue={clinic.email || ''}
+                                            onFocus={(e) => {
+                                                // Remove strikethrough styling when user starts editing
+                                                e.target.classList.remove('text-red-500', 'line-through');
+                                            }}
                                             onBlur={(e) => {
                                                 if (e.target.value !== clinic.email) {
+                                                    // Also reset email_status when a new address is entered
                                                     handleUpdate(clinic.id, 'email', e.target.value);
+                                                    if (clinic.email_status === 'invalid') {
+                                                        handleUpdate(clinic.id, 'email_status', '');
+                                                    }
                                                 }
                                             }}
                                         />
