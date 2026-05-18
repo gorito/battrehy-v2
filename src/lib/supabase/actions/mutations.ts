@@ -7,14 +7,14 @@ import { importExternalImage } from '../storage';
 export async function createClinicAction(formData: FormData) {
     const supabase = await createClient();
     // Extract form values
-    const name = formData.get('name') as string;
-    const city = formData.get('city') as string;
-    const address = formData.get('address') as string;
-    const phone = formData.get('phone') as string;
-    const website = formData.get('website') as string;
-    const booking_url = formData.get('booking_url') as string;
-    const description = formData.get('description') as string;
-    const primary_image_url = formData.get('primary_image_url') as string;
+    const name = (formData.get('name') as string)?.trim();
+    const city = (formData.get('city') as string)?.trim();
+    const address = (formData.get('address') as string)?.trim();
+    const phone = (formData.get('phone') as string)?.trim();
+    const website = (formData.get('website') as string)?.trim();
+    const booking_url = (formData.get('booking_url') as string)?.trim();
+    const description = (formData.get('description') as string)?.trim();
+    const primary_image_url = (formData.get('primary_image_url') as string)?.trim();
     const is_shr_member = formData.get('is_shr_member') === 'on';
 
     // Create slug from name
@@ -86,14 +86,14 @@ export async function updateClinicAction(formData: FormData) {
     const id = formData.get('id') as string;
     const slug = formData.get('slug') as string;
 
-    const name = formData.get('name') as string;
-    const city = formData.get('city') as string;
-    const address = formData.get('address') as string;
-    const phone = formData.get('phone') as string;
-    const website = formData.get('website') as string;
-    const booking_url = formData.get('booking_url') as string;
-    const description = formData.get('description') as string;
-    const primary_image_url = formData.get('primary_image_url') as string;
+    const name = (formData.get('name') as string)?.trim();
+    const city = (formData.get('city') as string)?.trim();
+    const address = (formData.get('address') as string)?.trim();
+    const phone = (formData.get('phone') as string)?.trim();
+    const website = (formData.get('website') as string)?.trim();
+    const booking_url = (formData.get('booking_url') as string)?.trim();
+    const description = (formData.get('description') as string)?.trim();
+    const primary_image_url = (formData.get('primary_image_url') as string)?.trim();
     const is_verified = formData.get('is_verified') === 'on';
     const is_shr_member = formData.get('is_shr_member') === 'on';
     const tier = formData.get('tier') as string;
