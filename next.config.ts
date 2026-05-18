@@ -41,6 +41,12 @@ const nextConfig: any = {
         destination: '/kliniker/:city/:slug*',
         permanent: true,
       },
+      // Fix broken Jönköping URL (was stored with URL-encoded chars and trailing space)
+      {
+        source: '/kliniker/j-c3-b6nk-c3-b6ping-20/:slug*',
+        destination: '/kliniker/jonkoping/:slug*',
+        permanent: true,
+      },
     ];
   },
 };
