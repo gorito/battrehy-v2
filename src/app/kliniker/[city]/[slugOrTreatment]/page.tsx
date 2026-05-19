@@ -181,7 +181,7 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
 
                     {/* Profile Header Image */}
                     <div
-                        className="w-full h-48 sm:h-64 md:h-80 bg-cover bg-center rounded-t-2xl border-x border-t border-gray-100/50 bg-gray-100"
+                        className="w-full h-56 sm:h-72 md:h-[26rem] bg-cover bg-center rounded-t-2xl border-x border-t border-gray-100/50 bg-gray-100"
                         style={primaryImage ? { backgroundImage: `url(${primaryImage})` } : {}}
                     />
 
