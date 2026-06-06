@@ -158,7 +158,7 @@ export default function BlogPost() {
                         <p>Solskador, hormonell pigmentering (melasma) eller post-inflammatorisk pigmentering kräver tålamod. <strong>Kemisk peeling med AHA eller TCA</strong> är förstaval. <strong>Microneedling med tillägg av tranexamsyra eller vitamin C</strong> kan komplettera. <strong>IPL</strong> (intense pulsed light) erbjuds av specialiserade kliniker. Sol-undvikande och dagligt SPF 50 är nödvändigt — annars kommer pigmenteringen tillbaka.</p>
 
                         <h3 className="text-xl font-bold text-gray-900 mt-6 mb-2">Åldrande hud, fina linjer och förlorad fasthet</h3>
-                        <p>Detta är ett område där flera behandlingar samverkar. <strong>Microneedling</strong> stimulerar kollagen i en serie om 3–4 behandlingar. <strong>HIFU</strong> ger djupare lyft över längre tid. <strong>Kemisk peeling</strong> förbättrar ytstrukturen. För <strong>dynamiska rynkor</strong> (panna, ögonbryn) erbjuder kliniker ofta injektioner — läs mer om <Link href="/behandlingar/botox" className="text-primary hover:underline">botox</Link>.</p>
+                        <p>Detta är ett område där flera behandlingar samverkar. <strong>Microneedling</strong> stimulerar kollagen i en serie om 3–4 behandlingar. <strong>HIFU</strong> ger djupare lyft över längre tid. <strong>Kemisk peeling</strong> förbättrar ytstrukturen. För <strong>dynamiska rynkor</strong> (panna, ögonbryn) erbjuder kliniker ofta injektioner — läs mer om <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline">botox</Link>.</p>
 
                         <h3 className="text-xl font-bold text-gray-900 mt-6 mb-2">Torr och känslig hud</h3>
                         <p>Mild rengöring och fokus på fukt. <strong>Klassisk ansiktsbehandling</strong> med hyaluronsyra-mask. <strong>HydraFacial</strong> är skonsam och ger omedelbar fukt. <strong>LED rött ljus</strong> dämpar inflammation. Undvik aggressiva peelings och microneedling under aktiv eksem-fas.</p>
@@ -264,7 +264,7 @@ export default function BlogPost() {
                                 På Battrehy.se hittar du över 500 hudvårdskliniker över hela Sverige. Du kan filtrera efter behandlingstyp, stad och kundbetyg, jämföra utbud och boka direkt — eller läsa om varje kliniks specialisering innan du tar kontakt. <Link href="/behandlingar/ansiktsbehandling" className="text-primary hover:underline font-medium">Hitta kliniker för ansiktsbehandling här</Link>.
                             </p>
                             <p className="text-gray-700 text-sm sm:text-base mt-2">
-                                För injektionsbehandlingar mot rynkor, se vår <Link href="/behandlingar/botox" className="text-primary hover:underline font-medium">guide till botox</Link>. Letar du efter en estetisk klinik mer generellt? Besök <Link href="/kliniker" className="text-primary hover:underline font-medium">vår klinikkatalog</Link>.
+                                För injektionsbehandlingar mot rynkor, se vår <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline font-medium">guide till botox</Link>. Letar du efter en estetisk klinik mer generellt? Besök <Link href="/kliniker" className="text-primary hover:underline font-medium">vår klinikkatalog</Link>.
                             </p>
                         </div>
 

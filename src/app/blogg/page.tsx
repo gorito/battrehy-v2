@@ -21,7 +21,7 @@ export default function BlogLandingPage() {
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {/* Article Card */}
                     <Link href="/blogg/ansiktsbehandling-den-kompletta-guiden" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
                         <div className="h-48 bg-gray-100 relative overflow-hidden">
@@ -59,6 +59,28 @@ export default function BlogLandingPage() {
                             </h2>
                             <p className="text-gray-600 text-sm mb-6 line-clamp-3">
                                 En komplett guide till botox: från hur mycket det kostar (medianpris per område) och vilka risker som finns, till hur du kollar att kliniken följer IVO-kraven.
+                            </p>
+                            <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
+                                Läs hela guiden <ArrowRight size={16} className="ml-1" />
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* Article Card 3 */}
+                    <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
+                        <div className="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center border-b border-gray-100">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src="/images/blogg/fillerbehandling-hero.jpeg" alt="Professionell fillerbehandling utförs av legitimerad personal" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <h2 className="absolute bottom-4 left-6 text-2xl font-bold text-white z-10 drop-shadow-sm">Fillerbehandling<br/><span className="text-sm font-medium opacity-90">Den kompletta guiden 2026</span></h2>
+                        </div>
+                        <div className="p-6 flex flex-col flex-grow">
+                            <div className="text-xs text-primary font-bold tracking-wide uppercase mb-2">Guide</div>
+                            <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                                Fillerbehandling i Sverige 2026 — den kompletta guiden till priser, hållbarhet och säkerhet
+                            </h2>
+                            <p className="text-gray-600 text-sm mb-6 line-clamp-3">
+                                Allt om fillerbehandling i Sverige 2026: områden, priser, hållbarhet, IVO-regler och hur du väljer en seriös klinik.
                             </p>
                             <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
                                 Läs hela guiden <ArrowRight size={16} className="ml-1" />

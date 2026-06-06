@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getClinics, getTreatments, getCities, getUniqueCities } from '@/lib/supabase/actions/queries';
 import { slugifyCity } from '@/lib/utils';
+import { stockholmSeoData } from '@/lib/seo/stockholm-seo';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://battrehy.se';
@@ -22,6 +23,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/blogg`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
         { url: `${baseUrl}/blogg/ansiktsbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/botoxbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+        { url: `${baseUrl}/blogg/fillerbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     ];
 
     // Individual Clinic Pages
@@ -81,5 +83,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         });
     });
 
-    return [...staticPages, ...clinicPages, ...treatmentPages, ...cityPages, ...comboPages];
+    // Custom Stockholm long-tail SEO pages
+    const stockholmSeoPages: MetadataRoute.Sitemap = Object.keys(stockholmSeoData).map((key) => ({
+        url: `${baseUrl}/kliniker/${key}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly',
+        priority: 0.8
+    }));
+
+    return [...staticPages, ...clinicPages, ...treatmentPages, ...cityPages, ...comboPages, ...stockholmSeoPages];
 }
