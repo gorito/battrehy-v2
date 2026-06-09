@@ -83,6 +83,12 @@ export default async function SearchResultsPage({
                                         {clinic.tier === 'verified' && (
                                             <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full font-bold">Verifierad</span>
                                         )}
+                                        {clinic.is_shr_member && (
+                                            <span className="bg-emerald-100 text-emerald-800 text-xs px-2 py-1 rounded-full font-bold">SHR-medlem</span>
+                                        )}
+                                        {clinic.is_rfem_member && (
+                                            <span className="bg-amber-100 text-amber-800 text-xs px-2 py-1 rounded-full font-bold">RFEM-medlem</span>
+                                        )}
                                     </div>
 
                                     <p className="text-gray-600 mb-3">{clinic.address ? `${clinic.address}, ` : ''}{clinic.city}</p>

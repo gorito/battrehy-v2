@@ -39,14 +39,14 @@ export default function FillerBlogPost() {
                         "@type": "Article",
                         "headline": "Fillerbehandling i Sverige 2026 — den kompletta guiden till priser, hållbarhet och säkerhet",
                         "description": "Allt om fillerbehandling i Sverige 2026: områden, priser, hållbarhet, IVO-regler och hur du väljer en seriös klinik.",
-                        "author": { "@type": "Organization", "name": "Battrehys redaktion" },
+                        "author": { "@type": "Organization", "name": "Battrehys redaktion", "url": "https://battrehy.se/om-redaktionen" },
                         "publisher": {
                             "@type": "Organization",
                             "name": "Battrehy",
                             "url": "https://battrehy.se"
                         },
-                        "datePublished": "2026-05-22",
-                        "dateModified": "2026-05-22",
+                        "datePublished": "2026-05-22T08:00:00+02:00",
+                        "dateModified": "2026-06-06T08:00:00+02:00",
                         "inLanguage": "sv-SE",
                         "image": "https://battrehy.se/images/blogg/fillerbehandling-hero.jpeg",
                         "mainEntityOfPage": {

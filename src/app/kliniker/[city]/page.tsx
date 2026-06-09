@@ -15,14 +15,15 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
+    const cityParam = decodeURIComponent(resolvedParams.city);
     const [cities, uniqueCityNames] = await Promise.all([getCities(), getUniqueCities()]);
     
     // Try to find the city in our cities table first
-    let city: Partial<City> | undefined = cities.find(c => slugifyCity(c.name) === resolvedParams.city);
+    let city: Partial<City> | undefined = cities.find(c => slugifyCity(c.name) === cityParam);
     
     // If not found in cities table, check if it exists in clinics by name
     if (!city) {
-        const cityName = uniqueCityNames.find(name => slugifyCity(name) === resolvedParams.city);
+        const cityName = uniqueCityNames.find(name => slugifyCity(name) === cityParam);
         if (cityName) {
             city = {
                 name: cityName,
@@ -41,19 +42,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title: `${count || ''} Skönhetskliniker i ${cityName}`,
         description: city.description || `Hitta och jämför ${count ? `de ${count} ` : ''}bästa skönhetsklinikerna i ${cityName}. Certifierade kliniker med omdömen och bokningsinformation på battrehy.se.`,
         alternates: {
-            canonical: `/kliniker/${resolvedParams.city}`,
+            canonical: `/kliniker/${cityParam}`,
         },
         openGraph: {
             title: `Skönhetskliniker i ${cityName}`,
             description: `Hitta certifierade kliniker i ${cityName}.`,
-            url: `https://battrehy.se/kliniker/${resolvedParams.city}`,
+            url: `https://battrehy.se/kliniker/${cityParam}`,
         }
     };
 }
 
 export default async function CityPage({ params }: Props) {
     const resolvedParams = await params;
-    const citySlug = resolvedParams.city;
+    const citySlug = decodeURIComponent(resolvedParams.city);
     const asciiCitySlug = slugifyCity(citySlug);
 
     if (citySlug !== asciiCitySlug) {
@@ -70,10 +71,10 @@ export default async function CityPage({ params }: Props) {
     const clinics = clinicsResponse.data;
 
     // Try to find the city
-    let city: Partial<City> | undefined = cities.find(c => slugifyCity(c.name) === resolvedParams.city);
+    let city: Partial<City> | undefined = cities.find(c => slugifyCity(c.name) === citySlug);
     
     if (!city) {
-        const cityName = uniqueCityNames.find(name => slugifyCity(name) === resolvedParams.city);
+        const cityName = uniqueCityNames.find(name => slugifyCity(name) === citySlug);
         if (cityName) {
             city = {
                 name: cityName,
@@ -110,7 +111,7 @@ export default async function CityPage({ params }: Props) {
                 '@type': 'ListItem',
                 position: 2,
                 name: `Kliniker i ${cityName}`,
-                item: `https://battrehy.se/kliniker/${resolvedParams.city}`
+                item: `https://battrehy.se/kliniker/${citySlug}`
             }
         ]
     };
@@ -172,6 +173,12 @@ export default async function CityPage({ params }: Props) {
                                         )}
                                         {clinic.is_verified && (
                                             <span className="bg-blue-100 text-blue-700 text-[10px] uppercase px-2 py-1 rounded-full font-bold">Verifierad</span>
+                                        )}
+                                        {clinic.is_shr_member && (
+                                            <span className="bg-emerald-100 text-emerald-800 text-[10px] uppercase px-2 py-1 rounded-full font-bold">SHR-medlem</span>
+                                        )}
+                                        {clinic.is_rfem_member && (
+                                            <span className="bg-amber-100 text-amber-800 text-[10px] uppercase px-2 py-1 rounded-full font-bold">RFEM-medlem</span>
                                         )}
                                     </div>
                                     <p className="text-gray-500 text-sm mb-4 line-clamp-2 leading-relaxed">

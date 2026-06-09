@@ -232,6 +232,7 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         let scrapedDescription = '';
         let scrapedImageUrl = '';
         let scrapedPhone = '';
+        let scrapedAddress = '';
 
         // Check for "unverified" profile links which lack the PRELOADED_STATE JSON
         if (url.includes('/profile-places/')) {
@@ -275,19 +276,25 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
 
                         const place = data?.place;
                         if (place) {
-                            // Merge description and welcomeText for a richer result
-                            const bdDesc = place.about?.description || '';
-                            const bdWelcome = place.about?.welcomeText || '';
-                            
-                            // Heuristic: If welcome text is unique and long enough, prepend it
-                            if (bdWelcome && bdWelcome.length > 20 && !bdDesc.includes(bdWelcome.substring(0, 20))) {
-                                scrapedDescription = `${bdWelcome}\n\n${bdDesc}`.trim();
-                            } else {
-                                scrapedDescription = bdDesc || bdWelcome;
-                            }
+                            // Strict description mapping: ONLY use the "Om företaget" description
+                            scrapedDescription = place.about?.description || place.description || '';
 
-                            if (place.contact && place.contact.phone) {
-                                scrapedPhone = place.contact.phone;
+                            if (place.contact) {
+                                if (place.contact.phone) {
+                                    scrapedPhone = place.contact.phone;
+                                }
+                                if (place.contact.address) {
+                                    // Construct address string if missing
+                                    const a = place.contact.address;
+                                    const addressParts = [];
+                                    if (a.street) addressParts.push(a.street);
+                                    if (a.zipcode || a.city) {
+                                        addressParts.push(`${a.zipcode || ''} ${a.city || ''}`.trim());
+                                    }
+                                    if (addressParts.length > 0) {
+                                        scrapedAddress = addressParts.join(', ');
+                                    }
+                                }
                             }
 
                             const possibleImageSources = [
@@ -356,7 +363,7 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         }
 
         // 1. Update image and description if they are missing
-        const { data: currentClinic } = await supabase.from('clinics').select('primary_image_url, description, phone').eq('id', clinicId).single();
+        const { data: currentClinic } = await supabase.from('clinics').select('primary_image_url, description, phone, address').eq('id', clinicId).single();
 
         const updates: any = {};
         let fieldsUpdated = [];
@@ -399,6 +406,11 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
         if (currentClinic && !currentClinic.phone && scrapedPhone) {
             updates.phone = scrapedPhone.substring(0, 20);
             fieldsUpdated.push('telefon');
+        }
+
+        if (currentClinic && !currentClinic.address && scrapedAddress) {
+            updates.address = scrapedAddress.substring(0, 200);
+            fieldsUpdated.push('adress');
         }
 
         if (extractedServices.length > 0) {
@@ -455,9 +467,11 @@ export async function fetchClinicMetadataAction(url: string) {
     try {
         const res = await fetch(targetUrl, {
             headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/112.0',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'sv-SE,sv;q=0.8,en-US;q=0.5,en;q=0.3'
             },
-            signal: AbortSignal.timeout(10000)
+            signal: AbortSignal.timeout(15000)
         });
 
         if (!res.ok) {
@@ -471,6 +485,7 @@ export async function fetchClinicMetadataAction(url: string) {
         let description = '';
         let image = '';
         let phone = '';
+        let address = '';
         let services: string[] = [];
 
         // Universal extractors
@@ -529,14 +544,22 @@ export async function fetchClinicMetadataAction(url: string) {
                         if (place) {
                             if (place.name) name = place.name;
                             
-                            // Merge description and welcomeText
-                            const bdDesc = place.about?.description || '';
-                            const bdWelcome = place.about?.welcomeText || '';
+                            // Strict description mapping: ONLY use the "Om företaget" description
+                            description = place.about?.description || place.description || '';
                             
-                            if (bdWelcome && bdWelcome.length > 20 && !bdDesc.includes(bdWelcome.substring(0, 20))) {
-                                description = `${bdWelcome}\n\n${bdDesc}`.trim();
-                            } else {
-                                description = bdDesc || bdWelcome;
+                            if (place.contact) {
+                                if (place.contact.phone) phone = place.contact.phone;
+                                if (place.contact.address) {
+                                    const a = place.contact.address;
+                                    const addressParts = [];
+                                    if (a.street) addressParts.push(a.street);
+                                    if (a.zipcode || a.city) {
+                                        addressParts.push(`${a.zipcode || ''} ${a.city || ''}`.trim());
+                                    }
+                                    if (addressParts.length > 0) {
+                                        address = addressParts.join(', ');
+                                    }
+                                }
                             }
                             
                             // Try to find a real image instead of the generic logo
@@ -722,6 +745,7 @@ export async function fetchClinicMetadataAction(url: string) {
                 description: finalDescription.substring(0, 3000),
                 image,
                 phone: phone.substring(0, 20),
+                address: address.substring(0, 200),
                 website: targetUrl,
                 services: [...new Set(services)]
             }
@@ -744,9 +768,9 @@ export async function enrichClinicFromWebsiteAction(clinicId: string, url: strin
             throw new Error(metadataRes.error || 'Kunde inte hämta metadata.');
         }
 
-        const { description, image, phone, services } = metadataRes.data;
+        const { description, image, phone, services, address } = metadataRes.data;
 
-        const { data: currentClinic } = await supabase.from('clinics').select('primary_image_url, description, phone').eq('id', clinicId).single();
+        const { data: currentClinic } = await supabase.from('clinics').select('primary_image_url, description, phone, address').eq('id', clinicId).single();
 
         const updates: any = {};
         let fieldsUpdated = [];
@@ -769,6 +793,11 @@ export async function enrichClinicFromWebsiteAction(clinicId: string, url: strin
         if (phone && !currentClinic?.phone) {
             updates.phone = phone;
             fieldsUpdated.push('telefon');
+        }
+
+        if (address && !currentClinic?.address) {
+            updates.address = address;
+            fieldsUpdated.push('adress');
         }
 
         if (services && services.length > 0) {

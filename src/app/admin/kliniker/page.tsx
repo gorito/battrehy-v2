@@ -33,6 +33,9 @@ export default async function AdminClinicsPage({
                     <Suspense fallback={<div className="h-10 w-64 bg-gray-100 rounded animate-pulse"></div>}>
                         <AdminSearch />
                     </Suspense>
+                    <Link href="/admin/shr-sync" className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap">
+                        <span className="hidden sm:inline">Synkronisera SHR</span>
+                    </Link>
                     <Link href="/admin/kliniker/skapa" className="bg-primary hover:bg-primary-hover text-white px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-colors whitespace-nowrap">
                         <Plus size={20} />
                         <span className="hidden sm:inline">Lägg till</span>

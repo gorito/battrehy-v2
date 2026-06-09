@@ -39,6 +39,7 @@ export default function CreateClinicForm({ cities }: CreateClinicFormProps) {
                 if (res.data.name) setName(res.data.name);
                 if (res.data.description) setDescription(res.data.description);
                 if (res.data.phone) setPhone(res.data.phone);
+                if (res.data.address) setAddress(res.data.address);
                 
                 // If it was a bokadirekt URL, put it in bookingUrl. 
                 // If it was a private site, put it in website.
@@ -228,6 +229,15 @@ export default function CreateClinicForm({ cities }: CreateClinicFormProps) {
                                 className="w-5 h-5 text-rose-500 rounded border-gray-300 focus:ring-rose-500"
                             />
                             <label htmlFor="is_shr_member" className="text-sm font-medium text-gray-700">Auktoriserad SHR-medlem?</label>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <input
+                                type="checkbox"
+                                id="is_rfem_member"
+                                name="is_rfem_member"
+                                className="w-5 h-5 text-amber-500 rounded border-gray-300 focus:ring-amber-500"
+                            />
+                            <label htmlFor="is_rfem_member" className="text-sm font-medium text-gray-700">RFEM-medlem?</label>
                         </div>
                     </div>
                 </div>

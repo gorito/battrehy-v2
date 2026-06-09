@@ -47,7 +47,14 @@ const nextConfig: any = {
         destination: '/kliniker/jonkoping/:slug*',
         permanent: true,
       },
+      // Fix broken Lidingö URL (was stored with URL-encoded chars)
+      {
+        source: '/kliniker/liding-c3-b6/:slug*',
+        destination: '/kliniker/lidingo/:slug*',
+        permanent: true,
+      },
       // Swedish city name redirects – å, ä, ö → ASCII slugs
+      { source: '/kliniker/lidingö/:slug*',           destination: '/kliniker/lidingo/:slug*',           permanent: true },
       { source: '/kliniker/malmö/:slug*',            destination: '/kliniker/malmo/:slug*',            permanent: true },
       { source: '/kliniker/göteborg/:slug*',          destination: '/kliniker/goteborg/:slug*',          permanent: true },
       { source: '/kliniker/örebro/:slug*',            destination: '/kliniker/orebro/:slug*',            permanent: true },
@@ -68,6 +75,7 @@ const nextConfig: any = {
       { source: '/kliniker/örnsköldsvik/:slug*',      destination: '/kliniker/ornskoldsvik/:slug*',      permanent: true },
       { source: '/kliniker/hovås/:slug*',             destination: '/kliniker/hovas/:slug*',             permanent: true },
       // City-only pages (without clinic slug)
+      { source: '/kliniker/lidingö',                  destination: '/kliniker/lidingo',                  permanent: true },
       { source: '/kliniker/malmö',                    destination: '/kliniker/malmo',                    permanent: true },
       { source: '/kliniker/göteborg',                 destination: '/kliniker/goteborg',                 permanent: true },
       { source: '/kliniker/örebro',                   destination: '/kliniker/orebro',                   permanent: true },

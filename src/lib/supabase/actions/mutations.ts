@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { importExternalImage } from '../storage';
+import { slugifyCity } from '@/lib/utils';
 
 export async function createClinicAction(formData: FormData) {
     const supabase = await createClient();
@@ -16,6 +17,8 @@ export async function createClinicAction(formData: FormData) {
     const description = (formData.get('description') as string)?.trim();
     const primary_image_url = (formData.get('primary_image_url') as string)?.trim();
     const is_shr_member = formData.get('is_shr_member') === 'on';
+    const is_rfem_member = formData.get('is_rfem_member') === 'on';
+    const neighborhood = (formData.get('neighborhood') as string)?.trim() || null;
 
     // Create slug from name
     const slug = name.toLowerCase().trim().replace(/[åä]/g, 'a').replace(/ö/g, 'o').replace(/[^a-z0-9]+/g, '-');
@@ -34,7 +37,9 @@ export async function createClinicAction(formData: FormData) {
             primary_image_url: primary_image_url ? await importExternalImage(primary_image_url) : null,
             tier: 'free',
             is_verified: false,
-            is_shr_member
+            is_shr_member,
+            is_rfem_member,
+            neighborhood
         }])
         .select()
         .single();
@@ -84,7 +89,8 @@ export async function updateTreatmentAction(formData: FormData) {
 export async function updateClinicAction(formData: FormData) {
     const supabase = await createClient();
     const id = formData.get('id') as string;
-    const slug = formData.get('slug') as string;
+    const rawSlug = formData.get('slug') as string;
+    const cleanSlug = rawSlug ? rawSlug.trim().toLowerCase().replace(/[^a-z0-9-_]+/g, '-') : '';
 
     const name = (formData.get('name') as string)?.trim();
     const city = (formData.get('city') as string)?.trim();
@@ -94,14 +100,26 @@ export async function updateClinicAction(formData: FormData) {
     const booking_url = (formData.get('booking_url') as string)?.trim();
     const description = (formData.get('description') as string)?.trim();
     const primary_image_url = (formData.get('primary_image_url') as string)?.trim();
+    const recoRatingRaw = (formData.get('reco_rating') as string)?.trim();
+    const parsedRating = recoRatingRaw ? parseFloat(recoRatingRaw) : NaN;
+    const reco_rating = !isNaN(parsedRating) ? parsedRating : null;
+
+    const recoReviewCountRaw = (formData.get('reco_review_count') as string)?.trim();
+    const parsedCount = recoReviewCountRaw ? parseInt(recoReviewCountRaw, 10) : NaN;
+    const reco_review_count = !isNaN(parsedCount) ? parsedCount : null;
+
+    const reco_url = (formData.get('reco_url') as string)?.trim() || null;
+    const neighborhood = (formData.get('neighborhood') as string)?.trim() || null;
     const is_verified = formData.get('is_verified') === 'on';
     const is_shr_member = formData.get('is_shr_member') === 'on';
+    const is_rfem_member = formData.get('is_rfem_member') === 'on';
     const tier = formData.get('tier') as string;
 
     const { error } = await supabase
         .from('clinics')
         .update({
             name,
+            slug: cleanSlug,
             city,
             address,
             phone,
@@ -111,7 +129,12 @@ export async function updateClinicAction(formData: FormData) {
             primary_image_url: primary_image_url ? await importExternalImage(primary_image_url) : null,
             is_verified,
             is_shr_member,
-            tier
+            is_rfem_member,
+            tier,
+            reco_rating,
+            reco_review_count,
+            reco_url,
+            neighborhood,
         })
         .eq('id', id);
 
@@ -152,9 +175,9 @@ export async function updateClinicAction(formData: FormData) {
     }
 
     revalidatePath('/admin/kliniker');
-    revalidatePath(`/kliniker/${city}/${slug}`);
+    revalidatePath(`/kliniker/${slugifyCity(city)}/${cleanSlug}`);
 
-    return { success: true };
+    return { success: true, newSlug: cleanSlug };
 }
 
 export async function deleteClinicAction(formData: FormData) {

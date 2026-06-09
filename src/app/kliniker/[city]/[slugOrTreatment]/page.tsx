@@ -7,6 +7,7 @@ import { slugifyCity } from '@/lib/utils';
 import CityTreatmentView from '@/components/seo/CityTreatmentView';
 import ClinicTracker from '@/components/analytics/ClinicTracker';
 import TrackedLink from '@/components/analytics/TrackedLink';
+import { stockholmSeoData, ALIAS_MAP } from '@/lib/seo/stockholm-seo';
 
 export const dynamic = 'force-dynamic';
 
@@ -16,7 +17,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
-    const { city: citySlug, slugOrTreatment } = resolvedParams;
+    const citySlug = decodeURIComponent(resolvedParams.city);
+    const slugOrTreatment = decodeURIComponent(resolvedParams.slugOrTreatment);
 
     // 1. Check if it's a specific clinic (Clinic Detail Page) - Check this FIRST to avoid hijacking
     const clinic = await getClinicBySlug(slugOrTreatment);
@@ -38,12 +40,26 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     }
 
     // 2. Check if it's a treatment (Combination Page)
+    const resolvedSlugOrTreatment = ALIAS_MAP[slugOrTreatment] || slugOrTreatment;
+    const seoKey = `${citySlug.toLowerCase()}/${slugOrTreatment.toLowerCase()}`;
+    const customSeo = stockholmSeoData[seoKey];
+
+    if (customSeo) {
+        return {
+            title: customSeo.title,
+            description: customSeo.description,
+            alternates: {
+                canonical: `/kliniker/${citySlug}/${slugOrTreatment}`,
+            }
+        };
+    }
+
     const [treatments, cities, uniqueCityNames] = await Promise.all([getTreatments(), getCities(), getUniqueCities()]);
-    let treatment = treatments.find(t => t.slug === slugOrTreatment);
+    let treatment = treatments.find(t => t.slug === resolvedSlugOrTreatment);
     
     // Fail-safe for treatment lookup
-    if (!treatment && (slugOrTreatment.includes('klinik') || slugOrTreatment.includes('behandling'))) {
-        treatment = { name: slugOrTreatment.replace(/-/g, ' '), slug: slugOrTreatment } as any;
+    if (!treatment && (resolvedSlugOrTreatment.includes('klinik') || resolvedSlugOrTreatment.includes('behandling'))) {
+        treatment = { name: resolvedSlugOrTreatment.replace(/-/g, ' '), slug: resolvedSlugOrTreatment } as any;
     }
 
     if (treatment) {
@@ -75,7 +91,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function SlugOrTreatmentPage({ params }: Props) {
     const resolvedParams = await params;
-    const { city: citySlug, slugOrTreatment } = resolvedParams;
+    const citySlug = decodeURIComponent(resolvedParams.city);
+    const slugOrTreatment = decodeURIComponent(resolvedParams.slugOrTreatment);
     const asciiCitySlug = slugifyCity(citySlug);
     const asciiSlugOrTreatment = slugifyCity(slugOrTreatment);
 
@@ -196,6 +213,12 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                                 {clinic.is_verified && (
                                     <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">✓ Verifierad</span>
                                 )}
+                                {clinic.is_shr_member && (
+                                    <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ SHR-medlem</span>
+                                )}
+                                {clinic.is_rfem_member && (
+                                    <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ RFEM-medlem</span>
+                                )}
                             </div>
                             <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap">
                                 {clinic.description || `${clinic.name} är en klinik belägen i ${clinic.city}.`}
@@ -291,14 +314,17 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
         );
     }
 
+    // Resolve alias if needed
+    const resolvedSlugOrTreatment = ALIAS_MAP[slugOrTreatment] || slugOrTreatment;
+
     // Step B: Is it a treatment combination? (FALLBACK)
-    let treatment = treatments.find(t => t.slug === slugOrTreatment);
+    let treatment = treatments.find(t => t.slug === resolvedSlugOrTreatment);
     
     if (!treatment) {
-        treatment = treatments.find(t => t.name.toLowerCase() === slugOrTreatment.replace(/-/g, ' '));
+        treatment = treatments.find(t => t.name.toLowerCase() === resolvedSlugOrTreatment.replace(/-/g, ' '));
     }
     
-    if (!treatment && (slugOrTreatment.includes('klinik') || slugOrTreatment.includes('behandling'))) {
+    if (!treatment && (resolvedSlugOrTreatment.includes('klinik') || resolvedSlugOrTreatment.includes('behandling') || ALIAS_MAP[slugOrTreatment])) {
         treatment = { 
             name: slugOrTreatment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
             slug: slugOrTreatment,
@@ -322,15 +348,31 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                 const cityMatch = slugifyCity(c.city).toLowerCase() === citySlug.toLowerCase();
                 const treatmentsArray = (c as any).treatments || (c as any).clinic_treatments?.map((ct: any) => ct.treatments) || [];
                 const treatmentMatch = treatmentsArray.some((t: any) => 
-                    t.id === treatment!.id || t.slug === treatment!.slug || (t.treatments && t.treatments.slug === treatment!.slug)
+                    t.id === treatment!.id || 
+                    t.slug === treatment!.slug || 
+                    t.slug === resolvedSlugOrTreatment ||
+                    t.slug === slugOrTreatment ||
+                    (t.treatments && (t.treatments.slug === treatment!.slug || t.treatments.slug === resolvedSlugOrTreatment))
                 );
                 const serviceMatch = c.extracted_services?.some((s: string) => 
-                    s.toLowerCase().includes(treatment!.name.toLowerCase())
+                    s.toLowerCase().includes(treatment!.name.toLowerCase()) ||
+                    s.toLowerCase().includes(resolvedSlugOrTreatment.toLowerCase())
                 );
                 return cityMatch && (treatmentMatch || serviceMatch);
             });
 
-            return <CityTreatmentView city={city as any} treatment={treatment} clinics={filteredClinics as any} />;
+            const seoKey = `${citySlug.toLowerCase()}/${slugOrTreatment.toLowerCase()}`;
+            const customSeo = stockholmSeoData[seoKey];
+
+            return (
+                <CityTreatmentView 
+                    city={city as any} 
+                    treatment={treatment} 
+                    clinics={filteredClinics as any} 
+                    customH1={customSeo?.h1}
+                    customEditorial={customSeo?.editorial}
+                />
+            );
         }
     }
     notFound();

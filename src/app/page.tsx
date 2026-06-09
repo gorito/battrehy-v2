@@ -135,7 +135,18 @@ export default async function Home() {
           <Link href="/behandlingar" className="text-[#e8234a] font-bold hover:underline text-sm">Visa alla &rarr;</Link>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {treatments.slice(0, 6).map(treatment => (
+          {treatments
+            .sort((a, b) => {
+              const popular = ['botoxbehandling', 'fillerbehandling', 'ansiktsbehandling', 'microneedling', 'laserbehandling', 'hudvard'];
+              const aIndex = popular.indexOf(a.slug);
+              const bIndex = popular.indexOf(b.slug);
+              if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+              if (aIndex !== -1) return -1;
+              if (bIndex !== -1) return 1;
+              return 0; // Keep alphabetical for the rest
+            })
+            .slice(0, 6)
+            .map(treatment => (
             <Link
               key={treatment.id}
               href={`/behandlingar/${treatment.slug}`}

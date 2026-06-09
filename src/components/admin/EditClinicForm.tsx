@@ -32,8 +32,16 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' 
             } else {
                 setShowSuccess(true);
                 setIsSaving(false);
-                // Hide success message after 5 seconds
-                setTimeout(() => setShowSuccess(false), 5000);
+                
+                const oldSlug = clinic.slug;
+                const newSlug = res?.newSlug;
+                if (newSlug && newSlug !== oldSlug) {
+                    // Redirect to the new edit URL
+                    window.location.href = `/admin/kliniker/${newSlug}?page=${returnPage}`;
+                } else {
+                    // Hide success message after 5 seconds
+                    setTimeout(() => setShowSuccess(false), 5000);
+                }
             }
         } catch (error: any) {
             setSaveError(error.message || 'Ett oväntat fel uppstod vid uppdatering.');
@@ -60,9 +68,10 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' 
 
             <form onSubmit={handleSubmit} className="space-y-6">
                 <input type="hidden" name="id" value={clinic.id} />
-                <input type="hidden" name="slug" value={clinic.slug} />
+                <input type="hidden" name="oldSlug" value={clinic.slug} />
+                <input type="hidden" name="returnPage" value={returnPage} />
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-4 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Kliniknamn *</label>
                         <input
@@ -71,6 +80,17 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' 
                             type="text"
                             defaultValue={clinic.name}
                             className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">URL-Slug *</label>
+                        <input
+                            name="slug"
+                            required
+                            type="text"
+                            defaultValue={clinic.slug}
+                            className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500 font-mono text-sm"
                         />
                     </div>
 
@@ -85,6 +105,22 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' 
                             {uniqueCities.map((city: string) => (
                                 <option key={city} value={city}>{city}</option>
                             ))}
+                        </select>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Stadsdel (Sthlm)</label>
+                        <select
+                            name="neighborhood"
+                            defaultValue={clinic.neighborhood || ''}
+                            className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                        >
+                            <option value="">Ingen</option>
+                            <option value="ostermalm">Östermalm</option>
+                            <option value="sodermalm">Södermalm</option>
+                            <option value="vasastan">Vasastan</option>
+                            <option value="stureplan">Stureplan</option>
+                            <option value="norrmalm-kungsholmen">Norrmalm / Kungsholmen</option>
                         </select>
                     </div>
                 </div>
@@ -141,6 +177,51 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' 
                             className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                             placeholder="https://bokadirekt.se/..."
                         />
+                    </div>
+                </div>
+
+                {/* Reco.se section */}
+                <div className="bg-amber-50 p-6 rounded-xl border border-amber-200 mt-2">
+                    <div className="flex items-center gap-2 mb-1">
+                        <span className="text-amber-500 text-lg">⭐</span>
+                        <h3 className="font-semibold text-gray-900">Reco.se-omdömen</h3>
+                    </div>
+                    <p className="text-xs text-gray-500 mb-4">Fyll i klinikens betyg och länk från Reco.se. Visas på profilsidan som ett trovärdighetsbevis.</p>
+                    <div className="grid grid-cols-3 gap-4">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Betyg (t.ex. 4.8)</label>
+                            <input
+                                name="reco_rating"
+                                type="number"
+                                step="0.1"
+                                min="1"
+                                max="5"
+                                defaultValue={clinic.reco_rating || ''}
+                                className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                placeholder="4.8"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Antal omdömen</label>
+                            <input
+                                name="reco_review_count"
+                                type="number"
+                                min="0"
+                                defaultValue={clinic.reco_review_count || ''}
+                                className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                placeholder="124"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Reco-länk (URL)</label>
+                            <input
+                                name="reco_url"
+                                type="url"
+                                defaultValue={clinic.reco_url || ''}
+                                className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                                placeholder="https://www.reco.se/..."
+                            />
+                        </div>
                     </div>
                 </div>
 
@@ -231,6 +312,17 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' 
                                 className="w-5 h-5 text-rose-500 rounded border-gray-300 focus:ring-rose-500"
                             />
                             <label htmlFor="is_shr_member" className="text-sm font-medium text-gray-700">Auktoriserad SHR-medlem?</label>
+                        </div>
+
+                        <div className="flex items-center gap-2 pt-6">
+                            <input
+                                type="checkbox"
+                                id="is_rfem_member"
+                                name="is_rfem_member"
+                                defaultChecked={clinic.is_rfem_member}
+                                className="w-5 h-5 text-amber-500 rounded border-gray-300 focus:ring-amber-500"
+                            />
+                            <label htmlFor="is_rfem_member" className="text-sm font-medium text-gray-700">RFEM-medlem?</label>
                         </div>
 
                         <div className="flex items-center gap-2 pt-6">

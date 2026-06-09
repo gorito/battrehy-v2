@@ -17,9 +17,12 @@ interface Props {
     city: { name: string; slug: string; description?: string };
     treatment: { name: string; slug: string; description?: string };
     clinics: Clinic[];
+    neighborhood?: { name: string; slug: string };
+    customH1?: string;
+    customEditorial?: string;
 }
 
-export default function CityTreatmentView({ city, treatment, clinics }: Props) {
+export default function CityTreatmentView({ city, treatment, clinics, neighborhood, customH1, customEditorial }: Props) {
     const breadcrumbLd = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
@@ -36,12 +39,21 @@ export default function CityTreatmentView({ city, treatment, clinics }: Props) {
                 name: `Kliniker i ${city.name}`,
                 item: `https://battrehy.se/kliniker/${city.slug}`
             },
-            {
-                '@type': 'ListItem',
-                position: 3,
-                name: `${treatment.name} i ${city.name}`,
-                item: `https://battrehy.se/kliniker/${city.slug}/${treatment.slug}`
-            }
+            ...(neighborhood ? [
+                {
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: `${treatment.name} i ${neighborhood.name}`,
+                    item: `https://battrehy.se/kliniker/${city.slug}/${neighborhood.slug}/${treatment.slug}`
+                }
+            ] : [
+                {
+                    '@type': 'ListItem',
+                    position: 3,
+                    name: `${treatment.name} i ${city.name}`,
+                    item: `https://battrehy.se/kliniker/${city.slug}/${treatment.slug}`
+                }
+            ])
         ]
     };
 
@@ -57,17 +69,25 @@ export default function CityTreatmentView({ city, treatment, clinics }: Props) {
                     <Link href="/" className="hover:text-primary transition-colors">Hem</Link>
                     <span>&gt;</span>
                     <Link href={`/kliniker/${city.slug}`} className="hover:text-primary capitalize">{city.name}</Link>
+                    {neighborhood && (
+                        <>
+                            <span>&gt;</span>
+                            <span className="capitalize">{neighborhood.name}</span>
+                        </>
+                    )}
                     <span>&gt;</span>
                     <span className="text-gray-900 font-medium">{treatment.name}</span>
                 </nav>
 
                 <div className="mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                        {treatment.name} i {city.name}
+                        {customH1 || (neighborhood ? `${treatment.name} i ${neighborhood.name} — ${city.name}` : `${treatment.name} i ${city.name}`)}
                     </h1>
-                    <p className="text-lg text-gray-600 leading-relaxed max-w-3xl">
-                        Hitta de bästa klinikerna för {treatment.name.toLowerCase()} i {city.name}. 
-                        Vi har listat certifierade kliniker som utför {treatment.name.toLowerCase()} med högsta precision och säkerhet.
+                    <p className="text-lg text-gray-600 leading-relaxed max-w-3xl whitespace-pre-line">
+                        {customEditorial || (neighborhood 
+                            ? `Hitta de bästa klinikerna för ${treatment.name.toLowerCase()} i ${neighborhood.name}, ${city.name}. Jämför verifierade kliniker, priser och boka direkt.`
+                            : `Hitta de bästa klinikerna för ${treatment.name.toLowerCase()} i ${city.name}. Vi har listat certifierade kliniker som utför ${treatment.name.toLowerCase()} med högsta precision och säkerhet.`
+                        )}
                     </p>
                 </div>
 
@@ -87,6 +107,12 @@ export default function CityTreatmentView({ city, treatment, clinics }: Props) {
                                         )}
                                         {clinic.is_verified && (
                                             <span className="bg-blue-100 text-blue-700 text-[10px] uppercase px-2 py-1 rounded-full font-bold">Verifierad</span>
+                                        )}
+                                        {clinic.is_shr_member && (
+                                            <span className="bg-emerald-100 text-emerald-800 text-[10px] uppercase px-2 py-1 rounded-full font-bold">SHR-medlem</span>
+                                        )}
+                                        {clinic.is_rfem_member && (
+                                            <span className="bg-amber-100 text-amber-800 text-[10px] uppercase px-2 py-1 rounded-full font-bold">RFEM-medlem</span>
                                         )}
                                     </div>
                                     <p className="text-gray-500 text-sm mb-4 line-clamp-2 leading-relaxed">

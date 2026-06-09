@@ -13,6 +13,43 @@ export const metadata: Metadata = {
 export default function BotoxBlogPost() {
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Article",
+                        "headline": "Botoxbehandling i Sverige 2026 — den kompletta guiden till priser, säkerhet och kliniker",
+                        "description": "Allt om botoxbehandling i Sverige 2026: priser, säkerhet, IVO-regler, områden och hur du väljer en seriös klinik.",
+                        "author": { "@type": "Organization", "name": "Battrehys redaktion", "url": "https://battrehy.se/om-redaktionen" },
+                        "publisher": { "@type": "Organization", "name": "Battrehy", "url": "https://battrehy.se" },
+                        "datePublished": "2026-05-01T08:00:00+02:00",
+                        "dateModified": "2026-06-06T08:00:00+02:00",
+                        "inLanguage": "sv-SE",
+                        "image": "https://battrehy.se/images/blogg/botox_hero.jpeg",
+                        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden" }
+                    })
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            { "@type": "Question", "name": "Vad kostar en botoxbehandling i Sverige?", "acceptedAnswer": { "@type": "Answer", "text": "En botoxbehandling i Sverige kostar typiskt mellan 1 800 kr (ett område) och 5 000 kr (3 områden). Nationellt snitt 3 088 kr enligt Skonhetskollens 2026-data. Stockholmskliniker ligger något över snittet, mindre orter ofta något under." } },
+                            { "@type": "Question", "name": "Hur länge håller botox?", "acceptedAnswer": { "@type": "Answer", "text": "Effekten håller typiskt 3–6 månader. Första behandlingen ger ofta kortare effekt; med upprepade behandlingar kan effekten förlängas till 4–6 månader. Faktorer som påverkar är muskelaktivitet, dos, område och individuell metabolism." } },
+                            { "@type": "Question", "name": "Vem får utföra botox i Sverige?", "acceptedAnswer": { "@type": "Answer", "text": "Enligt Lag 2021:363 måste botoxbehandlingar utföras av legitimerad sjuksköterska, läkare eller tandläkare. Kliniken måste finnas i IVO:s vårdgivarregister. Du har rätt att be om legitimationsbevis och kontrollera registreringen själv." } },
+                            { "@type": "Question", "name": "Måste man ha konsultation innan första botoxbehandlingen?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Lagen kräver minst 48 timmars betänketid mellan konsultation och första behandling. Konsultationen ska innehålla hudanalys, genomgång av medicinsk historia och skriftlig information om risker och pris." } },
+                            { "@type": "Question", "name": "Vilka biverkningar kan botox ge?", "acceptedAnswer": { "@type": "Answer", "text": "Vanliga övergående biverkningar är liten rodnad, små märken efter injektionspunkter och mild huvudvärk första dygnet. Mer sällsynt: tillfällig asymmetri, hängande ögonlock (ptos) eller en frusen känsla. Mycket sällsynta allvarliga reaktioner inkluderar allergisk reaktion." } },
+                            { "@type": "Question", "name": "Hur snabbt syns effekten av botox?", "acceptedAnswer": { "@type": "Answer", "text": "Första antydan till effekt kan synas efter 3–5 dagar. Full effekt utvecklas över 10–14 dagar. Många kliniker erbjuder en gratis kontroll 2 veckor efter behandlingen för eventuell justering." } },
+                            { "@type": "Question", "name": "Kan botox förebygga rynkor?", "acceptedAnswer": { "@type": "Answer", "text": "Preventiv botox — små doser i tidiga 30-årsåldern för att förhindra dynamiska rynkor — har blivit allt vanligare. Studier antyder att det kan fördröja djupa linjer, men beslutet bör tas med legitimerad personal baserat på individuella muskel- och hudmönster." } },
+                            { "@type": "Question", "name": "Hur hittar jag en seriös botoxklinik i Sverige?", "acceptedAnswer": { "@type": "Answer", "text": "Börja med att kontrollera att kliniken finns i IVO:s vårdgivarregister (ivo.se) och att den som utför behandlingen är legitimerad (kontrollera via socialstyrelsen.se). Be om transparenta priser, läs flera oberoende recensioner och kräv konsultation med 48 timmars betänketid." } }
+                        ]
+                    })
+                }}
+            />
             <div className="max-w-3xl mx-auto">
                 <Link href="/blogg" className="inline-flex items-center text-primary hover:underline mb-8 font-medium">
                     <ArrowLeft size={16} className="mr-2" />
@@ -58,12 +95,29 @@ export default function BotoxBlogPost() {
                             </ul>
                         </div>
 
+                        <nav className="bg-gray-50 border border-gray-200 p-6 rounded-2xl mb-12">
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">Innehåll</h2>
+                            <ul className="space-y-2 text-gray-700">
+                                <li><a href="#vad-ar" className="text-primary hover:underline">1. Vad är botox?</a></li>
+                                <li><a href="#omraden" className="text-primary hover:underline">2. Vilka områden kan behandlas med botox?</a></li>
+                                <li><a href="#behandling" className="text-primary hover:underline">3. Hur går behandlingen till?</a></li>
+                                <li><a href="#priser" className="text-primary hover:underline">4. Vad kostar botox i Sverige?</a></li>
+                                <li><a href="#hallbarhet" className="text-primary hover:underline">5. Hur länge håller resultatet?</a></li>
+                                <li><a href="#risker" className="text-primary hover:underline">6. Risker, biverkningar och kontraindikationer</a></li>
+                                <li><a href="#lag" className="text-primary hover:underline">7. Lag 2021:363 och IVO — dina rättigheter</a></li>
+                                <li><a href="#valja-klinik" className="text-primary hover:underline">8. Så väljer du en seriös klinik</a></li>
+                                <li><a href="#fore-efter" className="text-primary hover:underline">9. Före och efter behandling</a></li>
+                                <li><a href="#faq" className="text-primary hover:underline">10. Vanliga frågor</a></li>
+                                <li><a href="#kallor" className="text-primary hover:underline">11. Källor</a></li>
+                            </ul>
+                        </nav>
+
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="vad-ar">Vad är botox?</h2>
                         <p>
                             Botox är ett varumärke för botulinumtoxin typ A, ett protein som framställs från bakterien <em>Clostridium botulinum</em>. När det injiceras i mycket små mängder i en specifik muskel blockerar det tillfälligt nervsignalen som får muskeln att dra ihop sig. Resultatet: muskeln slappnar av, vilket mjukar upp eller släpper ut den rynka som musklen orsakade.
                         </p>
                         <p>
-                            Det är viktigt att skilja botox från <strong>filler</strong>. Botox slappnar av muskler — fillers tillför volym. De används ofta tillsammans men har olika syften: botox passar dynamiska rynkor (de som syns när du skrattar, rynkar pannan), fillers passar volymförluster och statiska linjer. För en djupare jämförelse, se våra <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="text-primary hover:underline">guider om fillers</Link>.
+                            Det är viktigt att skilja botox från <strong>filler</strong>. Botox slappnar av muskler — fillers tillför volym. De används ofta tillsammans men har olika syften: botox passar dynamiska rynkor (de som syns när du skrattar, rynkar pannan), fillers passar volymförluster och statiska linjer. För en djupare jämförelse, se vår <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="text-primary hover:underline">guide till fillerbehandling</Link>.
                         </p>
                         <p>
                             På den svenska marknaden används framför allt tre godkända botulinumtoxin-preparat: <strong>Botox</strong> (Allergan), <strong>Azzalure</strong> (Galderma/Ipsen) och <strong>Bocouture</strong> (Merz). De skiljer sig i bland annat doseringsformat och hur snabbt effekten kommer, men resultaten är för normala kosmetiska användningar i praktiken jämförbara.
@@ -270,6 +324,9 @@ export default function BotoxBlogPost() {
                             <li><strong>18-årsgräns.</strong> Estetiska injektioner får inte utföras på personer under 18 år.</li>
                         </ol>
 
+                        <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6" id="valja-klinik">Så väljer du en seriös klinik</h2>
+                        <p>Att hitta en seriös botoxklinik innebär att kontrollera IVO-registrering, behandlarens legitimation och klinikens recensioner. Du har rätt till en ordentlig konsultation och skriftlig information. Undvik kliniker som stressar fram ett beslut.</p>
+
                         <div className="bg-gray-50 border-l-4 border-primary p-6 mt-8 rounded-r-lg">
                             <h3 className="font-bold text-gray-900 mb-4">Hitta en klinik nära dig</h3>
                             <div className="flex flex-col md:flex-row gap-6 items-center">
@@ -314,7 +371,7 @@ export default function BotoxBlogPost() {
                         </ul>
                         
                         <p className="mt-4">
-                            För en grundlig hemvårdsrutin mellan klinikbesöken, se <Link href="/blogg" className="text-primary hover:underline">våra guider om hudvård</Link>.
+                            För djuprengöring av huden, se vår <Link href="/blogg/ansiktsbehandling-den-kompletta-guiden" className="text-primary hover:underline">guide till ansiktsbehandling</Link>.
                         </p>
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6" id="faq">Vanliga frågor</h2>

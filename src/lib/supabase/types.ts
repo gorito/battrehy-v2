@@ -37,6 +37,7 @@ export interface Clinic {
     primary_image_url?: string;
     is_verified: boolean;
     is_shr_member: boolean;
+    is_rfem_member: boolean;
     extracted_services?: string[];
     created_at: string;
     updated_at: string;

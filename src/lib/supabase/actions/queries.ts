@@ -32,7 +32,7 @@ export async function getClinics(
 
     const transformedData = (data as any[]).map(clinic => ({
         ...clinic,
-        treatments: clinic.clinic_treatments?.map((ct: any) => ct.treatments) || []
+        treatments: clinic.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || []
     }));
 
     return { data: transformedData, count: count || 0 };
@@ -68,7 +68,7 @@ export async function getFeaturedClinics(limit: number = 12, city?: string): Pro
 
     return (data as any[]).map(clinic => ({
         ...clinic,
-        treatments: clinic.clinic_treatments?.map((ct: any) => ct.treatments) || []
+        treatments: clinic.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || []
     }));
 }
 
@@ -93,7 +93,7 @@ export async function getClinicBySlug(slug: string): Promise<Clinic | null> {
 
     return {
         ...data,
-        treatments: data.clinic_treatments?.map((ct: any) => ct.treatments) || [],
+        treatments: data.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || [],
         images: data.clinic_images?.sort((a: any, b: any) => a.sort_order - b.sort_order) || []
     };
 }
@@ -166,14 +166,21 @@ export async function getTreatments(): Promise<Treatment[]> {
     const supabase = await createClient();
     const { data, error } = await supabase
         .from('treatments')
-        .select('*')
+        .select('*, clinic_treatments(clinic_id)')
         .order('name');
 
     if (error) {
         console.error('Error fetching treatments:', error);
         return [];
     }
-    return data;
+    
+    // Filter out treatments that have 0 clinics connected to them
+    return data
+        .filter(t => t.clinic_treatments && t.clinic_treatments.length > 0)
+        .map(t => {
+            const { clinic_treatments, ...rest } = t;
+            return rest as Treatment;
+        });
 }
 
 export async function getTreatmentBySlug(slug: string): Promise<Treatment | null> {

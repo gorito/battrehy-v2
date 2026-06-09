@@ -13,6 +13,42 @@ export const metadata: Metadata = {
 export default function BlogPost() {
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "Article",
+                        "headline": "Ansiktsbehandling: Den kompletta guiden 2026 — typer, priser och så väljer du rätt klinik",
+                        "description": "Allt om ansiktsbehandlingar i Sverige 2026: typer, priser, vilken passar din hud och hur du väljer en seriös klinik.",
+                        "author": { "@type": "Organization", "name": "Battrehys redaktion", "url": "https://battrehy.se/om-redaktionen" },
+                        "publisher": { "@type": "Organization", "name": "Battrehy", "url": "https://battrehy.se" },
+                        "datePublished": "2026-05-01T08:00:00+02:00",
+                        "dateModified": "2026-06-06T08:00:00+02:00",
+                        "inLanguage": "sv-SE",
+                        "image": "https://battrehy.se/images/blogg/ansiktsbehandling.jpeg",
+                        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://battrehy.se/blogg/ansiktsbehandling-den-kompletta-guiden" }
+                    })
+                }}
+            />
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                        "@context": "https://schema.org",
+                        "@type": "FAQPage",
+                        "mainEntity": [
+                            { "@type": "Question", "name": "Hur ofta ska jag gå på ansiktsbehandling?", "acceptedAnswer": { "@type": "Answer", "text": "Hudens cellförnyelse tar cirka 28 dagar, så de flesta hudterapeuter rekommenderar en behandling var fjärde till åttonde vecka för bästa resultat. Vid akuta hudproblem kan tätare behandlingar (varannan vecka) under en period rekommenderas; för underhåll räcker ofta sex till åtta veckors mellanrum." } },
+                            { "@type": "Question", "name": "Vad är skillnaden mellan en ansiktsbehandling hemma och på klinik?", "acceptedAnswer": { "@type": "Answer", "text": "En proffsbehandling använder utrustning, produktkoncentrationer och tekniker som inte är tillgängliga för konsumenter — exempelvis medicinsk peeling, microneedling-apparater och HIFU-ultraljud. Behandlingen utförs av utbildad personal som anpassar protokollet efter din specifika hud." } },
+                            { "@type": "Question", "name": "Vad kostar en ansiktsbehandling i Sverige?", "acceptedAnswer": { "@type": "Answer", "text": "Priserna varierar mellan cirka 600 kr för en enkel klassisk behandling till nära 9 000 kr för avancerade behandlingar som HIFU. Median för en standard ansiktsbehandling ligger på cirka 1 100 kr. Stockholm tenderar ligga 16 procent över rikssnitt; mindre orter ofta lägre." } },
+                            { "@type": "Question", "name": "Hur länge håller resultatet?", "acceptedAnswer": { "@type": "Answer", "text": "Det beror på typ av behandling. En klassisk ansiktsbehandling ger en omedelbar effekt som håller två till fyra veckor. Kemisk peeling och microneedling ger längre resultat (tre till sex månader). HIFU kan ge resultat upp till tolv till arton månader." } },
+                            { "@type": "Question", "name": "Är ansiktsbehandlingar säkra under graviditet?", "acceptedAnswer": { "@type": "Answer", "text": "Vissa behandlingar — klassisk rengöring, lugnande masker, manuell extraktion — är generellt säkra under graviditet. Andra avråds: medicinsk peeling med starka syror, retinol-baserade behandlingar, IPL och laser, samt vissa apparatbehandlingar. Konsultera alltid din kliniker och vid osäkerhet din barnmorska innan bokning." } },
+                            { "@type": "Question", "name": "Vilken ansiktsbehandling är bäst för akne?", "acceptedAnswer": { "@type": "Answer", "text": "Vid aktiv akne rekommenderas ofta en kombination av kemisk peeling med BHA (salicylsyra), djuprengörande behandling och LED-ljusterapi (blått ljus mot bakterier). Microneedling kan hjälpa mot ärr efter akne men avråds vid aktiv inflammation." } },
+                            { "@type": "Question", "name": "Måste kliniken vara registrerad hos IVO?", "acceptedAnswer": { "@type": "Answer", "text": "Kliniker som utför vissa estetiska behandlingar — såsom injektioner och kirurgiska ingrepp — måste enligt Lag (2021:363) vara registrerade i IVOs vårdgivarregister och ha legitimerad personal. För renodlade ansiktsbehandlingar utan injektioner eller invasiva ingrepp är reglerna mer flexibla, men välj alltid klinik med legitimerad hudterapeut, sjuksköterska eller läkare." } }
+                        ]
+                    })
+                }}
+            />
             <div className="max-w-3xl mx-auto">
                 <Link href="/blogg" className="inline-flex items-center text-primary hover:underline mb-8 font-medium">
                     <ArrowLeft size={16} className="mr-2" />
@@ -56,6 +92,21 @@ export default function BlogPost() {
                                 <li><strong>Underhåll var 4–8 vecka</strong> ger bäst långsiktigt resultat — hudens cellförnyelse tar cirka 28 dagar</li>
                             </ul>
                         </div>
+
+                        <nav className="bg-gray-50 border border-gray-200 p-6 rounded-2xl mb-12">
+                            <h2 className="text-xl font-bold text-gray-900 mb-4">Innehåll</h2>
+                            <ul className="space-y-2 text-gray-700">
+                                <li><a href="#vad-ar" className="text-primary hover:underline">1. Vad är en ansiktsbehandling?</a></li>
+                                <li><a href="#typer" className="text-primary hover:underline">2. De 8 vanligaste typerna av ansiktsbehandlingar</a></li>
+                                <li><a href="#vilken" className="text-primary hover:underline">3. Vilken ansiktsbehandling passar dig?</a></li>
+                                <li><a href="#priser" className="text-primary hover:underline">4. Vad kostar en ansiktsbehandling i Sverige?</a></li>
+                                <li><a href="#valja-klinik" className="text-primary hover:underline">5. Så väljer du rätt klinik</a></li>
+                                <li><a href="#risker" className="text-primary hover:underline">6. Risker, biverkningar och kontraindikationer</a></li>
+                                <li><a href="#fore-efter" className="text-primary hover:underline">7. Före och efter behandling</a></li>
+                                <li><a href="#faq" className="text-primary hover:underline">8. Vanliga frågor</a></li>
+                                <li><a href="#kallor" className="text-primary hover:underline">9. Källor</a></li>
+                            </ul>
+                        </nav>
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="vad-ar">Vad är en ansiktsbehandling?</h2>
                         <p>
@@ -158,7 +209,7 @@ export default function BlogPost() {
                         <p>Solskador, hormonell pigmentering (melasma) eller post-inflammatorisk pigmentering kräver tålamod. <strong>Kemisk peeling med AHA eller TCA</strong> är förstaval. <strong>Microneedling med tillägg av tranexamsyra eller vitamin C</strong> kan komplettera. <strong>IPL</strong> (intense pulsed light) erbjuds av specialiserade kliniker. Sol-undvikande och dagligt SPF 50 är nödvändigt — annars kommer pigmenteringen tillbaka.</p>
 
                         <h3 className="text-xl font-bold text-gray-900 mt-6 mb-2">Åldrande hud, fina linjer och förlorad fasthet</h3>
-                        <p>Detta är ett område där flera behandlingar samverkar. <strong>Microneedling</strong> stimulerar kollagen i en serie om 3–4 behandlingar. <strong>HIFU</strong> ger djupare lyft över längre tid. <strong>Kemisk peeling</strong> förbättrar ytstrukturen. För <strong>dynamiska rynkor</strong> (panna, ögonbryn) erbjuder kliniker ofta injektioner — läs mer om <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline">botox</Link>.</p>
+                        <p>Detta är ett område där flera behandlingar samverkar. <strong>Microneedling</strong> stimulerar kollagen i en serie om 3–4 behandlingar. <strong>HIFU</strong> ger djupare lyft över längre tid. <strong>Kemisk peeling</strong> förbättrar ytstrukturen. För <strong>dynamiska rynkor</strong> (panna, ögonbryn) erbjuder kliniker ofta injektioner — läs vår <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline">guide till botoxbehandling</Link>.</p>
 
                         <h3 className="text-xl font-bold text-gray-900 mt-6 mb-2">Torr och känslig hud</h3>
                         <p>Mild rengöring och fokus på fukt. <strong>Klassisk ansiktsbehandling</strong> med hyaluronsyra-mask. <strong>HydraFacial</strong> är skonsam och ger omedelbar fukt. <strong>LED rött ljus</strong> dämpar inflammation. Undvik aggressiva peelings och microneedling under aktiv eksem-fas.</p>
@@ -264,7 +315,7 @@ export default function BlogPost() {
                                 På Battrehy.se hittar du över 500 hudvårdskliniker över hela Sverige. Du kan filtrera efter behandlingstyp, stad och kundbetyg, jämföra utbud och boka direkt — eller läsa om varje kliniks specialisering innan du tar kontakt. <Link href="/behandlingar/ansiktsbehandling" className="text-primary hover:underline font-medium">Hitta kliniker för ansiktsbehandling här</Link>.
                             </p>
                             <p className="text-gray-700 text-sm sm:text-base mt-2">
-                                För injektionsbehandlingar mot rynkor, se vår <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline font-medium">guide till botox</Link>. Letar du efter en estetisk klinik mer generellt? Besök <Link href="/kliniker" className="text-primary hover:underline font-medium">vår klinikkatalog</Link>.
+                                För injektionsbehandlingar mot rynkor, se vår <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline font-medium">guide till botoxbehandling</Link>. För återskapande av volym, läs vår <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="text-primary hover:underline font-medium">guide till fillerbehandling</Link>. Letar du efter en estetisk klinik mer generellt? Besök <Link href="/kliniker" className="text-primary hover:underline font-medium">vår klinikkatalog</Link>.
                             </p>
                         </div>
 
