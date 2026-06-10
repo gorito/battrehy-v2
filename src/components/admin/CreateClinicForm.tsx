@@ -54,6 +54,23 @@ export default function CreateClinicForm({ cities, allTreatments = [] }: CreateC
                 if (res.data.image) {
                     setImageUrl(res.data.image);
                 }
+
+                // Auto-check the treatments that were found
+                if (res.data.matched_treatment_slugs && res.data.matched_treatment_slugs.length > 0) {
+                    const matchedIds = allTreatments
+                        .filter(t => res.data.matched_treatment_slugs.includes(t.slug))
+                        .map(t => t.id);
+                    
+                    setTimeout(() => {
+                        const checkboxes = document.querySelectorAll('input[name="treatment_ids"]');
+                        checkboxes.forEach((cb) => {
+                            const input = cb as HTMLInputElement;
+                            if (matchedIds.includes(input.value)) {
+                                input.checked = true;
+                            }
+                        });
+                    }, 100);
+                }
             } else {
                 setMagicError(res.error || 'Kunde inte hämta data ifrån denna URL.');
             }

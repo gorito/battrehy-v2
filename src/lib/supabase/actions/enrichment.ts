@@ -501,6 +501,16 @@ export async function fetchClinicMetadataAction(url: string) {
         for (const el of telLinks) {
             if (!phone) phone = $(el).text().trim();
         }
+        
+        // Regex fallback for phone on homepage if no tel: link exists
+        if (!phone) {
+            const bodyText = $('body').text();
+            // Looks for Swedish formats like 070-123 45 67, 08-123 45 67
+            const phoneMatch = bodyText.match(/(?:07[02369]|08)[-\s]?[0-9]{2,3}[-\s]?[0-9]{2}[-\s]?[0-9]{2}/);
+            if (phoneMatch) {
+                phone = phoneMatch[0].trim();
+            }
+        }
 
         // Try to get a rich description from the body first (prioritizing Swedish)
         const richDesc = extractRichDescription($);
@@ -637,9 +647,9 @@ export async function fetchClinicMetadataAction(url: string) {
 
             services = Array.from(possibleTreatments);
 
-            // 3. SUBPATH CHECK if nothing found on home page OR if description is very short
-            if ((services.length === 0 || description.length < 100) && (targetUrl.endsWith('.se') || targetUrl.endsWith('.se/') || targetUrl.endsWith('.com') || targetUrl.endsWith('.com/'))) {
-                const subpaths = ['om-oss', 'om-kliniken', 'kliniken', 'behandlingar', 'tjanster', 'vara-behandlingar', 'våra-behandlingar'];
+            // 3. SUBPATH CHECK if nothing found on home page OR if description is very short OR contact info is missing
+            if ((services.length === 0 || description.length < 100 || !phone || !address) && (targetUrl.endsWith('.se') || targetUrl.endsWith('.se/') || targetUrl.endsWith('.com') || targetUrl.endsWith('.com/'))) {
+                const subpaths = ['om-oss', 'om-kliniken', 'kliniken', 'behandlingar', 'tjanster', 'vara-behandlingar', 'våra-behandlingar', 'kontakt', 'kontakta-oss'];
                 for (const sub of subpaths) {
                     try {
                         const baseUrl = targetUrl.endsWith('/') ? targetUrl : targetUrl + '/';
@@ -657,6 +667,31 @@ export async function fetchClinicMetadataAction(url: string) {
                                 const subDesc = extractRichDescription($sub);
                                 if (subDesc && scoreText(subDesc) > scoreText(description)) {
                                     description = subDesc;
+                                }
+                            }
+                            
+                            // Try to find phone
+                            if (!phone) {
+                                const subTelLinks = $sub('a[href^="tel:"]').toArray();
+                                for (const el of subTelLinks) {
+                                    if (!phone) phone = $sub(el).text().trim();
+                                }
+                                if (!phone) {
+                                    const subBodyText = $sub('body').text();
+                                    const phoneMatch = subBodyText.match(/(?:07[02369]|08)[-\s]?[0-9]{2,3}[-\s]?[0-9]{2}[-\s]?[0-9]{2}/);
+                                    if (phoneMatch) {
+                                        phone = phoneMatch[0].trim();
+                                    }
+                                }
+                            }
+
+                            // Try to find address based on common Swedish formats
+                            if (!address) {
+                                const subBodyText = $sub('body').text();
+                                // Match something like: Storgatan 12, 123 45 Stockholm
+                                const addressMatch = subBodyText.match(/[A-ZÅÄÖ][a-zåäö]+(?:gatan|vägen|gränd|torget|platsen)\s+\d+[A-Za-z]?(?:,\s*|\s+)\d{3}\s?\d{2}\s+[A-ZÅÄÖ][a-zåäö]+/);
+                                if (addressMatch) {
+                                    address = addressMatch[0].trim();
                                 }
                             }
 
@@ -738,6 +773,14 @@ export async function fetchClinicMetadataAction(url: string) {
             finalDescription = await refineClinicDescription(description, name);
         }
 
+        // Map services to slugs
+        const uniqueServices = [...new Set(services)];
+        const matchedSlugs = new Set<string>();
+        for (const s of uniqueServices) {
+            const slug = mapTreatmentToCategory(s);
+            if (slug) matchedSlugs.add(slug);
+        }
+
         return { 
             success: true, 
             data: {
@@ -747,7 +790,8 @@ export async function fetchClinicMetadataAction(url: string) {
                 phone: phone.substring(0, 20),
                 address: address.substring(0, 200),
                 website: targetUrl,
-                services: [...new Set(services)]
+                services: uniqueServices,
+                matched_treatment_slugs: Array.from(matchedSlugs)
             }
         };
 
