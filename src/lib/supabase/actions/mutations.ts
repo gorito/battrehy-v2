@@ -52,6 +52,19 @@ export async function createClinicAction(formData: FormData) {
         return { error: 'Ett databasfel uppstod när kliniken skulle sparas.' };
     }
 
+    // Handle manual treatments
+    const treatment_ids = formData.getAll('treatment_ids') as string[];
+    if (treatment_ids && treatment_ids.length > 0) {
+        const clinicTreatments = treatment_ids.map(t_id => ({
+            clinic_id: data.id,
+            treatment_id: t_id
+        }));
+        const { error: treatmentError } = await supabase.from('clinic_treatments').insert(clinicTreatments);
+        if (treatmentError) {
+            console.error('Error inserting manual treatments:', treatmentError);
+        }
+    }
+
     // Revalidate the admin index to show the new clinic
     revalidatePath('/admin/kliniker');
 
@@ -172,6 +185,22 @@ export async function updateClinicAction(formData: FormData) {
     } else {
         // If downgraded to free, wipe their gallery images
         await supabase.from('clinic_images').delete().eq('clinic_id', id);
+    }
+
+    // Handle manual treatments
+    const treatment_ids = formData.getAll('treatment_ids') as string[];
+    // First wipe existing treatments
+    await supabase.from('clinic_treatments').delete().eq('clinic_id', id);
+    // Then insert new ones if any
+    if (treatment_ids && treatment_ids.length > 0) {
+        const clinicTreatments = treatment_ids.map(t_id => ({
+            clinic_id: id,
+            treatment_id: t_id
+        }));
+        const { error: treatmentError } = await supabase.from('clinic_treatments').insert(clinicTreatments);
+        if (treatmentError) {
+            console.error('Error updating manual treatments:', treatmentError);
+        }
     }
 
     revalidatePath('/admin/kliniker');

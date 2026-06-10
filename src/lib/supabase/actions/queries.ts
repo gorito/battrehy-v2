@@ -183,6 +183,20 @@ export async function getTreatments(): Promise<Treatment[]> {
         });
 }
 
+export async function getAllAdminTreatments(): Promise<Treatment[]> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('treatments')
+        .select('*')
+        .order('name');
+
+    if (error) {
+        console.error('Error fetching all admin treatments:', error);
+        return [];
+    }
+    return data as Treatment[];
+}
+
 export async function getTreatmentBySlug(slug: string): Promise<Treatment | null> {
     const supabase = await createClient();
     const { data, error } = await supabase

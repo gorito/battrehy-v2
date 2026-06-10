@@ -11,9 +11,10 @@ interface EditClinicFormProps {
     clinic: any;
     uniqueCities: string[];
     returnPage?: string;
+    allTreatments?: any[];
 }
 
-export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' }: EditClinicFormProps) {
+export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1', allTreatments = [] }: EditClinicFormProps) {
     const [isSaving, setIsSaving] = useState(false);
     const [saveError, setSaveError] = useState('');
     const [showSuccess, setShowSuccess] = useState(false);
@@ -267,21 +268,31 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1' 
                 <div className="bg-white p-6 rounded-xl border border-gray-200 mt-6 shadow-sm">
                     <div className="flex justify-between items-start mb-4">
                         <div>
-                            <h3 className="font-semibold text-gray-900 pb-1">Behandlingar (Kategorier)</h3>
-                            <p className="text-sm text-gray-500">De huvudkategorier som kliniken är kopplad till.</p>
+                            <h3 className="font-semibold text-gray-900 pb-1">Behandlingar (Manuellt val)</h3>
+                            <p className="text-sm text-gray-500">Kryssa i de behandlingar kliniken erbjuder. (Skrivs över vid automatisk berikning)</p>
                         </div>
                         <EnrichButton clinicId={clinic.id} bookingUrl={clinic.booking_url || clinic.website} />
                     </div>
 
-                    <div className="flex flex-wrap gap-2 mt-4">
-                        {clinic.treatments && clinic.treatments.length > 0 ? (
-                            clinic.treatments.map((t: any) => (
-                                <span key={t.id} className="bg-rose-50 text-rose-700 px-3 py-1 rounded-full text-sm font-medium border border-rose-100">
-                                    {t.name}
-                                </span>
-                            ))
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mt-4">
+                        {allTreatments.length > 0 ? (
+                            allTreatments.map((t: any) => {
+                                const isSelected = clinic.treatments?.some((ct: any) => ct.id === t.id);
+                                return (
+                                    <label key={t.id} className="flex items-center gap-2 bg-gray-50 px-3 py-2 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-100 transition-colors">
+                                        <input
+                                            type="checkbox"
+                                            name="treatment_ids"
+                                            value={t.id}
+                                            defaultChecked={isSelected}
+                                            className="w-4 h-4 text-rose-500 rounded border-gray-300 focus:ring-rose-500"
+                                        />
+                                        <span className="text-sm font-medium text-gray-700">{t.name}</span>
+                                    </label>
+                                );
+                            })
                         ) : (
-                            <p className="text-sm text-gray-400 italic">Inga behandlingar tillagda ännu. Klicka på "Berika" för att hämta från Bokadirekt.</p>
+                            <p className="text-sm text-gray-400 italic">Inga behandlingar tillgängliga i databasen.</p>
                         )}
                     </div>
                 </div>

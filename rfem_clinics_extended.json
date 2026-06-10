@@ -1,0 +1,947 @@
+[
+  {
+    "name": "Formedico Estetik",
+    "city": "Stockholm",
+    "email": "estetik@formedico.se",
+    "website": "http://www.formedico.se",
+    "phone": ""
+  },
+  {
+    "name": "Estetiska Kliniken",
+    "city": "Sundsvall",
+    "email": "info@estetiskakliniken.com",
+    "website": "http://www.estetiskakliniken.com",
+    "phone": ""
+  },
+  {
+    "name": "Beautyculture AB",
+    "city": "Uppsala",
+    "email": "janine@beautyculture.se",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "Balance by Lotta",
+    "city": "Höllviken",
+    "email": "info@balancebylotta.se",
+    "website": "http://www.balancebylotta.se",
+    "phone": ""
+  },
+  {
+    "name": "DeniCare AB",
+    "city": "Helsingborg",
+    "email": "denisa.talic@denicare.se",
+    "website": "http://www.denicare.se",
+    "phone": ""
+  },
+  {
+    "name": "Advanced Clinic",
+    "city": "Göteborg",
+    "email": "info@advancedclinic.se",
+    "website": "http://www.advancedclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Venturakliniken",
+    "city": "Nacka",
+    "email": "info@venturakliniken.com",
+    "website": "http://www.venturakliniken.com",
+    "phone": ""
+  },
+  {
+    "name": "Skinify",
+    "city": "Umeå",
+    "email": "info@skinifyumea.se",
+    "website": "http://www.skinifyumea.se",
+    "phone": ""
+  },
+  {
+    "name": "Hudfix Örebro AB",
+    "city": "Örebro",
+    "email": "info@hudfix.se",
+    "website": "http://www.hudfix.se",
+    "phone": ""
+  },
+  {
+    "name": "Kungsbacka Skönhet och Estetik",
+    "city": "Kungsbacka",
+    "email": "info@kbaskonhetochestetik.se",
+    "website": "http://www.kbaskonhetochestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "TDN Clinic",
+    "city": "Rönninge",
+    "email": "tom@tomdinurse.nu",
+    "website": "http://www.tomdinurse.com",
+    "phone": ""
+  },
+  {
+    "name": "Gamborg Medicreation",
+    "city": "Göteborg",
+    "email": "info@gamborgmeducation.se",
+    "website": "http://www.gamborgmeducation.se",
+    "phone": ""
+  },
+  {
+    "name": "Molding AB",
+    "city": "Uppsala",
+    "email": "info@molding.se",
+    "website": "http://www.molding.se",
+    "phone": ""
+  },
+  {
+    "name": "Klinik MH",
+    "city": "Göteborg",
+    "email": "klinikmh.se@gmail.com",
+    "website": "http://www.klinikmh.se",
+    "phone": ""
+  },
+  {
+    "name": "SwedEsthetic",
+    "city": "Stockholm",
+    "email": "info@swedesthetic.se",
+    "website": "http://www.swedesthetic.se",
+    "phone": ""
+  },
+  {
+    "name": "Marvelous by M",
+    "city": "Stockholm",
+    "email": "marv3lousbym@gmail.com",
+    "website": "http://www.marvelousbym.com",
+    "phone": ""
+  },
+  {
+    "name": "",
+    "city": "Göteborg",
+    "email": "tesandavorin@gmail.com",
+    "website": "",
+    "phone": "00168376041"
+  },
+  {
+    "name": "Aesthetic Med Clinic i Norrköping",
+    "city": "Norrköping",
+    "email": "info@aestheticmedclinic.se",
+    "website": "http://www.aestheticmedclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Laserkliniken i Uppsala",
+    "city": "Uppsala",
+    "email": "kontakt@laserkliniken.se",
+    "website": "http://www.laserkliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "MedEstetica Sweden AB",
+    "city": "Alingsås",
+    "email": "info@medestetica.se",
+    "website": "http://www.medestetica.se",
+    "phone": ""
+  },
+  {
+    "name": "LMD Nordic",
+    "city": "Stockholm",
+    "email": "info@nackatandvardsteam.se",
+    "website": "http://www.nackatandvardsteam.se",
+    "phone": ""
+  },
+  {
+    "name": "Beautify by Dr Samira AB",
+    "city": "Stockholm",
+    "email": "drsamira@beautifykliniken.se",
+    "website": "https://www.bokadirekt.se/places/beautify-27468",
+    "phone": ""
+  },
+  {
+    "name": "Eklandakliniken",
+    "city": "Särö",
+    "email": "info@eklandakliniken.se",
+    "website": "http://www.eklandakliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "Göta Hudklinik",
+    "city": "Göteborg",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "Amandakliniken AB",
+    "city": "Saltsjöbaden",
+    "email": "info@amandakliniken.se",
+    "website": "http://www.amandakliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "Maya Skin Clinic",
+    "city": "Jönköping",
+    "email": "info@mayaskinclinic.se",
+    "website": "http://www.mayaskinclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Art Clinic",
+    "city": "",
+    "email": "gunilla.windh@artclinic.com",
+    "website": "http://www.artclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Prima Estetik Medicin",
+    "city": "Askim",
+    "email": "mitra@primaestetik.se",
+    "website": "http://www.primaestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "Refine Medicin &amp; Estetik",
+    "city": "Jönköping",
+    "email": "info@refineestetik.se",
+    "website": "http://www.refineestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "Vikor klinik",
+    "city": "Göteborg",
+    "email": "dagmara.p@vikor.se",
+    "website": "http://www.vikor.se",
+    "phone": ""
+  },
+  {
+    "name": "Brenke Estetik AB",
+    "city": "Kungsbacka",
+    "email": "info@brenkeestetik.se",
+    "website": "https://brenkeestetik.se/",
+    "phone": ""
+  },
+  {
+    "name": "Skinclinic NKPG",
+    "city": "Norrköping",
+    "email": "nkpg@skinclinic.nu",
+    "website": "http://www.skinclinic.nu",
+    "phone": ""
+  },
+  {
+    "name": "VisageVital",
+    "city": "Malmö",
+    "email": "stina@visagevital.se",
+    "website": "https://www.bokadirekt.se/places/stina-sunnanvader-visagevital-59352",
+    "phone": ""
+  },
+  {
+    "name": "Klinikfin",
+    "city": "Sölvesborg",
+    "email": "klinikfin@gmail.com",
+    "website": "https://www.meridiq.com",
+    "phone": ""
+  },
+  {
+    "name": "Nord Clinic",
+    "city": "",
+    "email": "marie.carlsson@nordclinic.se",
+    "website": "http://www.nordclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Akademikliniken",
+    "city": "Rönninge",
+    "email": "nina.moosavi@ak.se",
+    "website": "http://www.akademikliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "LT Injektionsstudio AB",
+    "city": "Göteborg",
+    "email": "ltinjektionsstudio@gmail.com",
+    "website": "https://www.bokadirekt.se/places/lt-injektions-studio-54651",
+    "phone": ""
+  },
+  {
+    "name": "Faceclinic West AB",
+    "city": "Askim",
+    "email": "info@faceclinic.se",
+    "website": "http://www.faceclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Faceclinic West AB",
+    "city": "Askim",
+    "email": "info@faceclinic.se",
+    "website": "http://www.faceclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Omtanke &amp; Kompetens i Varberg AB",
+    "city": "Varberg",
+    "email": "sofia@omtankeokompetens.se",
+    "website": "http://www.omtankeokompetens.se",
+    "phone": ""
+  },
+  {
+    "name": "Ateljé Estetik by Jennie Johnsson",
+    "city": "Sävedalen",
+    "email": "jennie@ateljeestetik.se",
+    "website": "http://www.ateljeestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "SkinDelight Clinic AB",
+    "city": "Stockholm",
+    "email": "marie.norrmen@gmail.com",
+    "website": "http://www.skindelight.se",
+    "phone": ""
+  },
+  {
+    "name": "Klok Estetik AB",
+    "city": "Stockholm",
+    "email": "nandi.rutgard@gmail.com",
+    "website": "http://www.klokestetik.com",
+    "phone": ""
+  },
+  {
+    "name": "Ego Estetica",
+    "city": "Höganäs",
+    "email": "info@egoestetica.se",
+    "website": "http://www.egoestetica.se",
+    "phone": ""
+  },
+  {
+    "name": "För din egen skull",
+    "city": "Härnösand",
+    "email": "maria@fordinegenskull.com",
+    "website": "http://www.fordinegenskull.com",
+    "phone": ""
+  },
+  {
+    "name": "Estetik by Petra",
+    "city": "Södra Sandby",
+    "email": "ssk.petra@gmail.com",
+    "website": "http://www.bokadirekt.se/places/estetik-by-petra-54421",
+    "phone": ""
+  },
+  {
+    "name": "Sens à skin",
+    "city": "Kungsbacka",
+    "email": "lotta@sensaskin.se",
+    "website": "http://www.sensaskin.se",
+    "phone": ""
+  },
+  {
+    "name": "DrBritt Estetik",
+    "city": "Uppsala",
+    "email": "brernberg@gmail.com",
+    "website": "http://www.drbrittestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "YouSkin Clinic",
+    "city": "Höllviken",
+    "email": "info@youskin.se",
+    "website": "http://www.youskin.se",
+    "phone": ""
+  },
+  {
+    "name": "Wall Medical",
+    "city": "Stockholm",
+    "email": "info@wallmedical.se",
+    "website": "http://www.wallmedical.se",
+    "phone": ""
+  },
+  {
+    "name": "Carma Concept",
+    "city": "Kungsbacka",
+    "email": "sabina@carmaconcept.se",
+    "website": "http://www.carmaconcept.se",
+    "phone": ""
+  },
+  {
+    "name": "Prima Estetik Medicin",
+    "city": "Göteborg",
+    "email": "neda@primaestetik.se",
+    "website": "http://www.primaestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "Egoiste Gbg",
+    "city": "Göteborg",
+    "email": "meshkinfam.maryam@gmail.com",
+    "website": "http://www.egoistegbg.se",
+    "phone": ""
+  },
+  {
+    "name": "ByThereseForYou",
+    "city": "Köping",
+    "email": "info@bythereseforyou.com",
+    "website": "http://www.bythereseforyou.com",
+    "phone": ""
+  },
+  {
+    "name": "Ça-Va Clinique",
+    "city": "Hovås",
+    "email": "gunnar.brandrup@gmail.com",
+    "website": "http://www.ca-va.se",
+    "phone": ""
+  },
+  {
+    "name": "Nordiska Kliniken",
+    "city": "Stockholm",
+    "email": "silvia.galaz@nordiskakliniken.se",
+    "website": "http://www.nordiskakliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "Entouch",
+    "city": "Stockholm",
+    "email": "annika.harlen@entouch.se",
+    "website": "http://www.entouch.se",
+    "phone": ""
+  },
+  {
+    "name": "Elite Clinic",
+    "city": "Göteborg",
+    "email": "chavoshifanar@hotmail.com",
+    "website": "http://www.eliteclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Cfo clinic",
+    "city": "Umeå",
+    "email": "cecilia.forsner@gmail.com",
+    "website": "http://www.bokadirekt.se/places/cfo-clinic-34672",
+    "phone": ""
+  },
+  {
+    "name": "Sculpté – Klinik &amp; Akademi",
+    "city": "Göteborg",
+    "email": "soodhuntoha@yahoo.com",
+    "website": "http://www.sculpte.se",
+    "phone": ""
+  },
+  {
+    "name": "Klinik Wall",
+    "city": "Sollefteå",
+    "email": "johanna@klinikwall.se",
+    "website": "http://www.klinikwall.se",
+    "phone": ""
+  },
+  {
+    "name": "IBA Estetik",
+    "city": "Eskilstuna",
+    "email": "ibaestetikab@hotmail.com",
+    "website": "http://www.ibaestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "StayYou by Marlene",
+    "city": "marlene@horngard.se",
+    "email": "marlene@horngard.se",
+    "website": "http://www.stayyou.se",
+    "phone": ""
+  },
+  {
+    "name": "Gothia Kliniken",
+    "city": "Göteborg",
+    "email": "gothiakliniken@gmail.com",
+    "website": "http://www.gothiakliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "Forma Vita Dalarna",
+    "city": "Borlänge",
+    "email": "formavita.dalarna@gmail.com",
+    "website": "http://www.formavita.se",
+    "phone": ""
+  },
+  {
+    "name": "Adel Estetik",
+    "city": "Göteborg",
+    "email": "ludvigclase@gmail.com",
+    "website": "http://www.adelestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "Clinic Charisma",
+    "city": "Ljungby",
+    "email": "mj@cliniccharisma.se",
+    "website": "http://www.cliniccharisma.se",
+    "phone": ""
+  },
+  {
+    "name": "Global Aesthetic",
+    "city": "Sundbyberg",
+    "email": "emelie@ingnas.se",
+    "website": "http://www.globalaesthetic.se",
+    "phone": ""
+  },
+  {
+    "name": "Tälje MaxCare AB",
+    "city": "Södertälje",
+    "email": "leif.mattisson@talje-maxcare.se",
+    "website": "http://www.instagram.com/maxcare_",
+    "phone": ""
+  },
+  {
+    "name": "Blanche klinik AB",
+    "city": "Hovås",
+    "email": "caroline@blancheklinik.se",
+    "website": "http://www.blancheklinik.se",
+    "phone": ""
+  },
+  {
+    "name": "Christines Klinik",
+    "city": "Ystad",
+    "email": "kontakt@christinesklinik.se",
+    "website": "http://www.christinesklinik.se",
+    "phone": ""
+  },
+  {
+    "name": "Jixt",
+    "city": "Bromma",
+    "email": "jixtkonsult.ab@gmail.com",
+    "website": "http://www.jixt.se",
+    "phone": ""
+  },
+  {
+    "name": "Fillers by me Västerås",
+    "city": "Västerås",
+    "email": "josefin@fillersbyme.se",
+    "website": "http://www.fillersbyme.se",
+    "phone": ""
+  },
+  {
+    "name": "Dr. Ferlin Health &amp; Esthetics",
+    "city": "Stockholm",
+    "email": "info@drferlin.se",
+    "website": "http://www.drferlin.se",
+    "phone": ""
+  },
+  {
+    "name": "Klinik Täby Park",
+    "city": "Täby",
+    "email": "mai@kliniktabypark.se",
+    "website": "http://www.kliniktabypark.se",
+    "phone": ""
+  },
+  {
+    "name": "Akademikliniken",
+    "city": "Stockholm",
+    "email": "jessica-olsen1@hotmail.com",
+    "website": "http://www.ak.se",
+    "phone": ""
+  },
+  {
+    "name": "Claire Lind Estetik",
+    "city": "Åkersberga",
+    "email": "byclairelind@hotmail.com",
+    "website": "http://www.clairelind.se",
+    "phone": ""
+  },
+  {
+    "name": "Skinmall Göteborg",
+    "city": "Göteborg",
+    "email": "info@skinmall.se",
+    "website": "http://www.skinmall.se",
+    "phone": ""
+  },
+  {
+    "name": "Silhuetts Klinik",
+    "city": "Mullsjö",
+    "email": "hannakanerfalk@gmail.com",
+    "website": "http://www.lookingperfect.se",
+    "phone": ""
+  },
+  {
+    "name": "Your Clinic i Stockholm AB",
+    "city": "Stockholm",
+    "email": "lena.lind@yourclinic.se",
+    "website": "http://www.yourclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Derma Beauty Clinic",
+    "city": "Stockholm",
+    "email": "avesta.kaitoly87@gmail.com",
+    "website": "http://www.dermabeautyclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "IP Beauty",
+    "city": "Kungälv",
+    "email": "ipbeautyswe@gmail.com",
+    "website": "http://www.ipbeautyswe.se",
+    "phone": ""
+  },
+  {
+    "name": "Åmåls Estetiska &amp; Piercing",
+    "city": "Åmål",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "MIKI CLINIC",
+    "city": "Borås",
+    "email": "ulrika@mikiclinic.se",
+    "website": "http://www.mikiclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Karlstads Kirurgiska Laserklinik",
+    "city": "Forshaga",
+    "email": "laser@karlstadlaserklinik.se",
+    "website": "http://www.karlstadlaserklinik.se",
+    "phone": ""
+  },
+  {
+    "name": "Karlstads Kirurgiska Laserklinik",
+    "city": "Karlstad",
+    "email": "laser@karlstadlaserklinik.se",
+    "website": "http://www.karlstadlaserklinik.se",
+    "phone": ""
+  },
+  {
+    "name": "Karlstads Kirurgiska Laserklinik",
+    "city": "Karlstad",
+    "email": "laser@karlstadlaserklinik.se",
+    "website": "http://www.karlstadlaserklinik.se",
+    "phone": ""
+  },
+  {
+    "name": "Skönhetskliniken BEVARO",
+    "city": "Göteborg",
+    "email": "info@skonhetskliniken.se",
+    "website": "http://www.skonhetskliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "Svenska Hudvårdskliniken",
+    "city": "Visby",
+    "email": "eva@wagnhester.se",
+    "website": "http://www.svenskahk.se",
+    "phone": ""
+  },
+  {
+    "name": "Miderma Clinic AB",
+    "city": "Stockholm",
+    "email": "info@midermaclinic.se",
+    "website": "http://www.midermaclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "RelyOn Beauty Clinic",
+    "city": "Örebro",
+    "email": "support@relyonclinic.se",
+    "website": "http://www.relyonclinic.se",
+    "phone": ""
+  },
+  {
+    "name": "Inject Art",
+    "city": "Göteborg",
+    "email": "injectartbymarie@gmail.com",
+    "website": "http://www.injectart.se",
+    "phone": ""
+  },
+  {
+    "name": "Läkarhuset Hötorgscity",
+    "city": "Stockholm",
+    "email": "samineh_o@hotmail.com",
+    "website": "http://www.lakarhuset.se",
+    "phone": ""
+  },
+  {
+    "name": "Art By S Skin &amp; Beauty Clinic",
+    "city": "Kungsbacka",
+    "email": "info.artbys@gmail.com",
+    "website": "http://www.bokadirekt.se/places/art-by-s-skin-beauty-clinic-32058",
+    "phone": ""
+  },
+  {
+    "name": "DOKTORSARA",
+    "city": "Stockholm",
+    "email": "sara.algaho@gmail.com",
+    "website": "http://www.bokadirekt.se/places/doktorsara-30175",
+    "phone": ""
+  },
+  {
+    "name": "Nytorgstandläkarna",
+    "city": "Stockholm",
+    "email": "sara.matak@gmail.com",
+    "website": "http://www.nytand.se",
+    "phone": ""
+  },
+  {
+    "name": "Face Design Kalmar",
+    "city": "Kalmar",
+    "email": "susanne@facedesignkalmar.se",
+    "website": "http://www.facedesignkalmar.se",
+    "phone": ""
+  },
+  {
+    "name": "Nordic Skin Klinik",
+    "city": "Sigtuna",
+    "email": "alex@nordicskinklinik.se",
+    "website": "http://www.nordicskinklinik.se",
+    "phone": ""
+  },
+  {
+    "name": "FROG.NU",
+    "city": "Enskede",
+    "email": "ximena@frog.nu",
+    "website": "http://www.frog.nu",
+    "phone": "00168376041"
+  },
+  {
+    "name": "Hudläkaren i Umeå AB",
+    "city": "Umeå",
+    "email": "info@hudlakaren.se",
+    "website": "http://www.hudlakaren.se",
+    "phone": ""
+  },
+  {
+    "name": "My Clinic Sweden AB",
+    "city": "Stockholm",
+    "email": "marvy@myclinic.nu",
+    "website": "http://www.myclinic.nu",
+    "phone": ""
+  },
+  {
+    "name": "My Clinic Sweden AB",
+    "city": "Stockholm",
+    "email": "sabina_city@hotmail.com",
+    "website": "http://www.myclinic.nu",
+    "phone": ""
+  },
+  {
+    "name": "Örebro Estetik AB",
+    "city": "Örebro",
+    "email": "info@orebroestetik.se",
+    "website": "http://www.orebroestetik.se",
+    "phone": ""
+  },
+  {
+    "name": "Stockholm Platikkirurgi",
+    "city": "Stockholm",
+    "email": "info@stockholmplastikkirurgi.com",
+    "website": "http://www.stockholmplastikkirurgi.com",
+    "phone": ""
+  },
+  {
+    "name": "Beautaholic By Ahrnberg AB",
+    "city": "Lerum",
+    "email": "info@beautaholic.se",
+    "website": "http://www.beautaholic.se",
+    "phone": ""
+  },
+  {
+    "name": "Akademikliniken",
+    "city": "Kungälv",
+    "email": "jennifer.selling@ak.se",
+    "website": "http://www.ak.se",
+    "phone": ""
+  },
+  {
+    "name": "Vital Esthetique Norway/Sweden",
+    "city": "Grebbestad",
+    "email": "vitalesthetique@outlook.com",
+    "website": "https://www.bokadirekt.se/places/vital-esthetique-grebbestad-22239",
+    "phone": ""
+  },
+  {
+    "name": "Senso Estetik AB",
+    "city": "Sjömarken",
+    "email": "info@senso.se",
+    "website": "http://www.senso.se",
+    "phone": ""
+  },
+  {
+    "name": "Optima Tandvård",
+    "city": "Täby",
+    "email": "rm@optimatandvard.se",
+    "website": "http://www.optimatandvard.se",
+    "phone": ""
+  },
+  {
+    "name": "Skin Shape Klinik",
+    "city": "Västerås",
+    "email": "sahartaqwaei.st@gmail.com",
+    "website": "http://www.skinshape.se",
+    "phone": ""
+  },
+  {
+    "name": "Klinik Vital",
+    "city": "Växjö",
+    "email": "abir_tadares@live.se",
+    "website": "http://www.bokadirekt.se/places/klinik-vital-vaxjo-50328",
+    "phone": ""
+  },
+  {
+    "name": "Växjö laserklinik",
+    "city": "Växjö",
+    "email": "jesnygren@hotmail.com",
+    "website": "http://www.vaxjolaserklinik.se",
+    "phone": ""
+  },
+  {
+    "name": "Mandy Medical",
+    "city": "Sollentuna",
+    "email": "info@mandymedical.se",
+    "website": "http://www.mandymedical.se",
+    "phone": ""
+  },
+  {
+    "name": "byKrona",
+    "city": "Luleå",
+    "email": "info@bykrona.se",
+    "website": "http://www.bykrona.se",
+    "phone": ""
+  },
+  {
+    "name": "",
+    "city": "Skellefteå",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "",
+    "city": "Gällivare",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "",
+    "city": "Kiruna",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "byKrona",
+    "city": "Luleå",
+    "email": "info@bykrona.se",
+    "website": "http://www.bykrona.se",
+    "phone": ""
+  },
+  {
+    "name": "",
+    "city": "Skellefteå",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "",
+    "city": "Gällivare",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "",
+    "city": "Kiruna",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "Caelia Clinic",
+    "city": "Strängnäs",
+    "email": "therese@caelia.se",
+    "website": "http://www.caelia.se",
+    "phone": ""
+  },
+  {
+    "name": "Faceclinic West AB",
+    "city": "Askim",
+    "email": "info@faceclinic.se",
+    "website": "http://www.faceclinic.se",
+    "phone": "00168376041"
+  },
+  {
+    "name": "KH ESTETIK",
+    "city": "Stockholm",
+    "email": "havrest@khestetik.se",
+    "website": "https://www.bokadirekt.se/places/kh-estetik-gardet-38754",
+    "phone": ""
+  },
+  {
+    "name": "Klinik Estetik i Kalmar",
+    "city": "Kalmar",
+    "email": "info@klinikestetikkalmar.se",
+    "website": "http://www.klinikestetikkalmar.se",
+    "phone": ""
+  },
+  {
+    "name": "Akademikliniken",
+    "city": "Göteborg",
+    "email": "malin.medin@ak.se",
+    "website": "http://www.akademikliniken.se",
+    "phone": "00168376041"
+  },
+  {
+    "name": "Akademikliniken",
+    "city": "Göteborg",
+    "email": "sandra.sundqvist@ak.se",
+    "website": "http://www.akademikliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "Akademikliniken",
+    "city": "Stockholm",
+    "email": "ewelina.bradley@ak.se",
+    "website": "http://www.akademikliniken.se",
+    "phone": ""
+  },
+  {
+    "name": "Klinik By Elle AB",
+    "city": "Malmö",
+    "email": "klinikbyelle@gmail.com",
+    "website": "http://www.klinikbyelle.se",
+    "phone": ""
+  },
+  {
+    "name": "",
+    "city": "Hörby",
+    "email": "",
+    "website": "",
+    "phone": ""
+  },
+  {
+    "name": "Citylaser",
+    "city": "Göteborg",
+    "email": "info@citylaser.com",
+    "website": "http://www.citylaser.se",
+    "phone": "00168376041"
+  },
+  {
+    "name": "Setic Skincare",
+    "city": "Piteå",
+    "email": "info@seticskincare.se",
+    "website": "http://www.seticskincare.se",
+    "phone": ""
+  },
+  {
+    "name": "Mase Clinic AB",
+    "city": "Stockholm",
+    "email": "info@maseclinic.se",
+    "website": "http://www.maseclinic.com",
+    "phone": "00168376041"
+  },
+  {
+    "name": "My Clinic",
+    "city": "Stockholm",
+    "email": "kundtjanst@myclinic.nu",
+    "website": "https://www.myclinic.nu",
+    "phone": "00168376041"
+  },
+  {
+    "name": "My Clinic",
+    "city": "Stockholm",
+    "email": "kundtjanst@myclinic.nu",
+    "website": "https://www.myclinic.nu",
+    "phone": "00168376041"
+  }
+]

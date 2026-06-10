@@ -1,4 +1,4 @@
-import { getClinicBySlug } from '@/lib/supabase/actions/queries';
+import { getClinicBySlug, getAllAdminTreatments } from '@/lib/supabase/actions/queries';
 import { MOCK_CITIES } from '@/lib/mock-data';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -18,6 +18,7 @@ export default async function EditClinicPage({
     const returnPage = resolvedSearchParams?.returnPage || '1';
     
     const clinic = await getClinicBySlug(resolvedParams.slug);
+    const allTreatments = await getAllAdminTreatments();
 
     if (!clinic) {
         notFound();
@@ -40,7 +41,7 @@ export default async function EditClinicPage({
                 </Link>
             </div>
 
-            <EditClinicForm clinic={clinic} uniqueCities={uniqueCities} returnPage={returnPage} />
+            <EditClinicForm clinic={clinic} uniqueCities={uniqueCities} returnPage={returnPage} allTreatments={allTreatments} />
         </div>
     );
 }

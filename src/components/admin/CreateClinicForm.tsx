@@ -7,9 +7,10 @@ import { fetchClinicMetadataAction } from '@/lib/supabase/actions/enrichment';
 
 interface CreateClinicFormProps {
     cities: string[];
+    allTreatments?: any[];
 }
 
-export default function CreateClinicForm({ cities }: CreateClinicFormProps) {
+export default function CreateClinicForm({ cities, allTreatments = [] }: CreateClinicFormProps) {
     const [isLoading, setIsLoading] = useState(false);
     const [magicUrl, setMagicUrl] = useState('');
     const [magicError, setMagicError] = useState('');
@@ -215,6 +216,24 @@ export default function CreateClinicForm({ cities }: CreateClinicFormProps) {
                             className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                             placeholder="https://bokadirekt.se/..."
                         />
+                    </div>
+                </div>
+
+                <div className="p-4 bg-gray-50 rounded-xl border border-gray-200">
+                    <h3 className="font-semibold text-gray-900 mb-2">Behandlingar (Manuellt val)</h3>
+                    <p className="text-sm text-gray-500 mb-4">Välj de behandlingar som kliniken erbjuder. (Skrivs över om du klickar på Berika från Bokadirekt)</p>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                        {allTreatments.map((t: any) => (
+                            <label key={t.id} className="flex items-center gap-2 bg-white px-3 py-2 rounded-lg border border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors">
+                                <input
+                                    type="checkbox"
+                                    name="treatment_ids"
+                                    value={t.id}
+                                    className="w-4 h-4 text-rose-500 rounded border-gray-300 focus:ring-rose-500"
+                                />
+                                <span className="text-sm font-medium text-gray-700">{t.name}</span>
+                            </label>
+                        ))}
                     </div>
                 </div>
 

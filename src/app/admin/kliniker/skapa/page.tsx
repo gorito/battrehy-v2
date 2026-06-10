@@ -1,9 +1,10 @@
 import Link from 'next/link';
-import { getUniqueCities } from '@/lib/supabase/actions/queries';
+import { getUniqueCities, getAllAdminTreatments } from '@/lib/supabase/actions/queries';
 import CreateClinicForm from '@/components/admin/CreateClinicForm';
 
 export default async function CreateClinicPage() {
     const cities = await getUniqueCities();
+    const allTreatments = await getAllAdminTreatments();
 
     return (
         <div className="max-w-2xl mx-auto">
@@ -12,7 +13,7 @@ export default async function CreateClinicPage() {
                 <h1 className="text-3xl font-bold text-gray-900">Lägg till ny klinik</h1>
             </div>
 
-            <CreateClinicForm cities={cities} />
+            <CreateClinicForm cities={cities} allTreatments={allTreatments} />
         </div>
     );
 }
