@@ -512,6 +512,15 @@ export async function fetchClinicMetadataAction(url: string) {
             }
         }
 
+        // Regex fallback for address on homepage
+        if (!address) {
+            const bodyText = $('body').text();
+            const addressMatch = bodyText.match(/[A-ZÅÄÖ][a-zåäö]+(?:gatan|vägen|gränd|torget|platsen|väg|gata)\s+\d+[A-Za-z]?(?:,\s*|\s+)(?:\d{3}\s?\d{2}\s+)?[A-ZÅÄÖ][a-zåäö]+/);
+            if (addressMatch) {
+                address = addressMatch[0].trim();
+            }
+        }
+
         // Try to get a rich description from the body first (prioritizing Swedish)
         const richDesc = extractRichDescription($);
         description = $('meta[property="og:description"]').attr('content') || $('meta[name="description"]').attr('content') || '';
@@ -688,8 +697,8 @@ export async function fetchClinicMetadataAction(url: string) {
                             // Try to find address based on common Swedish formats
                             if (!address) {
                                 const subBodyText = $sub('body').text();
-                                // Match something like: Storgatan 12, 123 45 Stockholm
-                                const addressMatch = subBodyText.match(/[A-ZÅÄÖ][a-zåäö]+(?:gatan|vägen|gränd|torget|platsen)\s+\d+[A-Za-z]?(?:,\s*|\s+)\d{3}\s?\d{2}\s+[A-ZÅÄÖ][a-zåäö]+/);
+                                // Match something like: Storgatan 12, 123 45 Stockholm or Storgatan 12, Helsingborg
+                                const addressMatch = subBodyText.match(/[A-ZÅÄÖ][a-zåäö]+(?:gatan|vägen|gränd|torget|platsen|väg|gata)\s+\d+[A-Za-z]?(?:,\s*|\s+)(?:\d{3}\s?\d{2}\s+)?[A-ZÅÄÖ][a-zåäö]+/);
                                 if (addressMatch) {
                                     address = addressMatch[0].trim();
                                 }

@@ -14,6 +14,7 @@ export default function CreateClinicForm({ cities, allTreatments = [] }: CreateC
     const [isLoading, setIsLoading] = useState(false);
     const [magicUrl, setMagicUrl] = useState('');
     const [magicError, setMagicError] = useState('');
+    const [magicSuccess, setMagicSuccess] = useState('');
     
     // Form state
     const [name, setName] = useState('');
@@ -32,6 +33,7 @@ export default function CreateClinicForm({ cities, allTreatments = [] }: CreateC
         if (!magicUrl) return;
         setIsLoading(true);
         setMagicError('');
+        setMagicSuccess('');
         
         try {
             const res = await fetchClinicMetadataAction(magicUrl);
@@ -69,7 +71,11 @@ export default function CreateClinicForm({ cities, allTreatments = [] }: CreateC
                                 input.checked = true;
                             }
                         });
+                        
+                        setMagicSuccess(`Hittade kontaktuppgifter och matchade ${matchedIds.length} behandlingar!`);
                     }, 100);
+                } else {
+                    setMagicSuccess(`Hittade kontaktuppgifter men inga behandlingar kunde matchas.`);
                 }
             } else {
                 setMagicError(res.error || 'Kunde inte hämta data ifrån denna URL.');
@@ -128,7 +134,8 @@ export default function CreateClinicForm({ cities, allTreatments = [] }: CreateC
                         {isLoading ? 'Hämtar...' : 'Hämta Info'}
                     </button>
                 </div>
-                {magicError && <p className="text-sm text-red-600 mt-2 font-medium">{magicError}</p>}
+                {magicError && <p className="text-red-600 text-sm mt-2">{magicError}</p>}
+                {magicSuccess && <p className="text-green-700 bg-green-50 p-2 rounded text-sm mt-2">{magicSuccess}</p>}
                 {imageUrl && <p className="text-xs text-green-700 mt-2 font-medium">Bannern lyckades hämtas (gömd tills du sparar).</p>}
             </div>
 
