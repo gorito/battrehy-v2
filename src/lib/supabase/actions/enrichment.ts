@@ -250,6 +250,8 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
 
         // BOKADIREKT SPECIFIC EXTRACTION
         if (url.includes('bokadirekt.se')) {
+            // Prioritize og:image as it is more reliable and up-to-date than the preloaded state
+            scrapedImageUrl = $('meta[property="og:image"]').attr('content') || '';
             const scripts = $('script').toArray();
             for (const el of scripts) {
                 const text = $(el).html();
@@ -309,7 +311,7 @@ export async function enrichClinicTreatmentsAction(clinicId: string, url: string
                             ];
 
                             for (const arr of possibleImageSources) {
-                                if (arr && Array.isArray(arr)) {
+                                if (arr && Array.isArray(arr) && !scrapedImageUrl) {
                                     const validImage = arr.find(img => 
                                         img && typeof img === 'string' && !img.includes(GENERIC_BOKADIREKT_LOGO)
                                     );

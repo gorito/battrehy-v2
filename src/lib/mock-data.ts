@@ -7,6 +7,7 @@ export const MOCK_CITIES: City[] = [
     { id: '1', name: 'Stockholm', slug: 'stockholm', description: 'Skönhetskliniker i Stockholm' },
     { id: '2', name: 'Göteborg', slug: 'goteborg', description: 'Skönhetskliniker i Göteborg' },
     { id: '3', name: 'Malmö', slug: 'malmo', description: 'Skönhetskliniker i Malmö' },
+    { id: '4', name: 'Kristinehamn', slug: 'kristinehamn', description: 'Skönhetskliniker i Kristinehamn' },
 ];
 
 export const MOCK_TREATMENTS: Treatment[] = [

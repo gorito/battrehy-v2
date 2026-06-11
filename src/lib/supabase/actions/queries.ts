@@ -10,7 +10,7 @@ export async function getClinics(
     const from = (page - 1) * limit;
     const to = from + limit - 1;
 
-    let query = supabase
+    let dataQuery = supabase
         .rpc('search_clinics', {
             p_query: params?.query || '',
             p_location_city: params?.locationCity || ''
@@ -20,10 +20,16 @@ export async function getClinics(
             clinic_treatments (
                 treatments (*)
             )
-        `, { count: 'exact' });
-
-    const { data, count, error } = await query
+        `)
         .range(from, to);
+
+    let countQuery = supabase
+        .rpc('search_clinics', {
+            p_query: params?.query || '',
+            p_location_city: params?.locationCity || ''
+        }, { count: 'exact', head: true });
+
+    const [ { data, error }, { count } ] = await Promise.all([dataQuery, countQuery]);
 
     if (error) {
         console.error('Error fetching clinics:', { message: error.message, details: error.details, hint: error.hint, code: error.code, raw: error });
