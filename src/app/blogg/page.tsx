@@ -3,16 +3,45 @@ import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Blogg - Guider och artiklar om skönhet & hudvård | battrehy.se',
+    title: 'Blogg - Guider och artiklar om skönhet & hudvård',
     description: 'Läs våra senaste guider, tips och artiklar om hudvård, estetiska behandlingar och hur du väljer rätt klinik.',
     alternates: {
-        canonical: '/blogg',
+        canonical: 'https://battrehy.se/blogg',
     },
+    openGraph: {
+        title: 'Blogg - Guider och artiklar om skönhet & hudvård',
+        description: 'Läs våra senaste guider, tips och artiklar om hudvård, estetiska behandlingar och hur du väljer rätt klinik.',
+        url: 'https://battrehy.se/blogg',
+        type: 'website',
+    }
 };
 
 export default function BlogLandingPage() {
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blogg',
+                item: 'https://battrehy.se/blogg'
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             <div className="max-w-4xl mx-auto">
                 <div className="mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Skönhetsbloggen</h1>
@@ -81,6 +110,28 @@ export default function BlogLandingPage() {
                             </h2>
                             <p className="text-gray-600 text-sm mb-6 line-clamp-3">
                                 Allt om fillerbehandling i Sverige 2026: områden, priser, hållbarhet, IVO-regler och hur du väljer en seriös klinik.
+                            </p>
+                            <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
+                                Läs hela guiden <ArrowRight size={16} className="ml-1" />
+                            </div>
+                        </div>
+                    </Link>
+
+                    {/* Article Card 4 */}
+                    <Link href="/blogg/estetisk-klinik" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
+                        <div className="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center border-b border-gray-100">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src="/images/blogg/estetisk-klinik-hero.jpg" alt="Konsultation mellan legitimerad sjuksköterska och klient på en modern estetisk klinik" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <h2 className="absolute bottom-4 left-6 text-2xl font-bold text-white z-10 drop-shadow-sm">Estetisk klinik<br/><span className="text-sm font-medium opacity-90">Så väljer du en seriös klinik</span></h2>
+                        </div>
+                        <div className="p-6 flex flex-col flex-grow">
+                            <div className="text-xs text-primary font-bold tracking-wide uppercase mb-2">Guide</div>
+                            <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                                Estetisk klinik: så väljer du en seriös och säker klinik
+                            </h2>
+                            <p className="text-gray-600 text-sm mb-6 line-clamp-3">
+                                Så väljer du en trygg och seriös estetisk klinik i Sverige: kontrollera IVO-registrering, legitimerad personal, betänketid och dina rättigheter enligt lag.
                             </p>
                             <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
                                 Läs hela guiden <ArrowRight size={16} className="ml-1" />
