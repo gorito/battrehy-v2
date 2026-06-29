@@ -1,15 +1,22 @@
 import Link from 'next/link';
 import { Image as ImageIcon } from 'lucide-react';
+import TreatmentContentBlock from './TreatmentContentBlock';
 
 interface Clinic {
     id: string;
     name: string;
     slug: string;
     city: string;
-    description: string | null;
-    primary_image_url: string | null;
+    description?: string | null;
+    primary_image_url?: string | null;
     tier: string;
     is_verified: boolean;
+    is_shr_member?: boolean;
+    is_rfem_member?: boolean;
+    neighborhood?: string | null;
+    ai_description?: string;
+    ai_faq?: string;
+    ai_meta?: string;
     treatments?: { id: string; name: string; slug: string }[];
 }
 
@@ -155,6 +162,9 @@ export default function CityTreatmentView({ city, treatment, clinics, neighborho
                         </div>
                     )}
                 </div>
+
+                {/* Treatment Editorial Content Block */}
+                <TreatmentContentBlock content={(treatment as any).treatment_content} />
             </div>
         </main>
     );

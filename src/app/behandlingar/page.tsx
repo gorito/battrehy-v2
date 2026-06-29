@@ -3,11 +3,17 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Alla Behandlingar',
-    description: 'Utforska vårt utbud av estetiska behandlingar och hitta rätt klinik för dig.',
+    title: 'Estetiska Behandlingar i Sverige – Jämför & Boka',
+    description: 'Hitta rätt estetisk klinik nära dig. Jämför botox, fillers, laserbehandling och mer hos certifierade kliniker i Sverige. Boka enkelt online.',
     alternates: {
-        canonical: '/behandlingar',
+        canonical: 'https://battrehy.se/behandlingar',
     },
+    openGraph: {
+        title: 'Estetiska Behandlingar i Sverige – Jämför & Boka',
+        description: 'Hitta rätt estetisk klinik nära dig. Jämför botox, fillers, laserbehandling och mer hos certifierade kliniker i Sverige. Boka enkelt online.',
+        url: 'https://battrehy.se/behandlingar',
+        type: 'website',
+    }
 };
 
 export const dynamic = 'force-dynamic';
@@ -15,8 +21,31 @@ export const dynamic = 'force-dynamic';
 export default async function TreatmentsPage() {
     const treatments = await getTreatments();
 
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Behandlingar',
+                item: 'https://battrehy.se/behandlingar'
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-gray-50 p-8 pb-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             <div className="max-w-6xl mx-auto">
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">Alla Behandlingar</h1>
                 <p className="text-lg text-gray-700 mb-12">

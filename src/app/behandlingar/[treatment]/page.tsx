@@ -5,6 +5,7 @@ import { getTreatments, getClinics } from '@/lib/supabase/actions/queries';
 import { Image as ImageIcon, MapPin, ChevronDown } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { headers } from 'next/headers';
+import TreatmentContentBlock from '@/components/seo/TreatmentContentBlock';
 
 export const dynamic = 'force-dynamic';
 
@@ -192,7 +193,64 @@ export default async function TreatmentPage({ params }: Props) {
                         </div>
                     )}
                 </div>
+
+                {/* Treatment Editorial Content Block */}
+                <TreatmentContentBlock content={(treatment as any).treatment_content} />
+
+                {/* Reverse cross-linking section: Kliniker som erbjuder [treatment.name] */}
+                <div className="mt-20 pt-12 border-t border-gray-100">
+                    <h2 className="text-3xl font-black text-charcoal-900 mb-2">
+                        Kliniker som erbjuder {treatment.name}
+                    </h2>
+                    <p className="text-charcoal-500 mb-8">Här listas verifierade och certifierade experter i Sverige.</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {clinics
+                            .filter(c => c.treatments?.some((t: any) => t.id === treatment.id))
+                            .sort((a, b) => {
+                                // Prioritize premium tier clinics
+                                if (a.tier === 'premium' && b.tier !== 'premium') return -1;
+                                if (a.tier !== 'premium' && b.tier === 'premium') return 1;
+                                return a.name.localeCompare(b.name);
+                            })
+                            .slice(0, 12)
+                            .map(clinic => (
+                                <Link 
+                                    key={clinic.id} 
+                                    href={`/kliniker/${slugifyCity(clinic.city)}/${clinic.slug}`}
+                                    className="bg-white p-6 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col justify-between group block"
+                                >
+                                    <div>
+                                        <div className="flex flex-wrap items-center gap-2 mb-2">
+                                            <h3 className="font-bold text-charcoal-900 group-hover:text-[#e8234a] transition-colors line-clamp-1">
+                                                {clinic.name}
+                                            </h3>
+                                            {clinic.tier === 'premium' && (
+                                                <span className="bg-[#e8234a] text-white text-[8px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest">Premium</span>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-charcoal-400 font-bold mb-3 flex items-center gap-1">
+                                            <MapPin size={12} className="text-[#e8234a]" />
+                                            {clinic.city}
+                                        </p>
+                                        {clinic.description && (
+                                            <p className="text-charcoal-500 text-xs line-clamp-3 leading-relaxed mb-4">{clinic.description}</p>
+                                        )}
+                                    </div>
+                                    <div className="text-[#e8234a] font-bold text-xs group-hover:underline flex items-center gap-1 mt-2">
+                                        Visa profil &rarr;
+                                    </div>
+                                </Link>
+                            ))}
+                    </div>
+                </div>
             </div>
         </main>
     );
 }
+
+// Helpers
+function slugifyCity(str: string) {
+    return str.toLowerCase().trim().replace(/[åä]/g, 'a').replace(/ö/g, 'o').replace(/[^a-z0-9]+/g, '-');
+}
+

@@ -46,25 +46,120 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    {/* Popular Cities */}
+                </div>
+
+                {/* Expanded SEO City x Treatment Link Matrix */}
+                <div className="mt-16 pt-12 border-t border-gray-100 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 text-xs text-gray-500">
                     <div>
-                        <h3 className="text-charcoal-900 font-bold mb-6">Städer</h3>
-                        <ul className="space-y-4">
-                            <li>
-                                <Link href="/kliniker/stockholm" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Stockholm</Link>
-                            </li>
-                            <li>
-                                <Link href="/kliniker/goteborg" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Göteborg</Link>
-                            </li>
-                            <li>
-                                <Link href="/kliniker/malmo" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Malmö</Link>
-                            </li>
-                            <li>
-                                <Link href="/kliniker/uppsala" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Uppsala</Link>
-                            </li>
-                            <li>
-                                <Link href="/kliniker/vasteras" className="text-gray-500 hover:text-rose-500 transition-colors text-sm">Västerås</Link>
-                            </li>
+                        <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider">Botox & Fillers</h4>
+                        <ul className="space-y-2">
+                            <li><Link href="/kliniker/stockholm/botoxbehandling" className="hover:text-[#e8234a]">Botox Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/botoxbehandling" className="hover:text-[#e8234a]">Botox Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/botoxbehandling" className="hover:text-[#e8234a]">Botox Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/botoxbehandling" className="hover:text-[#e8234a]">Botox Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/botoxbehandling" className="hover:text-[#e8234a]">Botox Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/botoxbehandling" className="hover:text-[#e8234a]">Botox Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/botoxbehandling" className="hover:text-[#e8234a]">Botox Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/botoxbehandling" className="hover:text-[#e8234a]">Botox Lund</Link></li>
+                            <li className="pt-2"><Link href="/kliniker/stockholm/fillerbehandling" className="hover:text-[#e8234a] font-medium border-t border-gray-50 pt-2 block">Fillers Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/fillerbehandling" className="hover:text-[#e8234a]">Fillers Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/fillerbehandling" className="hover:text-[#e8234a]">Fillers Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/fillerbehandling" className="hover:text-[#e8234a]">Fillers Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/fillerbehandling" className="hover:text-[#e8234a]">Fillers Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/fillerbehandling" className="hover:text-[#e8234a]">Fillers Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/fillerbehandling" className="hover:text-[#e8234a]">Fillers Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/fillerbehandling" className="hover:text-[#e8234a]">Fillers Lund</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider">Laser & Nålar</h4>
+                        <ul className="space-y-2">
+                            <li><Link href="/kliniker/stockholm/laserbehandling" className="hover:text-[#e8234a]">Laserbehandling Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/laserbehandling" className="hover:text-[#e8234a]">Laserbehandling Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/laserbehandling" className="hover:text-[#e8234a]">Laserbehandling Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/laserbehandling" className="hover:text-[#e8234a]">Laserbehandling Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/laserbehandling" className="hover:text-[#e8234a]">Laserbehandling Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/laserbehandling" className="hover:text-[#e8234a]">Laserbehandling Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/laserbehandling" className="hover:text-[#e8234a]">Laserbehandling Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/laserbehandling" className="hover:text-[#e8234a]">Laserbehandling Lund</Link></li>
+                            <li className="pt-2"><Link href="/kliniker/stockholm/microneedling" className="hover:text-[#e8234a] font-medium border-t border-gray-50 pt-2 block">Microneedling Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/microneedling" className="hover:text-[#e8234a]">Microneedling Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/microneedling" className="hover:text-[#e8234a]">Microneedling Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/microneedling" className="hover:text-[#e8234a]">Microneedling Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/microneedling" className="hover:text-[#e8234a]">Microneedling Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/microneedling" className="hover:text-[#e8234a]">Microneedling Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/microneedling" className="hover:text-[#e8234a]">Microneedling Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/microneedling" className="hover:text-[#e8234a]">Microneedling Lund</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider">Ansikte & Hud</h4>
+                        <ul className="space-y-2">
+                            <li><Link href="/kliniker/stockholm/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Lund</Link></li>
+                            <li className="pt-2"><Link href="/kliniker/stockholm/anti-aging-behandling" className="hover:text-[#e8234a] font-medium border-t border-gray-50 pt-2 block">Anti-aging Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Lund</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider">Peeling & Läppar</h4>
+                        <ul className="space-y-2">
+                            <li><Link href="/kliniker/stockholm/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Lund</Link></li>
+                            {/* Lappfiller has no clinics in uppsala and lund. Verify and exclude them */}
+                            <li className="pt-2"><Link href="/kliniker/stockholm/lappfiller" className="hover:text-[#e8234a] font-medium border-t border-gray-50 pt-2 block">Läppfillers Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/lappfiller" className="hover:text-[#e8234a]">Läppfillers Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/lappfiller" className="hover:text-[#e8234a]">Läppfillers Malmö</Link></li>
+                            <li><Link href="/kliniker/vasteras/lappfiller" className="hover:text-[#e8234a]">Läppfillers Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/lappfiller" className="hover:text-[#e8234a]">Läppfillers Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/lappfiller" className="hover:text-[#e8234a]">Läppfillers Linköping</Link></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider">Huvudstäder & Hudvård</h4>
+                        <ul className="space-y-2 mb-6">
+                            <li><Link href="/kliniker/stockholm/hudvard" className="hover:text-[#e8234a]">Hudvård Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/hudvard" className="hover:text-[#e8234a]">Hudvård Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/hudvard" className="hover:text-[#e8234a]">Hudvård Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/hudvard" className="hover:text-[#e8234a]">Hudvård Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/hudvard" className="hover:text-[#e8234a]">Hudvård Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/hudvard" className="hover:text-[#e8234a]">Hudvård Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/hudvard" className="hover:text-[#e8234a]">Hudvård Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/hudvard" className="hover:text-[#e8234a]">Hudvård Lund</Link></li>
+                        </ul>
+                        
+                        <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider border-t border-gray-100 pt-4">Städer</h4>
+                        <ul className="space-y-2">
+                            <li><Link href="/kliniker/stockholm" className="hover:text-[#e8234a]">Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg" className="hover:text-[#e8234a]">Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo" className="hover:text-[#e8234a]">Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala" className="hover:text-[#e8234a]">Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras" className="hover:text-[#e8234a]">Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg" className="hover:text-[#e8234a]">Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping" className="hover:text-[#e8234a]">Linköping</Link></li>
+                            <li><Link href="/kliniker/lund" className="hover:text-[#e8234a]">Lund</Link></li>
                         </ul>
                     </div>
 

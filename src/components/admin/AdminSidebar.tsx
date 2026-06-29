@@ -7,6 +7,7 @@ const navItems = [
     { href: '/admin', label: 'Översikt', exact: true },
     { href: '/admin/kliniker', label: 'Hantera Kliniker' },
     { href: '/admin/forsaljning', label: 'Försäljning (CRM)' },
+    { href: '/admin/google-synlighet', label: 'Google-synlighet' },
     { href: '/admin/stader', label: 'Städer' },
     { href: '/admin/behandlingar', label: 'Behandlingar' },
 ];

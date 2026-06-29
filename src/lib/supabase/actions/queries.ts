@@ -232,3 +232,17 @@ export async function getAdminStats() {
         unverified: unverified.count || 0
     };
 }
+
+export async function getGBPChecklistForClinic(clinicId: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('clinic_gbp_checklist')
+        .select('*')
+        .eq('clinic_id', clinicId);
+
+    if (error) {
+        console.error('Error fetching GBP checklist:', error);
+        return [];
+    }
+    return data || [];
+}

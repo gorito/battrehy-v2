@@ -17,7 +17,8 @@ const NEIGHBORHOOD_NAMES: Record<string, string> = {
     'sodermalm': 'Södermalm',
     'vasastan': 'Vasastan',
     'stureplan': 'Stureplan',
-    'norrmalm-kungsholmen': 'Norrmalm & Kungsholmen'
+    'norrmalm-kungsholmen': 'Norrmalm & Kungsholmen',
+    'gamla-stan': 'Gamla Stan'
 };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -137,7 +138,7 @@ export default async function NeighborhoodTreatmentPage({ params }: Props) {
     return (
         <CityTreatmentView 
             city={cityObj} 
-            treatment={treatmentObj} 
+            treatment={treatmentObj as any} 
             clinics={filteredClinics} 
             neighborhood={{ name: neighborhoodName, slug: neighborhoodSlug }}
             customH1={customSeo?.h1}

@@ -15,6 +15,20 @@ type Props = {
     params: Promise<{ city: string, slugOrTreatment: string }> | { city: string, slugOrTreatment: string }
 };
 
+function parseFaq(faqText?: string): { question: string; answer: string }[] {
+    if (!faqText) return [];
+    const regex = /\*\*(.*?)\*\*\s*\n?([\s\S]*?)(?=\*\*|$)/g;
+    const faqs: { question: string; answer: string }[] = [];
+    let match;
+    while ((match = regex.exec(faqText)) !== null) {
+        faqs.push({
+            question: match[1].trim(),
+            answer: match[2].trim()
+        });
+    }
+    return faqs;
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
     const citySlug = decodeURIComponent(resolvedParams.city);
@@ -25,9 +39,69 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     if (clinic) {
         const clinicCitySlug = slugifyCity(clinic.city);
         if (clinicCitySlug === citySlug) {
+            // Cleanup clinic name for title
+            // Remove "AB", "i [City]" (case-insensitive, handling Swedish chars)
+            let displayName = clinic.name
+                .replace(/\bAB\b/g, '')
+                .replace(new RegExp(`\\bi\\s+${clinic.city}\\b`, 'gi'), '')
+                .trim();
+            
+            // If the name is now empty, fallback to the original clinic name
+            if (!displayName) {
+                displayName = clinic.name;
+            }
+
+            // Ensure the city name is appended exactly once
+            // Check if city name is already at the end of the cleaned displayName
+            const endsWithCity = new RegExp(`\\s+${clinic.city}$`, 'i');
+            const citySuffix = endsWithCity.test(displayName) ? '' : ` ${clinic.city}`;
+
+            // Build treatments suffix (top 2-3)
+            const clinicTreatments = clinic.treatments || [];
+            let servicesSuffix = 'Skönhetsklinik';
+            if (clinicTreatments.length > 0) {
+                servicesSuffix = clinicTreatments
+                    .slice(0, 3)
+                    .map((t: any) => t.name)
+                    .join(' & ');
+            }
+
+            // Formulate base title: "[Clinic display name][City] – [Treatments]"
+            let baseTitle = `${displayName}${citySuffix} – ${servicesSuffix}`;
+
+            // Keep base title under 60 characters
+            const maxBaseLength = 60;
+            if (baseTitle.length > maxBaseLength) {
+                // If too long, try with top 2 treatments
+                if (clinicTreatments.length > 2) {
+                    servicesSuffix = clinicTreatments
+                        .slice(0, 2)
+                        .map((t: any) => t.name)
+                        .join(' & ');
+                    baseTitle = `${displayName}${citySuffix} – ${servicesSuffix}`;
+                }
+                
+                // If still too long, fallback to single top treatment
+                if (baseTitle.length > maxBaseLength && clinicTreatments.length > 0) {
+                    servicesSuffix = clinicTreatments[0].name;
+                    baseTitle = `${displayName}${citySuffix} – ${servicesSuffix}`;
+                }
+
+                // If still too long, fallback to Skönhetsklinik
+                if (baseTitle.length > maxBaseLength) {
+                    servicesSuffix = 'Skönhetsklinik';
+                    baseTitle = `${displayName}${citySuffix} – ${servicesSuffix}`;
+                }
+
+                // Final hard truncation to 57 chars + '...' if somehow still over limit
+                if (baseTitle.length > maxBaseLength) {
+                    baseTitle = baseTitle.substring(0, 57).trim() + '...';
+                }
+            }
+
             return {
-                title: `${clinic.name} i ${clinic.city} – Boka behandling`,
-                description: `Läs mer om ${clinic.name} i ${clinic.city} och boka din behandling enkelt via battrehy.se.`,
+                title: baseTitle,
+                description: clinic.ai_meta || `Läs mer om ${clinic.name} i ${clinic.city} och boka din behandling enkelt via battrehy.se.`,
                 alternates: {
                     canonical: `/kliniker/${clinicCitySlug}/${clinic.slug}`,
                 },
@@ -41,20 +115,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     // 2. Check if it's a treatment (Combination Page)
     const resolvedSlugOrTreatment = ALIAS_MAP[slugOrTreatment] || slugOrTreatment;
-    const seoKey = `${citySlug.toLowerCase()}/${slugOrTreatment.toLowerCase()}`;
-    const customSeo = stockholmSeoData[seoKey];
+    const [treatments, cities, uniqueCityNames, clinicsResponse] = await Promise.all([
+        getTreatments(),
+        getCities(),
+        getUniqueCities(),
+        getClinics({ limit: 1000 })
+    ]);
 
-    if (customSeo) {
-        return {
-            title: customSeo.title,
-            description: customSeo.description,
-            alternates: {
-                canonical: `/kliniker/${citySlug}/${slugOrTreatment}`,
-            }
-        };
-    }
-
-    const [treatments, cities, uniqueCityNames] = await Promise.all([getTreatments(), getCities(), getUniqueCities()]);
     let treatment = treatments.find(t => t.slug === resolvedSlugOrTreatment);
     
     // Fail-safe for treatment lookup
@@ -76,11 +143,52 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         }
 
         if (city) {
+            // Count matching clinics
+            const filteredClinics = clinicsResponse.data.filter(c => {
+                const cityMatch = slugifyCity(c.city).toLowerCase() === citySlug.toLowerCase();
+                const treatmentsArray = (c as any).treatments || (c as any).clinic_treatments?.map((ct: any) => ct.treatments) || [];
+                const treatmentMatch = treatmentsArray.some((t: any) => 
+                    t.id === treatment!.id || 
+                    t.slug === treatment!.slug || 
+                    t.slug === resolvedSlugOrTreatment ||
+                    t.slug === slugOrTreatment ||
+                    (t.treatments && (t.treatments.slug === treatment!.slug || t.treatments.slug === resolvedSlugOrTreatment))
+                );
+                const serviceMatch = c.extracted_services?.some((s: string) => 
+                    s.toLowerCase().includes(treatment!.name.toLowerCase()) ||
+                    s.toLowerCase().includes(resolvedSlugOrTreatment.toLowerCase())
+                );
+                return cityMatch && (treatmentMatch || serviceMatch);
+            });
+
+            const count = filteredClinics.length;
+
+            const seoKey = `${citySlug.toLowerCase()}/${slugOrTreatment.toLowerCase()}`;
+            const customSeo = stockholmSeoData[seoKey];
+
+            if (customSeo) {
+                return {
+                    title: customSeo.title,
+                    description: customSeo.description,
+                    alternates: {
+                        canonical: `/kliniker/${citySlug}/${slugOrTreatment}`,
+                    },
+                    robots: {
+                        index: count > 1,
+                        follow: true
+                    }
+                };
+            }
+
             return {
                 title: `${treatment.name} i ${city.name} – Hitta Bästa Kliniken`,
                 description: `Hitta och jämför de bästa klinikerna för ${treatment.name.toLowerCase()} i ${city.name}. Certifierade kliniker, priser och bokningsinformation via battrehy.se.`,
                 alternates: {
                     canonical: `/kliniker/${citySlug}/${slugOrTreatment}`,
+                },
+                robots: {
+                    index: count > 1,
+                    follow: true
                 }
             };
         }
@@ -203,8 +311,8 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                     />
 
                     {/* Profile Header */}
-                    <div className="bg-white rounded-b-2xl shadow-sm p-6 sm:p-8 mb-8 border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                        <div className="flex-1">
+                    <div className="bg-white rounded-b-2xl shadow-sm p-6 sm:p-8 mb-8 border border-gray-100 flex flex-col md:flex-row justify-between items-start gap-6">
+                        <div className="flex-1 w-full">
                             <div className="flex flex-wrap items-center gap-3 mb-3">
                                 <h1 className="text-3xl font-bold text-gray-900">{clinic.name}</h1>
                                 {clinic.tier === 'premium' && (
@@ -220,9 +328,34 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                                     <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ RFEM-medlem</span>
                                 )}
                             </div>
-                            <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap">
+                            <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap mb-6">
                                 {clinic.description || `${clinic.name} är en klinik belägen i ${clinic.city}.`}
                             </p>
+
+                            {/* AI Description Section */}
+                            {clinic.ai_description && (
+                                <div className="mt-6 pt-6 border-t border-gray-100">
+                                    <h2 className="text-xl font-bold text-gray-900 mb-3">Om kliniken</h2>
+                                    <p className="text-gray-600 text-base leading-relaxed whitespace-pre-wrap">
+                                        {clinic.ai_description}
+                                    </p>
+                                </div>
+                            )}
+
+                            {/* FAQ Section */}
+                            {clinic.ai_faq && (
+                                <div className="mt-6 pt-6 border-t border-gray-100">
+                                    <h2 className="text-xl font-bold text-gray-900 mb-4">Vanliga frågor</h2>
+                                    <div className="space-y-5">
+                                        {parseFaq(clinic.ai_faq).map((item, idx) => (
+                                            <div key={idx} className="space-y-1">
+                                                <h3 className="font-semibold text-gray-900 text-base">{item.question}</h3>
+                                                <p className="text-gray-600 text-sm sm:text-base leading-relaxed whitespace-pre-wrap">{item.answer}</p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
                         </div>
 
                         {clinic.booking_url ? (
@@ -259,23 +392,29 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                                 </div>
                             </section>
 
-                            {/* Extracted Services */}
-                            {clinic.extracted_services && clinic.extracted_services.length > 0 && (
-                                <section className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 mt-8">
-                                    <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                                        <div className="w-1.5 h-6 bg-rose-500 rounded-full"></div>
-                                        Tjänster & Utbud
-                                    </h2>
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                                        {clinic.extracted_services.slice(0, 12).map((service: string, idx: number) => (
-                                            <div key={idx} className="px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl text-sm text-gray-700 font-medium flex items-center gap-2 hover:border-rose-200 transition-colors group">
-                                                <div className="w-1.5 h-1.5 rounded-full bg-rose-300 group-hover:bg-rose-500 transition-colors"></div>
-                                                <span className="truncate">{service}</span>
-                                            </div>
-                                        ))}
+                            {/* CTA Boka Tid Card */}
+                            <section className="bg-rose-50/50 rounded-2xl p-8 border border-rose-100/50 mt-8 flex flex-col items-center text-center">
+                                <Calendar className="text-rose-500 mb-4" size={40} />
+                                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Redo att boka din behandling?</h2>
+                                <p className="text-gray-600 text-sm sm:text-base mb-6">
+                                    Välj tid och behandling direkt hos {clinic.name}
+                                </p>
+                                {clinic.booking_url ? (
+                                    <TrackedLink 
+                                        clinicId={clinic.id}
+                                        eventType="booking_click"
+                                        href={clinic.booking_url} 
+                                        className="bg-primary hover:bg-primary-hover text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-md inline-flex justify-center"
+                                    >
+                                        <Calendar size={18} />
+                                        Boka tid
+                                    </TrackedLink>
+                                ) : (
+                                    <div className="bg-gray-100 text-gray-400 px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 inline-flex justify-center cursor-not-allowed">
+                                        Ingen bokningslänk
                                     </div>
-                                </section>
-                            )}
+                                )}
+                            </section>
                         </div>
 
                         <div className="space-y-8">
@@ -360,6 +499,10 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                 );
                 return cityMatch && (treatmentMatch || serviceMatch);
             });
+            
+            if (filteredClinics.length <= 1) {
+                notFound();
+            }
 
             const seoKey = `${citySlug.toLowerCase()}/${slugOrTreatment.toLowerCase()}`;
             const customSeo = stockholmSeoData[seoKey];

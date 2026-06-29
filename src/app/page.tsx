@@ -37,7 +37,12 @@ export default async function Home() {
       '@type': 'Organization',
       name: 'battrehy.se',
       url: 'https://battrehy.se',
-      email: 'info@battrehy.se'
+      logo: 'https://battrehy.se/og-image.jpg',
+      contactPoint: {
+        '@type': 'ContactPoint',
+        email: 'info@battrehy.se',
+        contactType: 'customer service'
+      }
     }
   ];
 
@@ -48,8 +53,14 @@ export default async function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       {/* Hero Section */}
-      <div className="w-full pt-24 pb-16 px-8 text-center bg-gradient-to-b from-rose-50/50 to-transparent">
-        <div className="max-w-4xl mx-auto">
+      <div 
+        className="w-full pt-28 pb-20 px-8 text-center relative bg-cover bg-center"
+        style={{ backgroundImage: `url('/images/hero-bg.jpg')` }}
+      >
+        {/* Soft overlay to ensure high contrast and readability of the dark text */}
+        <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px]" />
+
+        <div className="max-w-4xl mx-auto relative z-10">
           <h1 className="text-5xl md:text-6xl font-black text-charcoal-900 mb-6 leading-[1.1] tracking-tight">
             Sveriges tryggaste guide för <span className="text-[#e8234a]">skönhetskliniker</span>
           </h1>

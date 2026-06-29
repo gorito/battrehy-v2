@@ -2,13 +2,45 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'Integritetspolicy | Bättrehy.se',
+    title: 'Integritetspolicy',
     description: 'Integritetspolicy för Bättrehy.se.',
+    alternates: {
+        canonical: 'https://battrehy.se/integritetspolicy',
+    },
+    openGraph: {
+        title: 'Integritetspolicy',
+        description: 'Integritetspolicy för Bättrehy.se.',
+        url: 'https://battrehy.se/integritetspolicy',
+        type: 'website',
+    }
 };
 
 export default function IntegritetspolicyPage() {
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Integritetspolicy',
+                item: 'https://battrehy.se/integritetspolicy'
+            }
+        ]
+    };
+
     return (
         <div className="min-h-screen bg-white">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             {/* Header Section */}
             <section className="relative py-20 bg-rose-50 overflow-hidden border-b border-rose-100">
                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-rose-200/30 rounded-full blur-3xl" />

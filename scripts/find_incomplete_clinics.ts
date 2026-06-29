@@ -10,23 +10,37 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl!, supabaseKey!);
 
 async function main() {
-    const { data: clinics, error } = await supabase
-        .from('clinics')
-        .select(`
-            id,
-            name,
-            primary_image_url,
-            address,
-            city,
-            phone,
-            description,
-            extracted_services,
-            clinic_treatments ( treatment_id )
-        `);
+    let clinics: any[] = [];
+    let page = 0;
+    const pageSize = 1000;
+    while (true) {
+        const { data, error } = await supabase
+            .from('clinics')
+            .select(`
+                id,
+                name,
+                primary_image_url,
+                address,
+                city,
+                phone,
+                description,
+                extracted_services,
+                clinic_treatments ( treatment_id )
+            `)
+            .range(page * pageSize, (page + 1) * pageSize - 1);
 
-    if (error) {
-        console.error('Error fetching clinics:', error);
-        return;
+        if (error) {
+            console.error('Error fetching clinics:', error);
+            return;
+        }
+        if (!data || data.length === 0) {
+            break;
+        }
+        clinics = clinics.concat(data);
+        if (data.length < pageSize) {
+            break;
+        }
+        page++;
     }
 
     const incompleteClinics = clinics.map(c => {

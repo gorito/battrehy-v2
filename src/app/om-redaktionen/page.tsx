@@ -2,13 +2,45 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-    title: 'Om Battrehys Redaktion | battrehy.se',
+    title: 'Om Battrehys Redaktion',
     description: 'Läs om hur vi skriver våra guider, våra redaktionella riktlinjer och hur vi säkerställer oberoende och korrekt information.',
+    alternates: {
+        canonical: 'https://battrehy.se/om-redaktionen',
+    },
+    openGraph: {
+        title: 'Om Battrehys Redaktion',
+        description: 'Läs om hur vi skriver våra guider, våra redaktionella riktlinjer och hur vi säkerställer oberoende och korrekt information.',
+        url: 'https://battrehy.se/om-redaktionen',
+        type: 'website',
+    }
 };
 
 export default function EditorialPage() {
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Om redaktionen',
+                item: 'https://battrehy.se/om-redaktionen'
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             <div className="max-w-3xl mx-auto bg-white p-8 sm:p-12 rounded-2xl shadow-sm border border-gray-100">
                 <h1 className="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-6">Om Battrehys redaktion</h1>
                 

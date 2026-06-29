@@ -42,6 +42,10 @@ export default async function AdminClinicsPage({
                     </Link>
                 </div>
             </div>
+            {/* Top Pagination */}
+            <Suspense fallback={<div className="h-10 w-64 bg-gray-100 rounded animate-pulse"></div>}>
+                <AdminPagination totalItems={totalItems} currentPage={currentPage} itemsPerPage={itemsPerPage} />
+            </Suspense>
 
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 <div className="overflow-x-auto">

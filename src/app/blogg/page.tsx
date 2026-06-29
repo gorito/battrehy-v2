@@ -121,7 +121,7 @@ export default function BlogLandingPage() {
                     <Link href="/blogg/estetisk-klinik" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
                         <div className="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center border-b border-gray-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/images/blogg/estetisk-klinik-hero.jpg" alt="Konsultation mellan legitimerad sjuksköterska och klient på en modern estetisk klinik" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <img src="/images/blogg/estetisk-klinik-hero.webp" alt="Konsultation mellan legitimerad sjuksköterska och klient på en modern estetisk klinik" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <h2 className="absolute bottom-4 left-6 text-2xl font-bold text-white z-10 drop-shadow-sm">Estetisk klinik<br/><span className="text-sm font-medium opacity-90">Så väljer du en seriös klinik</span></h2>
                         </div>

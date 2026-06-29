@@ -6,6 +6,12 @@ export const metadata: Metadata = {
     alternates: {
         canonical: 'https://battrehy.se/kontakt',
     },
+    openGraph: {
+        title: 'Kontakta oss',
+        description: 'Har du frågor om en klinik eller vill samarbeta? Kontakta oss på battrehy.se. Vi svarar oftast inom 24 timmar.',
+        url: 'https://battrehy.se/kontakt',
+        type: 'website',
+    }
 };
 
 export default function KontaktLayout({

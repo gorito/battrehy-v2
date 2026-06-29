@@ -122,6 +122,7 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1',
                             <option value="vasastan">Vasastan</option>
                             <option value="stureplan">Stureplan</option>
                             <option value="norrmalm-kungsholmen">Norrmalm / Kungsholmen</option>
+                            <option value="gamla-stan">Gamla Stan</option>
                         </select>
                     </div>
                 </div>
@@ -135,6 +136,41 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1',
                         className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                         placeholder="Beskriv kliniken och vad de är experter på..."
                     ></textarea>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">AI Beskrivning (Om kliniken)</label>
+                        <textarea
+                            name="ai_description"
+                            rows={6}
+                            defaultValue={clinic.ai_description || ''}
+                            className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500 text-sm"
+                            placeholder="AI-genererad beskrivning..."
+                        ></textarea>
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">AI FAQ (Vanliga frågor)</label>
+                        <textarea
+                            name="ai_faq"
+                            rows={6}
+                            defaultValue={clinic.ai_faq || ''}
+                            className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500 font-mono text-sm"
+                            placeholder="**Fråga 1**&#10;Svar 1&#10;&#10;**Fråga 2**&#10;Svar 2"
+                        ></textarea>
+                    </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">AI Meta (Sökresultatsbeskrivning)</label>
+                    <input
+                        name="ai_meta"
+                        type="text"
+                        defaultValue={clinic.ai_meta || ''}
+                        className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                        placeholder="AI-genererad meta-beskrivning..."
+                    />
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">

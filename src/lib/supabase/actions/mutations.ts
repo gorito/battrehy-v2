@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { importExternalImage } from '../storage';
+import { getCorrectedCity } from '@/lib/cityFixes';
 import { slugifyCity } from '@/lib/utils';
 
 export async function createClinicAction(formData: FormData) {
@@ -10,6 +11,7 @@ export async function createClinicAction(formData: FormData) {
     // Extract form values
     const name = (formData.get('name') as string)?.trim();
     const city = (formData.get('city') as string)?.trim();
+  const correctedCity = getCorrectedCity(name, city);
     const address = (formData.get('address') as string)?.trim();
     const phone = (formData.get('phone') as string)?.trim();
     const website = (formData.get('website') as string)?.trim();
@@ -28,7 +30,7 @@ export async function createClinicAction(formData: FormData) {
         .insert([{
             name,
             slug,
-            city,
+            city: correctedCity,
             address,
             phone,
             website,
@@ -107,11 +109,15 @@ export async function updateClinicAction(formData: FormData) {
 
     const name = (formData.get('name') as string)?.trim();
     const city = (formData.get('city') as string)?.trim();
+  const correctedCity = getCorrectedCity(name, city);
     const address = (formData.get('address') as string)?.trim();
     const phone = (formData.get('phone') as string)?.trim();
     const website = (formData.get('website') as string)?.trim();
     const booking_url = (formData.get('booking_url') as string)?.trim();
     const description = (formData.get('description') as string)?.trim();
+    const ai_description = (formData.get('ai_description') as string)?.trim() || null;
+    const ai_faq = (formData.get('ai_faq') as string)?.trim() || null;
+    const ai_meta = (formData.get('ai_meta') as string)?.trim() || null;
     const primary_image_url = (formData.get('primary_image_url') as string)?.trim();
     const recoRatingRaw = (formData.get('reco_rating') as string)?.trim();
     const parsedRating = recoRatingRaw ? parseFloat(recoRatingRaw) : NaN;
@@ -133,12 +139,15 @@ export async function updateClinicAction(formData: FormData) {
         .update({
             name,
             slug: cleanSlug,
-            city,
+            city: correctedCity,
             address,
             phone,
             website,
             booking_url,
             description,
+            ai_description,
+            ai_faq,
+            ai_meta,
             primary_image_url: primary_image_url ? await importExternalImage(primary_image_url) : null,
             is_verified,
             is_shr_member,
@@ -204,7 +213,7 @@ export async function updateClinicAction(formData: FormData) {
     }
 
     revalidatePath('/admin/kliniker');
-    revalidatePath(`/kliniker/${slugifyCity(city)}/${cleanSlug}`);
+    revalidatePath(`/kliniker/${slugifyCity(correctedCity)}/${cleanSlug}`);
 
     return { success: true, newSlug: cleanSlug };
 }
@@ -282,5 +291,51 @@ export async function updateClinicSalesInfoAction(id: string, data: { email?: st
     }
 
     revalidatePath('/admin/forsaljning');
+    return { success: true };
+}
+
+export async function toggleGBPChecklistItemAction(clinicId: string, itemId: string, completed: boolean) {
+    const supabase = await createClient();
+    
+    // Check if the record already exists
+    const { data: existing, error: selectError } = await supabase
+        .from('clinic_gbp_checklist')
+        .select('id')
+        .eq('clinic_id', clinicId)
+        .eq('item_id', itemId)
+        .maybeSingle();
+
+    if (selectError) {
+        console.error('Error checking GBP checklist item:', selectError);
+        return { success: false, error: selectError.message };
+    }
+
+    if (existing) {
+        // Update existing item
+        const { error: updateError } = await supabase
+            .from('clinic_gbp_checklist')
+            .update({ completed, updated_at: new Date().toISOString() })
+            .eq('id', existing.id);
+
+        if (updateError) {
+            console.error('Error updating GBP checklist item:', updateError);
+            return { success: false, error: updateError.message };
+        }
+    } else {
+        // Insert new checklist item
+        const { error: insertError } = await supabase
+            .from('clinic_gbp_checklist')
+            .insert([{
+                clinic_id: clinicId,
+                item_id: itemId,
+                completed
+            }]);
+
+        if (insertError) {
+            console.error('Error inserting GBP checklist item:', insertError);
+            return { success: false, error: insertError.message };
+        }
+    }
+
     return { success: true };
 }

@@ -32,7 +32,8 @@ export interface Clinic {
     phone?: string;
     website?: string;
     booking_url?: string;
-    description?: string;
+    description?: string | null;
+    neighborhood?: string | null;
     tier: Tier;
     primary_image_url?: string;
     is_verified: boolean;
@@ -45,4 +46,9 @@ export interface Clinic {
     // Joined relations
     treatments?: Treatment[];
     images?: ClinicImage[];
+    
+    // AI fields
+    ai_description?: string;
+    ai_faq?: string;
+    ai_meta?: string;
 }

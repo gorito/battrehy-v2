@@ -37,12 +37,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const cityName = city.name!;
     const supabase = await createClient();
     const { count } = await supabase.from('clinics').select('id', { count: 'exact', head: true }).ilike('city', cityName);
+    const clinicCount = count || 0;
 
     return {
-        title: `${count || ''} Skönhetskliniker i ${cityName}`,
-        description: city.description || `Hitta och jämför ${count ? `de ${count} ` : ''}bästa skönhetsklinikerna i ${cityName}. Certifierade kliniker med omdömen och bokningsinformation på battrehy.se.`,
+        title: `${clinicCount || ''} Skönhetskliniker i ${cityName}`,
+        description: city.description || `Hitta och jämför ${clinicCount ? `de ${clinicCount} ` : ''}bästa skönhetsklinikerna i ${cityName}. Certifierade kliniker med omdömen och bokningsinformation på battrehy.se.`,
         alternates: {
             canonical: `/kliniker/${cityParam}`,
+        },
+        robots: {
+            index: clinicCount > 1,
+            follow: true
         },
         openGraph: {
             title: `Skönhetskliniker i ${cityName}`,
@@ -140,7 +145,7 @@ export default async function CityPage({ params }: Props) {
                 </div>
 
                 {/* City Treatments Filter/Cross-links */}
-                {cityTreatments.length > 0 && (
+                {cityClinics.length >= 3 && cityTreatments.length > 0 && (
                     <div className="mb-10">
                         <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Populära behandlingar i {cityName}</h2>
                         <div className="flex flex-wrap gap-2">

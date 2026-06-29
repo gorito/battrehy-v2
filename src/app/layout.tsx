@@ -38,8 +38,6 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "battrehy.se",
-    description: "Hitta Sveriges bästa skönhetskliniker",
     images: ["/og-image.jpg"],
   },
 };

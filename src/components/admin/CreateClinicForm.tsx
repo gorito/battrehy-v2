@@ -11,6 +11,9 @@ interface CreateClinicFormProps {
 }
 
 export default function CreateClinicForm({ cities, allTreatments = [] }: CreateClinicFormProps) {
+  const [cityList, setCityList] = useState<string[]>(cities);
+  const [showAddCityModal, setShowAddCityModal] = useState(false);
+  const [newCityName, setNewCityName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [magicUrl, setMagicUrl] = useState('');
     const [magicError, setMagicError] = useState('');
@@ -163,25 +166,67 @@ export default function CreateClinicForm({ cities, allTreatments = [] }: CreateC
                     />
                 </div>
 
-                <div>
+                <div className="relative">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Stad *</label>
-                    <input
-                        name="city"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
-                        required
-                        list="cities-list"
-                        type="text"
-                        className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
-                        placeholder="Skriv stad (t.ex. Uppsala) eller välj från listan"
-                        autoComplete="off"
-                    />
+                    <div className="flex items-center">
+                        <input
+                            name="city"
+                            value={city}
+                            onChange={(e) => setCity(e.target.value)}
+                            required
+                            list="cities-list"
+                            type="text"
+                            className="flex-1 border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                            placeholder="Skriv stad (t.ex. Uppsala) eller välj från listan"
+                            autoComplete="off"
+                        />
+                        <button type="button" onClick={() => setShowAddCityModal(true)} className="ml-2 px-3 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors">
+                            Lägg till ny stad
+                        </button>
+                    </div>
                     <datalist id="cities-list">
-                        {cities.map(c => (
+                        {cityList.map(c => (
                             <option key={c} value={c}>{c}</option>
                         ))}
                     </datalist>
                 </div>
+                {/* Add City Modal */}
+                {showAddCityModal && (
+                    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+                        <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
+                            <h2 className="text-xl font-bold mb-4">Lägg till ny stad</h2>
+                            <form onSubmit={async (e) => {
+                                e.preventDefault();
+                                if (!newCityName.trim()) return;
+                                const res = await fetch('/api/cities', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ name: newCityName.trim() })
+                                });
+                                if (res.ok) {
+                                    setCityList(prev => [...prev, newCityName.trim()]);
+                                    setNewCityName('');
+                                    setShowAddCityModal(false);
+                                } else {
+                                    alert('Kunde inte lägga till staden.');
+                                }
+                            }} className="space-y-4">
+                                <input
+                                    type="text"
+                                    value={newCityName}
+                                    onChange={(e) => setNewCityName(e.target.value)}
+                                    className="w-full border border-gray-300 rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-primary"
+                                    placeholder="Stadens namn"
+                                    required
+                                />
+                                <div className="flex justify-end space-x-2">
+                                    <button type="button" onClick={() => setShowAddCityModal(false)} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Avbryt</button>
+                                    <button type="submit" className="px-4 py-2 bg-primary text-white rounded hover:bg-primary-hover">Lägg till</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                )}
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Kort beskrivning</label>

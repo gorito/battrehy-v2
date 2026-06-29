@@ -117,7 +117,7 @@ export default function BlogPost() {
                         <div className="w-full rounded-2xl overflow-hidden bg-gray-100 mb-10 border border-gray-200">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
-                                src="/images/blogg/estetisk-klinik-hero.jpg" 
+                                src="/images/blogg/estetisk-klinik-hero.webp" 
                                 alt="Konsultation mellan legitimerad sjuksköterska och klient på en modern estetisk klinik" 
                                 className="w-full h-auto object-cover max-h-[500px]"
                             />
@@ -174,7 +174,7 @@ export default function BlogPost() {
                         <div className="w-full rounded-2xl overflow-hidden bg-gray-100 my-8 border border-gray-200">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
-                                src="/images/blogg/estetisk-klinik-behandlingsrum.jpg" 
+                                src="/images/blogg/estetisk-klinik-behandlingsrum.webp" 
                                 alt="Rent och minimalistiskt behandlingsrum på en skandinavisk estetisk klinik" 
                                 className="w-full h-auto object-cover max-h-96"
                             />
@@ -216,7 +216,7 @@ export default function BlogPost() {
                         <div className="w-full rounded-2xl overflow-hidden bg-gray-100 my-8 border border-gray-200">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
-                                src="/images/blogg/estetisk-klinik-hygien.jpg" 
+                                src="/images/blogg/estetisk-klinik-hygien.webp" 
                                 alt="Behandlares handskklädda händer som förbereder sterila engångsartiklar" 
                                 className="w-full h-auto object-cover max-h-96"
                             />
@@ -262,7 +262,7 @@ export default function BlogPost() {
                         <div className="w-full rounded-2xl overflow-hidden bg-gray-100 my-8 border border-gray-200">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
                             <img 
-                                src="/images/blogg/estetisk-klinik-konsultation.jpg" 
+                                src="/images/blogg/estetisk-klinik-konsultation.webp" 
                                 alt="Klient läser informationsblad vid konsultation medan behandlare förklarar" 
                                 className="w-full h-auto object-cover max-h-96"
                             />
