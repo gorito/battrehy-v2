@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Estetisk klinik: så väljer du en seriös och säker klinik (guide 2026)',
+    title: 'Estetisk klinik – så väljer du en seriös klinik | Battrehy',
     description: 'Så väljer du en trygg och seriös estetisk klinik i Sverige: kontrollera IVO-registrering, legitimerad personal, betänketid och dina rättigheter enligt lag.',
     alternates: {
         canonical: 'https://battrehy.se/blogg/estetisk-klinik',
@@ -120,6 +120,9 @@ export default function BlogPost() {
                                 src="/images/blogg/estetisk-klinik-hero.webp" 
                                 alt="Konsultation mellan legitimerad sjuksköterska och klient på en modern estetisk klinik" 
                                 className="w-full h-auto object-cover max-h-[500px]"
+                                width={1600}
+                                height={893}
+                                fetchPriority="high"
                             />
                             <p className="text-xs text-gray-500 p-3 text-center bg-gray-50 border-t border-gray-100 m-0">Inför injektioner och kirurgi har du enligt lag rätt till information och betänketid innan du säger ja – ofta i en inledande konsultation.</p>
                         </div>
@@ -177,6 +180,9 @@ export default function BlogPost() {
                                 src="/images/blogg/estetisk-klinik-behandlingsrum.webp" 
                                 alt="Rent och minimalistiskt behandlingsrum på en skandinavisk estetisk klinik" 
                                 className="w-full h-auto object-cover max-h-96"
+                                width={1600}
+                                height={893}
+                                loading="lazy"
                             />
                             <p className="text-xs text-gray-500 p-3 text-center bg-gray-50 border-t border-gray-100 m-0">Ordning, hygien och tydliga rutiner är synliga tecken på en seriös verksamhet.</p>
                         </div>
@@ -219,6 +225,9 @@ export default function BlogPost() {
                                 src="/images/blogg/estetisk-klinik-hygien.webp" 
                                 alt="Behandlares handskklädda händer som förbereder sterila engångsartiklar" 
                                 className="w-full h-auto object-cover max-h-96"
+                                width={1600}
+                                height={1073}
+                                loading="lazy"
                             />
                             <p className="text-xs text-gray-500 p-3 text-center bg-gray-50 border-t border-gray-100 m-0">Legitimerad personal och sterila engångsmaterial hör ihop med en trygg behandling.</p>
                         </div>
@@ -265,6 +274,9 @@ export default function BlogPost() {
                                 src="/images/blogg/estetisk-klinik-konsultation.webp" 
                                 alt="Klient läser informationsblad vid konsultation medan behandlare förklarar" 
                                 className="w-full h-auto object-cover max-h-96"
+                                width={1600}
+                                height={1073}
+                                loading="lazy"
                             />
                             <p className="text-xs text-gray-500 p-3 text-center bg-gray-50 border-t border-gray-100 m-0">Du har rätt till tydlig information och betänketid innan du lämnar ditt samtycke.</p>
                         </div>
