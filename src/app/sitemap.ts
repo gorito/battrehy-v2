@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/blogg/ansiktsbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/botoxbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/fillerbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+        { url: `${baseUrl}/blogg/estetisk-klinik`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     ];
 
     // Individual Clinic Pages
@@ -51,7 +52,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ...uniqueCityNames
     ]));
 
-    const cityPages: MetadataRoute.Sitemap = allCityNames.map((cityName) => ({
+    // Only include city pages with 3+ clinics (Definition of small city is fewer than 3 clinics)
+    const largeCityNames = allCityNames.filter(cityName => {
+        const cityClinics = clinics.filter(c => c.city.toLowerCase() === cityName.toLowerCase());
+        return cityClinics.length >= 3;
+    });
+
+    const cityPages: MetadataRoute.Sitemap = largeCityNames.map((cityName) => ({
         url: `${baseUrl}/kliniker/${slugifyCity(cityName)}`,
         lastModified: new Date(),
         changeFrequency: 'weekly',
@@ -59,10 +66,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }));
 
     // Combination Pages: City + Treatment
-    // We only generate combinations that actually have at least one clinic to avoid "thin content" pages
+    // We only generate combinations that actually have at least two clinics to avoid "thin content" / 404 pages
     const comboPages: MetadataRoute.Sitemap = [];
     
-    allCityNames.forEach(cityName => {
+    largeCityNames.forEach(cityName => {
         const citySlug = slugifyCity(cityName);
         const cityClinics = clinics.filter(c => c.city.toLowerCase() === cityName.toLowerCase());
         
@@ -73,12 +80,25 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
         availableTreatments.forEach(tSlug => {
             if (tSlug) {
-                comboPages.push({
-                    url: `${baseUrl}/kliniker/${citySlug}/${tSlug}`,
-                    lastModified: new Date(),
-                    changeFrequency: 'weekly',
-                    priority: 0.6,
-                });
+                // Count clinics in this city offering the treatment
+                const matchingClinicsCount = cityClinics.filter(c => {
+                    const treatmentsArray = (c as any).treatments || (c as any).clinic_treatments?.map((ct: any) => ct.treatments) || [];
+                    const treatmentMatch = treatmentsArray.some((t: any) => t.slug === tSlug);
+                    const serviceMatch = c.extracted_services?.some((s: string) => 
+                        s.toLowerCase().includes(tSlug.replace(/-/g, ' '))
+                    );
+                    return treatmentMatch || serviceMatch;
+                }).length;
+
+                // Only include if there are 2 or more clinics (since 0 or 1 returns 404)
+                if (matchingClinicsCount >= 2) {
+                    comboPages.push({
+                        url: `${baseUrl}/kliniker/${citySlug}/${tSlug}`,
+                        lastModified: new Date(),
+                        changeFrequency: 'weekly',
+                        priority: 0.6,
+                    });
+                }
             }
         });
     });
