@@ -3,16 +3,63 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Ansiktsbehandling: Den kompletta guiden 2026 | battrehy.se',
+    title: 'Ansiktsbehandling: Den kompletta guiden 2026',
     description: 'En komplett guide till 8 typer av ansiktsbehandlingar, priser från 500 till 9000 kr, och tips på hur du väljer rätt behandling för din hud.',
     alternates: {
-        canonical: '/blogg/ansiktsbehandling-den-kompletta-guiden',
+        canonical: 'https://battrehy.se/blogg/ansiktsbehandling-den-kompletta-guiden',
     },
+    openGraph: {
+        title: 'Ansiktsbehandling: Den kompletta guiden 2026',
+        description: 'En komplett guide till 8 typer av ansiktsbehandlingar, priser från 500 till 9000 kr, och tips på hur du väljer rätt behandling för din hud.',
+        type: 'article',
+        locale: 'sv_SE',
+        url: 'https://battrehy.se/blogg/ansiktsbehandling-den-kompletta-guiden',
+        images: [
+            {
+                url: 'https://battrehy.se/images/blogg/ansiktsbehandling.jpeg',
+            }
+        ],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Ansiktsbehandling: Den kompletta guiden 2026',
+        description: 'En komplett guide till 8 typer av ansiktsbehandlingar, priser från 500 till 9000 kr, och tips på hur du väljer rätt behandling för din hud.',
+        images: ['https://battrehy.se/images/blogg/ansiktsbehandling.jpeg'],
+    }
 };
 
 export default function BlogPost() {
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blogg',
+                item: 'https://battrehy.se/blogg'
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: 'Ansiktsbehandling',
+                item: 'https://battrehy.se/blogg/ansiktsbehandling-den-kompletta-guiden'
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -316,6 +363,9 @@ export default function BlogPost() {
                             </p>
                             <p className="text-gray-700 text-sm sm:text-base mt-2">
                                 För injektionsbehandlingar mot rynkor, se vår <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline font-medium">guide till botoxbehandling</Link>. För återskapande av volym, läs vår <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="text-primary hover:underline font-medium">guide till fillerbehandling</Link>. Letar du efter en estetisk klinik mer generellt? Besök <Link href="/kliniker" className="text-primary hover:underline font-medium">vår klinikkatalog</Link>.
+                            </p>
+                            <p className="text-gray-700 text-sm sm:text-base mt-2">
+                                Vill du veta mer om hur du gör ett tryggt val? Läs vår guide: <Link href="/blogg/estetisk-klinik" className="text-primary hover:underline font-medium">Så väljer du en seriös estetisk klinik</Link>.
                             </p>
                         </div>
 

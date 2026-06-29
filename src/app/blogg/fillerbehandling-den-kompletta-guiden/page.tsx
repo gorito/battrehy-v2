@@ -29,8 +29,37 @@ export const metadata: Metadata = {
 };
 
 export default function FillerBlogPost() {
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blogg',
+                item: 'https://battrehy.se/blogg'
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: 'Fillerbehandling',
+                item: 'https://battrehy.se/blogg/fillerbehandling-den-kompletta-guiden'
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -429,6 +458,9 @@ export default function FillerBlogPost() {
                             </p>
                             <p className="text-gray-700 text-sm sm:text-base mt-2">
                                 För injektioner mot rynkor som inte är fillerbaserade, läs vår <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline font-medium">kompletta guide till botoxbehandling</Link>. För renodlade ansiktsbehandlingar utan injektioner, se vår <Link href="/blogg/ansiktsbehandling-den-kompletta-guiden" className="text-primary hover:underline font-medium">guide till ansiktsbehandling</Link>.
+                            </p>
+                            <p className="text-gray-700 text-sm sm:text-base mt-2">
+                                Vill du veta mer om hur du gör ett tryggt val? Läs vår guide: <Link href="/blogg/estetisk-klinik" className="text-primary hover:underline font-medium">Så väljer du en seriös estetisk klinik</Link>.
                             </p>
                         </div>
 

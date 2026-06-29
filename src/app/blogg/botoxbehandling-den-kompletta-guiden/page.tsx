@@ -3,16 +3,63 @@ import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 
 export const metadata: Metadata = {
-    title: 'Botoxbehandling i Sverige 2026: Den kompletta guiden | battrehy.se',
+    title: 'Botoxbehandling i Sverige 2026: Den kompletta guiden',
     description: 'En komplett guide till botoxbehandling i Sverige 2026. Läs om priser, risker, säkerhet, IVO-lagstiftning och hur du väljer rätt klinik.',
     alternates: {
-        canonical: '/blogg/botoxbehandling-den-kompletta-guiden',
+        canonical: 'https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden',
     },
+    openGraph: {
+        title: 'Botoxbehandling i Sverige 2026: Den kompletta guiden',
+        description: 'En komplett guide till botoxbehandling i Sverige 2026. Läs om priser, risker, säkerhet, IVO-lagstiftning och hur du väljer rätt klinik.',
+        type: 'article',
+        locale: 'sv_SE',
+        url: 'https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden',
+        images: [
+            {
+                url: 'https://battrehy.se/images/blogg/botox_hero.jpeg',
+            }
+        ],
+    },
+    twitter: {
+        card: 'summary_large_image',
+        title: 'Botoxbehandling i Sverige 2026: Den kompletta guiden',
+        description: 'En komplett guide till botoxbehandling i Sverige 2026. Läs om priser, risker, säkerhet, IVO-lagstiftning och hur du väljer rätt klinik.',
+        images: ['https://battrehy.se/images/blogg/botox_hero.jpeg'],
+    }
 };
 
 export default function BotoxBlogPost() {
+    const breadcrumbLd = {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                position: 1,
+                name: 'Hem',
+                item: 'https://battrehy.se'
+            },
+            {
+                '@type': 'ListItem',
+                position: 2,
+                name: 'Blogg',
+                item: 'https://battrehy.se/blogg'
+            },
+            {
+                '@type': 'ListItem',
+                position: 3,
+                name: 'Botoxbehandling',
+                item: 'https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden'
+            }
+        ]
+    };
+
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+            />
             <script
                 type="application/ld+json"
                 dangerouslySetInnerHTML={{
@@ -341,6 +388,9 @@ export default function BotoxBlogPost() {
                                 <div className="md:w-2/3 w-full">
                                     <p className="text-gray-700 text-sm sm:text-base">
                                         På Battrehy.se hittar du över 500 hudvårdskliniker över hela Sverige. Du kan filtrera efter behandlingstyp, stad och kundbetyg, jämföra utbud och boka direkt. <Link href="/behandlingar/botoxbehandling" className="text-primary hover:underline font-medium">Hitta kliniker för botoxbehandling här</Link>.
+                                    </p>
+                                    <p className="text-gray-700 text-sm sm:text-base mt-2">
+                                        Vill du veta mer om hur du gör ett tryggt val? Läs vår guide: <Link href="/blogg/estetisk-klinik" className="text-primary hover:underline font-medium">Så väljer du en seriös estetisk klinik</Link>.
                                     </p>
                                 </div>
                             </div>
