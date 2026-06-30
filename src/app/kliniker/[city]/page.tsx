@@ -6,7 +6,8 @@ import { slugifyCity } from '@/lib/utils';
 import { City } from '@/lib/supabase/types';
 import { Image as ImageIcon } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
-
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildItemListSchema } from '@/lib/schema';
 export const dynamic = 'force-dynamic';
 
 type Props = {
@@ -102,31 +103,25 @@ export default async function CityPage({ params }: Props) {
         cityClinics.flatMap(c => c.treatments?.map(t => ({ id: t.id, name: t.name, slug: t.slug })) || [])
     )).filter((v, i, a) => v && a.findIndex(t => t.id === v.id) === i);
 
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: `Kliniker i ${cityName}`,
-                item: `https://battrehy.se/kliniker/${citySlug}`
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: `Kliniker i ${cityName}`, url: `https://battrehy.se/kliniker/${citySlug}` }
+        ]),
+        buildItemListSchema({
+            pageTitle: `Kliniker i ${cityName}`,
+            pageUrl: `https://battrehy.se/kliniker/${citySlug}`,
+            clinics: cityClinics.map(c => ({
+                name: c.name,
+                slug: c.slug,
+                city_slug: citySlug
+            }))
+        })
+    ];
 
     return (
         <main className="min-h-screen bg-gray-50 p-4 sm:p-8">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-4xl mx-auto">
                 {/* Breadcrumbs */}
                 <nav className="text-sm text-gray-500 mb-6">

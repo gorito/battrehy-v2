@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildArticleSchema, buildFAQSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
     title: 'Estetisk klinik – så väljer du en seriös klinik | Battrehy',
@@ -29,73 +31,34 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPost() {
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Blogg',
-                item: 'https://battrehy.se/blogg'
-            },
-            {
-                '@type': 'ListItem',
-                position: 3,
-                name: 'Estetisk klinik',
-                item: 'https://battrehy.se/blogg/estetisk-klinik'
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Blogg', url: 'https://battrehy.se/blogg' },
+            { name: 'Estetisk klinik', url: 'https://battrehy.se/blogg/estetisk-klinik' }
+        ]),
+        buildArticleSchema({
+            headline: "Estetisk klinik: så väljer du en seriös och säker klinik",
+            description: "Så väljer du en trygg och seriös estetisk klinik i Sverige: kontrollera IVO-registrering, legitimerad personal, betänketid och dina rättigheter enligt lag.",
+            datePublished: "2026-06-29T08:00:00+02:00",
+            dateModified: "2026-06-29T08:00:00+02:00",
+            imageUrl: "https://battrehy.se/images/blogg/estetisk_klinik_exterior.jpeg",
+            pageUrl: "https://battrehy.se/blogg/estetisk-klinik"
+        }),
+        buildFAQSchema([
+            { question: "Vad är skillnaden mellan en estetisk klinik och en skönhetssalong?", answer: "En estetisk klinik utför ofta medicinska behandlingar som injektioner och laser, vilka kräver legitimerad personal. En skönhetssalong erbjuder vanligtvis hudvård, massage och liknande icke-medicinska behandlingar. Många kliniker kombinerar båda delarna." },
+            { question: "Hur vet jag om en estetisk klinik är seriös?", answer: "Kontrollera att kliniken är registrerad hos IVO, att personalen är legitimerad, att du erbjuds konsultation och betänketid, och att kliniken har patientförsäkring." },
+            { question: "Måste en estetisk klinik vara registrerad hos IVO?", answer: "Ja. Verksamheter som utför estetiska injektioner eller kirurgiska ingrepp ska vara anmälda till IVO, som utövar tillsyn över branschen." },
+            { question: "Hur kontrollerar jag att den som behandlar är legitimerad?", answer: "Be om behandlarens namn och yrkestitel och sök i Socialstyrelsens register över legitimerad hälso- och sjukvårdspersonal. Endast legitimerad läkare, tandläkare eller sjuksköterska får utföra estetiska injektioner." },
+            { question: "Vilken betänketid gäller för estetiska injektioner?", answer: "Minst 2 dagar för injektionsbehandlingar och minst 7 dagar för kirurgiska ingrepp. Ditt samtycke får lämnas först efter att betänketiden har gått ut." },
+            { question: "Vad gör jag om jag har skadats efter en behandling?", answer: "Kontakta kliniken, sök vård vid behov, anmäl allvarliga händelser till IVO och vänd dig till klinikens patientförsäkring för att utreda rätten till ersättning." },
+            { question: "Får man göra estetiska injektioner före 18 års ålder?", answer: "Nej. Lagen förbjuder estetiska injektioner och kirurgiska ingrepp på personer under 18 år." }
+        ])
+    ];
 
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "Article",
-                        "headline": "Estetisk klinik: så väljer du en seriös och säker klinik",
-                        "description": "Så väljer du en trygg och seriös estetisk klinik i Sverige: kontrollera IVO-registrering, legitimerad personal, betänketid och dina rättigheter enligt lag.",
-                        "image": "https://battrehy.se/images/blogg/estetisk_klinik_exterior.jpeg",
-                        "author": { "@type": "Organization", "name": "Battrehys redaktion", "url": "https://battrehy.se" },
-                        "publisher": { "@type": "Organization", "name": "Battrehy", "logo": { "@type": "ImageObject", "url": "https://battrehy.se/favicon.ico" } },
-                        "datePublished": "2026-06-29T08:00:00+02:00",
-                        "dateModified": "2026-06-29T08:00:00+02:00",
-                        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://battrehy.se/blogg/estetisk-klinik" },
-                        "inLanguage": "sv-SE"
-                    })
-                }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "FAQPage",
-                        "mainEntity": [
-                            { "@type": "Question", "name": "Vad är skillnaden mellan en estetisk klinik och en skönhetssalong?", "acceptedAnswer": { "@type": "Answer", "text": "En estetisk klinik utför ofta medicinska behandlingar som injektioner och laser, vilka kräver legitimerad personal. En skönhetssalong erbjuder vanligtvis hudvård, massage och liknande icke-medicinska behandlingar. Många kliniker kombinerar båda delarna." } },
-                            { "@type": "Question", "name": "Hur vet jag om en estetisk klinik är seriös?", "acceptedAnswer": { "@type": "Answer", "text": "Kontrollera att kliniken är registrerad hos IVO, att personalen är legitimerad, att du erbjuds konsultation och betänketid, och att kliniken har patientförsäkring." } },
-                            { "@type": "Question", "name": "Måste en estetisk klinik vara registrerad hos IVO?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Verksamheter som utför estetiska injektioner eller kirurgiska ingrepp ska vara anmälda till IVO, som utövar tillsyn över branschen." } },
-                            { "@type": "Question", "name": "Hur kontrollerar jag att den som behandlar är legitimerad?", "acceptedAnswer": { "@type": "Answer", "text": "Be om behandlarens namn och yrkestitel och sök i Socialstyrelsens register över legitimerad hälso- och sjukvårdspersonal. Endast legitimerad läkare, tandläkare eller sjuksköterska får utföra estetiska injektioner." } },
-                            { "@type": "Question", "name": "Vilken betänketid gäller för estetiska injektioner?", "acceptedAnswer": { "@type": "Answer", "text": "Minst 2 dagar för injektionsbehandlingar och minst 7 dagar för kirurgiska ingrepp. Ditt samtycke får lämnas först efter att betänketiden har gått ut." } },
-                            { "@type": "Question", "name": "Vad gör jag om jag har skadats efter en behandling?", "acceptedAnswer": { "@type": "Answer", "text": "Kontakta kliniken, sök vård vid behov, anmäl allvarliga händelser till IVO och vänd dig till klinikens patientförsäkring för att utreda rätten till ersättning." } },
-                            { "@type": "Question", "name": "Får man göra estetiska injektioner före 18 års ålder?", "acceptedAnswer": { "@type": "Answer", "text": "Nej. Lagen förbjuder estetiska injektioner och kirurgiska ingrepp på personer under 18 år." } }
-                        ]
-                    })
-                }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-3xl mx-auto">
                 <Link href="/blogg" className="inline-flex items-center text-primary hover:underline mb-8 font-medium">
                     <ArrowLeft size={16} className="mr-2" />

@@ -6,6 +6,8 @@ import { Image as ImageIcon, MapPin, ChevronDown } from 'lucide-react';
 import { createClient } from '@/lib/supabase/server';
 import { headers } from 'next/headers';
 import TreatmentContentBlock from '@/components/seo/TreatmentContentBlock';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildOrganizationSchema, buildItemListSchema } from '@/lib/schema';
 
 export const dynamic = 'force-dynamic';
 
@@ -75,57 +77,27 @@ export default async function TreatmentPage({ params }: Props) {
         displayCity = 'Stockholm'; // Default fallback city string
     }
 
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Behandlingar',
-                item: 'https://battrehy.se/behandlingar'
-            },
-            {
-                '@type': 'ListItem',
-                position: 3,
-                name: treatment.name,
-                item: `https://battrehy.se/behandlingar/${treatment.slug}`
-            }
-        ]
-    };
-
-    const serviceLd = {
-        '@context': 'https://schema.org',
-        '@type': 'Service',
-        name: treatment.name,
-        provider: {
-            '@type': 'Organization',
-            name: 'battrehy.se',
-            url: 'https://battrehy.se'
-        },
-        areaServed: {
-            '@type': 'Country',
-            name: 'Sverige'
-        },
-        description: treatment.description || undefined
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Behandlingar', url: 'https://battrehy.se/behandlingar' },
+            { name: treatment.name, url: `https://battrehy.se/behandlingar/${treatment.slug}` }
+        ]),
+        buildOrganizationSchema(),
+        buildItemListSchema({
+            pageTitle: `Kliniker som erbjuder ${treatment.name}`,
+            pageUrl: `https://battrehy.se/behandlingar/${treatment.slug}`,
+            clinics: treatmentClinics.map(c => ({
+                name: c.name,
+                slug: c.slug,
+                city_slug: c.city.toLowerCase()
+            }))
+        })
+    ];
 
     return (
         <main className="min-h-screen bg-[#fffafa] pt-24 pb-16 px-8 flex flex-col items-center">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceLd) }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-4xl w-full mx-auto">
                 {/* Breadcrumbs */}
                 <nav className="text-sm font-medium text-charcoal-400 mb-8 flex items-center gap-2">

@@ -8,7 +8,8 @@ import CityTreatmentView from '@/components/seo/CityTreatmentView';
 import ClinicTracker from '@/components/analytics/ClinicTracker';
 import TrackedLink from '@/components/analytics/TrackedLink';
 import { stockholmSeoData, ALIAS_MAP } from '@/lib/seo/stockholm-seo';
-
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBeautySalonSchema, buildBreadcrumbSchema, buildOrganizationSchema } from '@/lib/schema';
 export const dynamic = 'force-dynamic';
 
 type Props = {
@@ -238,61 +239,19 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
         console.log(`[ROUTER] Clinic found: ${clinic.name}`);
         const primaryImage = clinic.primary_image_url;
 
-        const breadcrumbLd = {
-            '@context': 'https://schema.org',
-            '@type': 'BreadcrumbList',
-            itemListElement: [
-                {
-                    '@type': 'ListItem',
-                    position: 1,
-                    name: 'Hem',
-                    item: 'https://battrehy.se'
-                },
-                {
-                    '@type': 'ListItem',
-                    position: 2,
-                    name: clinic.city,
-                    item: `https://battrehy.se/kliniker/${citySlug}`
-                },
-                {
-                    '@type': 'ListItem',
-                    position: 3,
-                    name: clinic.name,
-                    item: `https://battrehy.se/kliniker/${citySlug}/${clinic.slug}`
-                }
-            ]
-        };
-
-        const clinicLd = {
-            '@context': 'https://schema.org',
-            '@type': 'BeautySalon',
-            name: clinic.name,
-            description: clinic.description || undefined,
-            address: clinic.address ? {
-                '@type': 'PostalAddress',
-                streetAddress: clinic.address,
-                addressLocality: clinic.city,
-                addressCountry: 'SE'
-            } : undefined,
-            telephone: clinic.phone || undefined,
-            url: clinic.website || undefined,
-            areaServed: {
-                '@type': 'City',
-                name: clinic.city
-            },
-            image: clinic.primary_image_url || undefined
-        };
+        const schemas = [
+            buildBreadcrumbSchema([
+                { name: 'Hem', url: 'https://battrehy.se' },
+                { name: clinic.city, url: `https://battrehy.se/kliniker/${citySlug}` },
+                { name: clinic.name, url: `https://battrehy.se/kliniker/${citySlug}/${clinic.slug}` }
+            ]),
+            buildBeautySalonSchema(clinic),
+            buildOrganizationSchema()
+        ];
 
         return (
             <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-                />
-                <script
-                    type="application/ld+json"
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(clinicLd) }}
-                />
+                <SchemaScript schemas={schemas} />
                 <ClinicTracker clinicId={clinic.id} />
                 <div className="max-w-4xl mx-auto">
                     {/* Breadcrumbs */}

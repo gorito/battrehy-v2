@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { Image as ImageIcon } from 'lucide-react';
 import TreatmentContentBlock from './TreatmentContentBlock';
-
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildItemListSchema } from '@/lib/schema';
 interface Clinic {
     id: string;
     name: string;
@@ -30,46 +31,32 @@ interface Props {
 }
 
 export default function CityTreatmentView({ city, treatment, clinics, neighborhood, customH1, customEditorial }: Props) {
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: `Kliniker i ${city.name}`,
-                item: `https://battrehy.se/kliniker/${city.slug}`
-            },
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: `Kliniker i ${city.name}`, url: `https://battrehy.se/kliniker/${city.slug}` },
             ...(neighborhood ? [
-                {
-                    '@type': 'ListItem',
-                    position: 3,
-                    name: `${treatment.name} i ${neighborhood.name}`,
-                    item: `https://battrehy.se/kliniker/${city.slug}/${neighborhood.slug}/${treatment.slug}`
-                }
+                { name: `${treatment.name} i ${neighborhood.name}`, url: `https://battrehy.se/kliniker/${city.slug}/${neighborhood.slug}/${treatment.slug}` }
             ] : [
-                {
-                    '@type': 'ListItem',
-                    position: 3,
-                    name: `${treatment.name} i ${city.name}`,
-                    item: `https://battrehy.se/kliniker/${city.slug}/${treatment.slug}`
-                }
+                { name: `${treatment.name} i ${city.name}`, url: `https://battrehy.se/kliniker/${city.slug}/${treatment.slug}` }
             ])
-        ]
-    };
+        ]),
+        buildItemListSchema({
+            pageTitle: customH1 || (neighborhood ? `${treatment.name} i ${neighborhood.name} — ${city.name}` : `${treatment.name} i ${city.name}`),
+            pageUrl: neighborhood 
+                ? `https://battrehy.se/kliniker/${city.slug}/${neighborhood.slug}/${treatment.slug}` 
+                : `https://battrehy.se/kliniker/${city.slug}/${treatment.slug}`,
+            clinics: clinics.map(c => ({
+                name: c.name,
+                slug: c.slug,
+                city_slug: city.slug
+            }))
+        })
+    ];
 
     return (
         <main className="min-h-screen bg-gray-50 p-4 sm:p-8">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-4xl mx-auto">
                 {/* Breadcrumbs */}
                 <nav className="text-sm text-gray-500 mb-6 flex flex-wrap gap-2 items-center">

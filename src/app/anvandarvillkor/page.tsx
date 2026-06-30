@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
     title: 'Användarvillkor',
@@ -16,31 +18,16 @@ export const metadata: Metadata = {
 };
 
 export default function AnvandarvillkorPage() {
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Användarvillkor',
-                item: 'https://battrehy.se/anvandarvillkor'
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Användarvillkor', url: 'https://battrehy.se/anvandarvillkor' }
+        ])
+    ];
 
     return (
         <div className="min-h-screen bg-white">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
+            <SchemaScript schemas={schemas} />
             {/* Header Section */}
             <section className="relative py-20 bg-rose-50 overflow-hidden border-b border-rose-100">
                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-rose-200/30 rounded-full blur-3xl" />

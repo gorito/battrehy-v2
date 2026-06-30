@@ -1,6 +1,8 @@
 import { getTreatments } from '@/lib/supabase/actions/queries';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildOrganizationSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
     title: 'Estetiska Behandlingar i Sverige – Jämför & Boka',
@@ -21,31 +23,17 @@ export const dynamic = 'force-dynamic';
 export default async function TreatmentsPage() {
     const treatments = await getTreatments();
 
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Behandlingar',
-                item: 'https://battrehy.se/behandlingar'
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Behandlingar', url: 'https://battrehy.se/behandlingar' }
+        ]),
+        buildOrganizationSchema()
+    ];
 
     return (
         <main className="min-h-screen bg-gray-50 p-8 pb-24">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-6xl mx-auto">
                 <h1 className="text-4xl font-bold text-gray-900 mb-4">Alla Behandlingar</h1>
                 <p className="text-lg text-gray-700 mb-12">

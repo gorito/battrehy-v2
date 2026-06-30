@@ -24,34 +24,8 @@ export default async function Home() {
     displayCity = 'Stockholm'; // Default to Stockholm if we literally have no idea or no clinics
   }
 
-  const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'WebSite',
-      name: 'battrehy.se',
-      url: 'https://battrehy.se',
-      description: 'Sveriges tryggaste guide för skönhetskliniker – jämför och boka estetiska behandlingar hos certifierade kliniker.'
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'Organization',
-      name: 'battrehy.se',
-      url: 'https://battrehy.se',
-      logo: 'https://battrehy.se/og-image.jpg',
-      contactPoint: {
-        '@type': 'ContactPoint',
-        email: 'info@battrehy.se',
-        contactType: 'customer service'
-      }
-    }
-  ];
-
   return (
     <main className="min-h-screen bg-[#fffafa] flex flex-col items-center">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       {/* Hero Section */}
       <div 
         className="w-full pt-28 pb-20 px-8 text-center relative bg-cover bg-center"

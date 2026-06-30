@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { SchemaScript } from "@/components/SchemaScript";
+import { buildOrganizationSchema, buildWebSiteSchema } from "@/lib/schema";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -47,9 +49,15 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const globalSchemas = [
+    buildOrganizationSchema(),
+    buildWebSiteSchema()
+  ];
+
   return (
     <html lang="sv">
       <body className={`${inter.variable} font-sans antialiased bg-white text-charcoal-900 flex flex-col min-h-screen`}>
+        <SchemaScript schemas={globalSchemas} />
         <Navbar />
         <main className="flex-grow">
           {children}

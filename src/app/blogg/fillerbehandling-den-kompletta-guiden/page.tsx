@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildArticleSchema, buildFAQSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
     title: 'Fillerbehandling 2026: priser, hållbarhet & guide | Battrehy',
@@ -29,105 +31,35 @@ export const metadata: Metadata = {
 };
 
 export default function FillerBlogPost() {
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Blogg',
-                item: 'https://battrehy.se/blogg'
-            },
-            {
-                '@type': 'ListItem',
-                position: 3,
-                name: 'Fillerbehandling',
-                item: 'https://battrehy.se/blogg/fillerbehandling-den-kompletta-guiden'
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Blogg', url: 'https://battrehy.se/blogg' },
+            { name: 'Fillerbehandling', url: 'https://battrehy.se/blogg/fillerbehandling-den-kompletta-guiden' }
+        ]),
+        buildArticleSchema({
+            headline: "Fillerbehandling i Sverige 2026 — den kompletta guiden till priser, hållbarhet och säkerhet",
+            description: "Allt om fillerbehandling i Sverige 2026: områden, priser, hållbarhet, IVO-regler och hur du väljer en seriös klinik.",
+            datePublished: "2026-05-22T08:00:00+02:00",
+            dateModified: "2026-06-06T08:00:00+02:00",
+            imageUrl: "https://battrehy.se/images/blogg/fillerbehandling-hero.jpeg",
+            pageUrl: "https://battrehy.se/blogg/fillerbehandling-den-kompletta-guiden"
+        }),
+        buildFAQSchema([
+            { question: "Vad kostar en fillerbehandling i Sverige?", answer: "En milliliter HA-filler kostar typiskt 3 500–4 500 kr (median 3 800 kr). Läppfiller från 2 800 kr för 0,5 ml; större områden som käklinje och kinder kostar 4 500–6 000 kr per behandling. Stockholmskliniker ligger 10–15 procent över rikssnitt." },
+            { question: "Hur länge håller filler?", answer: "Mjukare HA-fillers i läppar och tårränna håller 6–9 månader. Tvärbundna HA-fillers i kinder, käke och haka håller 12–18 månader. Faktorer som påverkar är områdets rörlighet, filler-typ och individuell metabolism." },
+            { question: "Går det att lösa upp filler?", answer: "Ja — hyaluronsyra-filler kan lösas upp med enzymet hyaluronidas. Upplösningen sker inom timmar och kostar typiskt 2 000–2 500 kr per session. Andra typer av filler (Radiesse, Sculptra) är inte reversibla på samma sätt." },
+            { question: "Vem får utföra filler i Sverige?", answer: "Enligt Lag 2021:363 måste fillerbehandlingar utföras av legitimerad sjuksköterska, läkare eller tandläkare. Kliniken måste finnas i IVO:s vårdgivarregister." },
+            { question: "Vilka biverkningar kan filler ge?", answer: "Vanliga övergående biverkningar är svullnad, blåmärken och tillfällig asymmetri som avtar inom 2 veckor. Mer sällsynt: knutar under huden eller infektion. Mycket sällsynt men allvarligt är vaskulär ocklusion (filler i blodkärl)." },
+            { question: "Vad är vaskulär ocklusion?", answer: "Vaskulär ocklusion uppstår när filler injiceras in i ett blodkärl och blockerar blodflödet. Det är mycket sällsynt men allvarligt — kan i värsta fall leda till vävnadsdöd eller, vid behandling nära ögat, synpåverkan. En kompetent behandlare förebygger detta genom kanylteknik och tillgång till hyaluronidas på kliniken." },
+            { question: "Vad är skillnaden mellan filler och botox?", answer: "Filler tillför volym där huden förlorat sin egen — används för läppar, kinder, tårränna och käke. Botox slappnar av muskler och används mot dynamiska rynkor som pannlinjer och kråksparkar. De används ofta tillsammans men löser olika problem." },
+            { question: "Hur hittar jag en seriös filler-klinik?", answer: "Kontrollera IVO-registrering på ivo.se, behandlarens legitimation på socialstyrelsen.se, fråga vilket filler-märke som används, kontrollera att hyaluronidas finns direkt tillgängligt, be om transparent pris och kräv 48 timmars betänketid för första behandling." }
+        ])
+    ];
 
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "Article",
-                        "headline": "Fillerbehandling i Sverige 2026 — den kompletta guiden till priser, hållbarhet och säkerhet",
-                        "description": "Allt om fillerbehandling i Sverige 2026: områden, priser, hållbarhet, IVO-regler och hur du väljer en seriös klinik.",
-                        "author": { "@type": "Organization", "name": "Battrehys redaktion", "url": "https://battrehy.se/om-redaktionen" },
-                        "publisher": {
-                            "@type": "Organization",
-                            "name": "Battrehy",
-                            "url": "https://battrehy.se"
-                        },
-                        "datePublished": "2026-05-22T08:00:00+02:00",
-                        "dateModified": "2026-06-06T08:00:00+02:00",
-                        "inLanguage": "sv-SE",
-                        "image": "https://battrehy.se/images/blogg/fillerbehandling-hero.jpeg",
-                        "mainEntityOfPage": {
-                            "@type": "WebPage",
-                            "@id": "https://battrehy.se/blogg/fillerbehandling-den-kompletta-guiden"
-                        }
-                    })
-                }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "FAQPage",
-                        "mainEntity": [
-                            {
-                                "@type": "Question", "name": "Vad kostar en fillerbehandling i Sverige?",
-                                "acceptedAnswer": { "@type": "Answer", "text": "En milliliter HA-filler kostar typiskt 3 500–4 500 kr (median 3 800 kr). Läppfiller från 2 800 kr för 0,5 ml; större områden som käklinje och kinder kostar 4 500–6 000 kr per behandling. Stockholmskliniker ligger 10–15 procent över rikssnitt." }
-                            },
-                            {
-                                "@type": "Question", "name": "Hur länge håller filler?",
-                                "acceptedAnswer": { "@type": "Answer", "text": "Mjukare HA-fillers i läppar och tårränna håller 6–9 månader. Tvärbundna HA-fillers i kinder, käke och haka håller 12–18 månader. Faktorer som påverkar är områdets rörlighet, filler-typ och individuell metabolism." }
-                            },
-                            {
-                                "@type": "Question", "name": "Går det att lösa upp filler?",
-                                "acceptedAnswer": { "@type": "Answer", "text": "Ja — hyaluronsyra-filler kan lösas upp med enzymet hyaluronidas. Upplösningen sker inom timmar och kostar typiskt 2 000–2 500 kr per session. Andra typer av filler (Radiesse, Sculptra) är inte reversibla på samma sätt." }
-                            },
-                            {
-                                "@type": "Question", "name": "Vem får utföra filler i Sverige?",
-                                "acceptedAnswer": { "@type": "Answer", "text": "Enligt Lag 2021:363 måste fillerbehandlingar utföras av legitimerad sjuksköterska, läkare eller tandläkare. Kliniken måste finnas i IVO:s vårdgivarregister." }
-                            },
-                            {
-                                "@type": "Question", "name": "Vilka biverkningar kan filler ge?",
-                                "acceptedAnswer": { "@type": "Answer", "text": "Vanliga övergående biverkningar är svullnad, blåmärken och tillfällig asymmetri som avtar inom 2 veckor. Mer sällsynt: knutar under huden eller infektion. Mycket sällsynt men allvarligt är vaskulär ocklusion (filler i blodkärl)." }
-                            },
-                            {
-                                "@type": "Question", "name": "Vad är vaskulär ocklusion?",
-                                "acceptedAnswer": { "@type": "Answer", "text": "Vaskulär ocklusion uppstår när filler injiceras in i ett blodkärl och blockerar blodflödet. Det är mycket sällsynt men allvarligt — kan i värsta fall leda till vävnadsdöd eller, vid behandling nära ögat, synpåverkan. En kompetent behandlare förebygger detta genom kanylteknik och tillgång till hyaluronidas på kliniken." }
-                            },
-                            {
-                                "@type": "Question", "name": "Vad är skillnaden mellan filler och botox?",
-                                "acceptedAnswer": { "@type": "Answer", "text": "Filler tillför volym där huden förlorat sin egen — används för läppar, kinder, tårränna och käke. Botox slappnar av muskler och används mot dynamiska rynkor som pannlinjer och kråksparkar. De används ofta tillsammans men löser olika problem." }
-                            },
-                            {
-                                "@type": "Question", "name": "Hur hittar jag en seriös filler-klinik?",
-                                "acceptedAnswer": { "@type": "Answer", "text": "Kontrollera IVO-registrering på ivo.se, behandlarens legitimation på socialstyrelsen.se, fråga vilket filler-märke som används, kontrollera att hyaluronidas finns direkt tillgängligt, be om transparent pris och kräv 48 timmars betänketid för första behandling." }
-                            }
-                        ]
-                    })
-                }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-3xl mx-auto">
                 <Link href="/blogg" className="inline-flex items-center text-primary hover:underline mb-8 font-medium">
                     <ArrowLeft size={16} className="mr-2" />

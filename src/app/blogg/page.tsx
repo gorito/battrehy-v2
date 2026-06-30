@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildOrganizationSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
     title: 'Blogg - Guider och artiklar om skönhet & hudvård',
@@ -17,31 +19,17 @@ export const metadata: Metadata = {
 };
 
 export default function BlogLandingPage() {
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Blogg',
-                item: 'https://battrehy.se/blogg'
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Blogg', url: 'https://battrehy.se/blogg' }
+        ]),
+        buildOrganizationSchema()
+    ];
 
     return (
         <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-4xl mx-auto">
                 <div className="mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Skönhetsbloggen</h1>

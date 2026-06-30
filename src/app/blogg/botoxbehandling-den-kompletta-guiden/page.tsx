@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildArticleSchema, buildFAQSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
     title: 'Botoxbehandling i Sverige 2026: Den kompletta guiden',
@@ -29,74 +31,35 @@ export const metadata: Metadata = {
 };
 
 export default function BotoxBlogPost() {
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Blogg',
-                item: 'https://battrehy.se/blogg'
-            },
-            {
-                '@type': 'ListItem',
-                position: 3,
-                name: 'Botoxbehandling',
-                item: 'https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden'
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Blogg', url: 'https://battrehy.se/blogg' },
+            { name: 'Botoxbehandling', url: 'https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden' }
+        ]),
+        buildArticleSchema({
+            headline: "Botoxbehandling i Sverige 2026 — den kompletta guiden till priser, säkerhet och kliniker",
+            description: "Allt om botoxbehandling i Sverige 2026: priser, säkerhet, IVO-regler, områden och hur du väljer en seriös klinik.",
+            datePublished: "2026-05-01T08:00:00+02:00",
+            dateModified: "2026-06-06T08:00:00+02:00",
+            imageUrl: "https://battrehy.se/images/blogg/botox_hero.jpeg",
+            pageUrl: "https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden"
+        }),
+        buildFAQSchema([
+            { question: "Vad kostar en botoxbehandling i Sverige?", answer: "En botoxbehandling i Sverige kostar typiskt mellan 1 800 kr (ett område) och 5 000 kr (3 områden). Nationellt snitt 3 088 kr enligt Skonhetskollens 2026-data. Stockholmskliniker ligger något över snittet, mindre orter ofta något under." },
+            { question: "Hur länge håller botox?", answer: "Effekten håller typiskt 3–6 månader. Första behandlingen ger ofta kortare effekt; med upprepade behandlingar kan effekten förlängas till 4–6 månader. Faktorer som påverkar är muskelaktivitet, dos, område och individuell metabolism." },
+            { question: "Vem får utföra botox i Sverige?", answer: "Enligt Lag 2021:363 måste botoxbehandlingar utföras av legitimerad sjuksköterska, läkare eller tandläkare. Kliniken måste finnas i IVO:s vårdgivarregister. Du har rätt att be om legitimationsbevis och kontrollera registreringen själv." },
+            { question: "Måste man ha konsultation innan första botoxbehandlingen?", answer: "Ja. Lagen kräver minst 48 timmars betänketid mellan konsultation och första behandling. Konsultationen ska innehålla hudanalys, genomgång av medicinsk historia och skriftlig information om risker och pris." },
+            { question: "Vilka biverkningar kan botox ge?", answer: "Vanliga övergående biverkningar är liten rodnad, små märken efter injektionspunkter och mild huvudvärk första dygnet. Mer sällsynt: tillfällig asymmetri, hängande ögonlock (ptos) eller en frusen känsla. Mycket sällsynta allvarliga reaktioner inkluderar allergisk reaktion." },
+            { question: "Hur snabbt syns effekten av botox?", answer: "Första antydan till effekt kan synas efter 3–5 dagar. Full effekt utvecklas över 10–14 dagar. Många kliniker erbjuder en gratis kontroll 2 veckor efter behandlingen för eventuell justering." },
+            { question: "Kan botox förebygga rynkor?", answer: "Preventiv botox — små doser i tidiga 30-årsåldern för att förhindra dynamiska rynkor — har blivit allt vanligare. Studier antyder att det kan fördröja djupa linjer, men beslutet bör tas med legitimerad personal baserat på individuella muskel- och hudmönster." },
+            { question: "Hur hittar jag en seriös botoxklinik i Sverige?", answer: "Börja med att kontrollera att kliniken finns i IVO:s vårdgivarregister (ivo.se) och att den som utför behandlingen är legitimerad (kontrollera via socialstyrelsen.se). Be om transparenta priser, läs flera oberoende recensioner och kräv konsultation med 48 timmars betänketid." }
+        ])
+    ];
 
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "Article",
-                        "headline": "Botoxbehandling i Sverige 2026 — den kompletta guiden till priser, säkerhet och kliniker",
-                        "description": "Allt om botoxbehandling i Sverige 2026: priser, säkerhet, IVO-regler, områden och hur du väljer en seriös klinik.",
-                        "author": { "@type": "Organization", "name": "Battrehys redaktion", "url": "https://battrehy.se/om-redaktionen" },
-                        "publisher": { "@type": "Organization", "name": "Battrehy", "url": "https://battrehy.se" },
-                        "datePublished": "2026-05-01T08:00:00+02:00",
-                        "dateModified": "2026-06-06T08:00:00+02:00",
-                        "inLanguage": "sv-SE",
-                        "image": "https://battrehy.se/images/blogg/botox_hero.jpeg",
-                        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden" }
-                    })
-                }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "FAQPage",
-                        "mainEntity": [
-                            { "@type": "Question", "name": "Vad kostar en botoxbehandling i Sverige?", "acceptedAnswer": { "@type": "Answer", "text": "En botoxbehandling i Sverige kostar typiskt mellan 1 800 kr (ett område) och 5 000 kr (3 områden). Nationellt snitt 3 088 kr enligt Skonhetskollens 2026-data. Stockholmskliniker ligger något över snittet, mindre orter ofta något under." } },
-                            { "@type": "Question", "name": "Hur länge håller botox?", "acceptedAnswer": { "@type": "Answer", "text": "Effekten håller typiskt 3–6 månader. Första behandlingen ger ofta kortare effekt; med upprepade behandlingar kan effekten förlängas till 4–6 månader. Faktorer som påverkar är muskelaktivitet, dos, område och individuell metabolism." } },
-                            { "@type": "Question", "name": "Vem får utföra botox i Sverige?", "acceptedAnswer": { "@type": "Answer", "text": "Enligt Lag 2021:363 måste botoxbehandlingar utföras av legitimerad sjuksköterska, läkare eller tandläkare. Kliniken måste finnas i IVO:s vårdgivarregister. Du har rätt att be om legitimationsbevis och kontrollera registreringen själv." } },
-                            { "@type": "Question", "name": "Måste man ha konsultation innan första botoxbehandlingen?", "acceptedAnswer": { "@type": "Answer", "text": "Ja. Lagen kräver minst 48 timmars betänketid mellan konsultation och första behandling. Konsultationen ska innehålla hudanalys, genomgång av medicinsk historia och skriftlig information om risker och pris." } },
-                            { "@type": "Question", "name": "Vilka biverkningar kan botox ge?", "acceptedAnswer": { "@type": "Answer", "text": "Vanliga övergående biverkningar är liten rodnad, små märken efter injektionspunkter och mild huvudvärk första dygnet. Mer sällsynt: tillfällig asymmetri, hängande ögonlock (ptos) eller en frusen känsla. Mycket sällsynta allvarliga reaktioner inkluderar allergisk reaktion." } },
-                            { "@type": "Question", "name": "Hur snabbt syns effekten av botox?", "acceptedAnswer": { "@type": "Answer", "text": "Första antydan till effekt kan synas efter 3–5 dagar. Full effekt utvecklas över 10–14 dagar. Många kliniker erbjuder en gratis kontroll 2 veckor efter behandlingen för eventuell justering." } },
-                            { "@type": "Question", "name": "Kan botox förebygga rynkor?", "acceptedAnswer": { "@type": "Answer", "text": "Preventiv botox — små doser i tidiga 30-årsåldern för att förhindra dynamiska rynkor — har blivit allt vanligare. Studier antyder att det kan fördröja djupa linjer, men beslutet bör tas med legitimerad personal baserat på individuella muskel- och hudmönster." } },
-                            { "@type": "Question", "name": "Hur hittar jag en seriös botoxklinik i Sverige?", "acceptedAnswer": { "@type": "Answer", "text": "Börja med att kontrollera att kliniken finns i IVO:s vårdgivarregister (ivo.se) och att den som utför behandlingen är legitimerad (kontrollera via socialstyrelsen.se). Be om transparenta priser, läs flera oberoende recensioner och kräv konsultation med 48 timmars betänketid." } }
-                        ]
-                    })
-                }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-3xl mx-auto">
                 <Link href="/blogg" className="inline-flex items-center text-primary hover:underline mb-8 font-medium">
                     <ArrowLeft size={16} className="mr-2" />

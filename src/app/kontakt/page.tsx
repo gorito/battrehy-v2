@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import { Mail, MessageSquare, Send, CheckCircle2, ArrowRight } from 'lucide-react';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema } from '@/lib/schema';
 
 export default function KontaktPage() {
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
@@ -38,31 +40,16 @@ export default function KontaktPage() {
         );
     }
 
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Kontakt',
-                item: 'https://battrehy.se/kontakt'
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Kontakt', url: 'https://battrehy.se/kontakt' }
+        ])
+    ];
 
     return (
         <div className="min-h-screen bg-white">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
+            <SchemaScript schemas={schemas} />
             {/* Hero Section */}
             <section className="relative py-20 overflow-hidden bg-rose-50">
                 <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-[500px] h-[500px] bg-rose-200/30 rounded-full blur-3xl" />

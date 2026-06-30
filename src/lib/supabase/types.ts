@@ -42,6 +42,15 @@ export interface Clinic {
     extracted_services?: string[];
     created_at: string;
     updated_at: string;
+    
+    // Future schema fields
+    email?: string;
+    opening_hours?: string[];
+    rating_value?: number;
+    rating_count?: number;
+    price_range?: string;
+    latitude?: number;
+    longitude?: number;
 
     // Joined relations
     treatments?: Treatment[];

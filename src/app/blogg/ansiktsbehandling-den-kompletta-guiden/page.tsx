@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { SchemaScript } from '@/components/SchemaScript';
+import { buildBreadcrumbSchema, buildArticleSchema, buildFAQSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
     title: 'Ansiktsbehandling: Den kompletta guiden 2026',
@@ -29,73 +31,34 @@ export const metadata: Metadata = {
 };
 
 export default function BlogPost() {
-    const breadcrumbLd = {
-        '@context': 'https://schema.org',
-        '@type': 'BreadcrumbList',
-        itemListElement: [
-            {
-                '@type': 'ListItem',
-                position: 1,
-                name: 'Hem',
-                item: 'https://battrehy.se'
-            },
-            {
-                '@type': 'ListItem',
-                position: 2,
-                name: 'Blogg',
-                item: 'https://battrehy.se/blogg'
-            },
-            {
-                '@type': 'ListItem',
-                position: 3,
-                name: 'Ansiktsbehandling',
-                item: 'https://battrehy.se/blogg/ansiktsbehandling-den-kompletta-guiden'
-            }
-        ]
-    };
+    const schemas = [
+        buildBreadcrumbSchema([
+            { name: 'Hem', url: 'https://battrehy.se' },
+            { name: 'Blogg', url: 'https://battrehy.se/blogg' },
+            { name: 'Ansiktsbehandling', url: 'https://battrehy.se/blogg/ansiktsbehandling-den-kompletta-guiden' }
+        ]),
+        buildArticleSchema({
+            headline: "Ansiktsbehandling: Den kompletta guiden 2026 — typer, priser och så väljer du rätt klinik",
+            description: "Allt om ansiktsbehandlingar i Sverige 2026: typer, priser, vilken passar din hud och hur du väljer en seriös klinik.",
+            datePublished: "2026-05-01T08:00:00+02:00",
+            dateModified: "2026-06-06T08:00:00+02:00",
+            imageUrl: "https://battrehy.se/images/blogg/ansiktsbehandling.jpeg",
+            pageUrl: "https://battrehy.se/blogg/ansiktsbehandling-den-kompletta-guiden"
+        }),
+        buildFAQSchema([
+            { question: "Hur ofta ska jag gå på ansiktsbehandling?", answer: "Hudens cellförnyelse tar cirka 28 dagar, så de flesta hudterapeuter rekommenderar en behandling var fjärde till åttonde vecka för bästa resultat. Vid akuta hudproblem kan tätare behandlingar (varannan vecka) under en period rekommenderas; för underhåll räcker ofta sex till åtta veckors mellanrum." },
+            { question: "Vad är skillnaden mellan en ansiktsbehandling hemma och på klinik?", answer: "En proffsbehandling använder utrustning, produktkoncentrationer och tekniker som inte är tillgängliga för konsumenter — exempelvis medicinsk peeling, microneedling-apparater och HIFU-ultraljud. Behandlingen utförs av utbildad personal som anpassar protokollet efter din specifika hud." },
+            { question: "Vad kostar en ansiktsbehandling i Sverige?", answer: "Priserna varierar mellan cirka 600 kr för en enkel klassisk behandling till nära 9 000 kr för avancerade behandlingar som HIFU. Median för en standard ansiktsbehandling ligger på cirka 1 100 kr. Stockholm tenderar ligga 16 procent över rikssnitt; mindre orter ofta lägre." },
+            { question: "Hur länge håller resultatet?", answer: "Det beror på typ av behandling. En klassisk ansiktsbehandling ger en omedelbar effekt som håller två till fyra veckor. Kemisk peeling och microneedling ger längre resultat (tre till sex månader). HIFU kan ge resultat upp till tolv till arton månader." },
+            { question: "Är ansiktsbehandlingar säkra under graviditet?", answer: "Vissa behandlingar — klassisk rengöring, lugnande masker, manuell extraktion — är generellt säkra under graviditet. Andra avråds: medicinsk peeling med starka syror, retinol-baserade behandlingar, IPL och laser, samt vissa apparatbehandlingar. Konsultera alltid din kliniker och vid osäkerhet din barnmorska innan bokning." },
+            { question: "Vilken ansiktsbehandling är bäst för akne?", answer: "Vid aktiv akne rekommenderas ofta en kombination av kemisk peeling med BHA (salicylsyra), djuprengörande behandling och LED-ljusterapi (blått ljus mot bakterier). Microneedling kan hjälpa mot ärr efter akne men avråds vid aktiv inflammation." },
+            { question: "Måste kliniken vara registrerad hos IVO?", answer: "Kliniker som utför vissa estetiska behandlingar — såsom injektioner och kirurgiska ingrepp — måste enligt Lag (2021:363) vara registrerade i IVOs vårdgivarregister och ha legitimerad personal. För renodlade ansiktsbehandlingar utan injektioner eller invasiva ingrepp är reglerna mer flexibla, men välj alltid klinik med legitimerad hudterapeut, sjuksköterska eller läkare." }
+        ])
+    ];
 
     return (
         <main className="min-h-screen bg-white p-4 sm:p-8 pb-24">
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "Article",
-                        "headline": "Ansiktsbehandling: Den kompletta guiden 2026 — typer, priser och så väljer du rätt klinik",
-                        "description": "Allt om ansiktsbehandlingar i Sverige 2026: typer, priser, vilken passar din hud och hur du väljer en seriös klinik.",
-                        "author": { "@type": "Organization", "name": "Battrehys redaktion", "url": "https://battrehy.se/om-redaktionen" },
-                        "publisher": { "@type": "Organization", "name": "Battrehy", "url": "https://battrehy.se" },
-                        "datePublished": "2026-05-01T08:00:00+02:00",
-                        "dateModified": "2026-06-06T08:00:00+02:00",
-                        "inLanguage": "sv-SE",
-                        "image": "https://battrehy.se/images/blogg/ansiktsbehandling.jpeg",
-                        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://battrehy.se/blogg/ansiktsbehandling-den-kompletta-guiden" }
-                    })
-                }}
-            />
-            <script
-                type="application/ld+json"
-                dangerouslySetInnerHTML={{
-                    __html: JSON.stringify({
-                        "@context": "https://schema.org",
-                        "@type": "FAQPage",
-                        "mainEntity": [
-                            { "@type": "Question", "name": "Hur ofta ska jag gå på ansiktsbehandling?", "acceptedAnswer": { "@type": "Answer", "text": "Hudens cellförnyelse tar cirka 28 dagar, så de flesta hudterapeuter rekommenderar en behandling var fjärde till åttonde vecka för bästa resultat. Vid akuta hudproblem kan tätare behandlingar (varannan vecka) under en period rekommenderas; för underhåll räcker ofta sex till åtta veckors mellanrum." } },
-                            { "@type": "Question", "name": "Vad är skillnaden mellan en ansiktsbehandling hemma och på klinik?", "acceptedAnswer": { "@type": "Answer", "text": "En proffsbehandling använder utrustning, produktkoncentrationer och tekniker som inte är tillgängliga för konsumenter — exempelvis medicinsk peeling, microneedling-apparater och HIFU-ultraljud. Behandlingen utförs av utbildad personal som anpassar protokollet efter din specifika hud." } },
-                            { "@type": "Question", "name": "Vad kostar en ansiktsbehandling i Sverige?", "acceptedAnswer": { "@type": "Answer", "text": "Priserna varierar mellan cirka 600 kr för en enkel klassisk behandling till nära 9 000 kr för avancerade behandlingar som HIFU. Median för en standard ansiktsbehandling ligger på cirka 1 100 kr. Stockholm tenderar ligga 16 procent över rikssnitt; mindre orter ofta lägre." } },
-                            { "@type": "Question", "name": "Hur länge håller resultatet?", "acceptedAnswer": { "@type": "Answer", "text": "Det beror på typ av behandling. En klassisk ansiktsbehandling ger en omedelbar effekt som håller två till fyra veckor. Kemisk peeling och microneedling ger längre resultat (tre till sex månader). HIFU kan ge resultat upp till tolv till arton månader." } },
-                            { "@type": "Question", "name": "Är ansiktsbehandlingar säkra under graviditet?", "acceptedAnswer": { "@type": "Answer", "text": "Vissa behandlingar — klassisk rengöring, lugnande masker, manuell extraktion — är generellt säkra under graviditet. Andra avråds: medicinsk peeling med starka syror, retinol-baserade behandlingar, IPL och laser, samt vissa apparatbehandlingar. Konsultera alltid din kliniker och vid osäkerhet din barnmorska innan bokning." } },
-                            { "@type": "Question", "name": "Vilken ansiktsbehandling är bäst för akne?", "acceptedAnswer": { "@type": "Answer", "text": "Vid aktiv akne rekommenderas ofta en kombination av kemisk peeling med BHA (salicylsyra), djuprengörande behandling och LED-ljusterapi (blått ljus mot bakterier). Microneedling kan hjälpa mot ärr efter akne men avråds vid aktiv inflammation." } },
-                            { "@type": "Question", "name": "Måste kliniken vara registrerad hos IVO?", "acceptedAnswer": { "@type": "Answer", "text": "Kliniker som utför vissa estetiska behandlingar — såsom injektioner och kirurgiska ingrepp — måste enligt Lag (2021:363) vara registrerade i IVOs vårdgivarregister och ha legitimerad personal. För renodlade ansiktsbehandlingar utan injektioner eller invasiva ingrepp är reglerna mer flexibla, men välj alltid klinik med legitimerad hudterapeut, sjuksköterska eller läkare." } }
-                        ]
-                    })
-                }}
-            />
+            <SchemaScript schemas={schemas} />
             <div className="max-w-3xl mx-auto">
                 <Link href="/blogg" className="inline-flex items-center text-primary hover:underline mb-8 font-medium">
                     <ArrowLeft size={16} className="mr-2" />
