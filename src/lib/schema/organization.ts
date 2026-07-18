@@ -18,7 +18,7 @@ export function buildOrganizationSchema() {
     publisher: {
       '@type': 'Person',
       name: 'Goran Billingskog',
-      url: 'https://billingskog.se',              // the publisher's authority domain
+      url: 'https://billingskog.com',              // the publisher's authority domain
     },
   }
 }

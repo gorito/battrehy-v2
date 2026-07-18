@@ -17,23 +17,47 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
-    const treatments = await getTreatments();
-    const treatment = treatments.find(t => t.slug === resolvedParams.treatment);
-
-    if (!treatment) return { title: 'Behandling hittades inte' };
-
     const supabase = await createClient();
-    const { count } = await supabase.from('clinics').select('id', { count: 'exact', head: true }).contains('extracted_services', [treatment.name]);
+    
+    const { data: treatment, error: tError } = await supabase
+        .from('treatments')
+        .select('name, slug, treatment_content')
+        .eq('slug', resolvedParams.treatment)
+        .single();
+
+    if (tError || !treatment) return { title: 'Behandling hittades inte' };
+
+    let metaDesc = `Jämför och hitta de bästa klinikerna för ${treatment.name.toLowerCase()} i Sverige. Certifierade kliniker, enkelt att boka.`;
+    
+    if (treatment.treatment_content) {
+        let parsed: any = {};
+        try {
+            if (typeof treatment.treatment_content === 'string') {
+                parsed = JSON.parse(treatment.treatment_content);
+            } else {
+                parsed = treatment.treatment_content;
+            }
+            if (parsed.intro) {
+                // Match the first sentence ending with a dot, question mark, or exclamation mark.
+                const firstSentence = parsed.intro.match(/^[^.!?]+[.!?]/)?.[0];
+                if (firstSentence) {
+                    metaDesc = firstSentence.trim();
+                }
+            }
+        } catch (e) {
+            console.error("Error parsing treatment content for metadata description:", e);
+        }
+    }
 
     return {
         title: `${treatment.name} – Hitta kliniker nära dig`,
-        description: `Jämför och hitta de bästa klinikerna för ${treatment.name.toLowerCase()} i Sverige. Certifierade kliniker, enkelt att boka.`,
+        description: metaDesc,
         alternates: {
             canonical: `/behandlingar/${treatment.slug}`,
         },
         openGraph: {
             title: `${treatment.name} - Expertkliniker i Sverige`,
-            description: `Hitta certifierade experter för ${treatment.name}.`,
+            description: metaDesc,
             url: `https://battrehy.se/behandlingar/${treatment.slug}`,
         }
     };
@@ -44,36 +68,60 @@ export default async function TreatmentPage({ params }: Props) {
     const headersList = await headers();
     const userCityHeader = headersList.get('x-vercel-ip-city');
     const userCity = userCityHeader ? decodeURIComponent(userCityHeader) : 'Stockholm';
-
-    // Fetch treatments and ALL clinics for the specific city first
-    let [treatments, clinicsResponse] = await Promise.all([
-        getTreatments(), 
-        getClinics({ limit: 1000, locationCity: userCity })
-    ]);
     
-    let clinics = clinicsResponse.data;
+    const supabase = await createClient();
 
-    // Try to find the treatment in our real data
-    const treatment = treatments.find(t => t.slug === resolvedParams.treatment);
+    // Fetch the treatment first
+    const { data: treatment, error: tError } = await supabase
+        .from('treatments')
+        .select('*')
+        .eq('slug', resolvedParams.treatment)
+        .single();
 
-    if (!treatment) {
+    if (tError || !treatment) {
         notFound();
     }
 
-    // Filter clinics that offer this treatment
-    let treatmentClinics = clinics.filter(
-        c => c.treatments?.some((t: any) => t.id === treatment.id)
-    );
+    // Query clinics that offer this treatment in the user's city
+    const { data: clinicsData, error: cError } = await supabase
+        .from('clinics')
+        .select(`
+            *,
+            clinic_treatments!inner (
+                treatment_id,
+                treatments (*)
+            )
+        `)
+        .eq('clinic_treatments.treatment_id', treatment.id)
+        .ilike('city', userCity);
+
+    let clinics = clinicsData || [];
+    let treatmentClinics = clinics.map((c: any) => ({
+        ...c,
+        treatments: c.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || []
+    }));
 
     let displayCity = userCity;
 
-    // Fallback: If no clinics found in the user's city for this treatment, show ALL clinics in Sweden
+    // Fallback: If no clinics found in the user's city for this treatment, show clinics in Sweden (limit 100)
     if (treatmentClinics.length === 0) {
-        const allClinicsResponse = await getClinics({ limit: 1000 });
-        clinics = allClinicsResponse.data;
-        treatmentClinics = clinics.filter(
-            c => c.treatments?.some((t: any) => t.id === treatment.id)
-        );
+        const { data: allClinicsData, error: allErr } = await supabase
+            .from('clinics')
+            .select(`
+                *,
+                clinic_treatments!inner (
+                    treatment_id,
+                    treatments (*)
+                )
+            `)
+            .eq('clinic_treatments.treatment_id', treatment.id)
+            .limit(100);
+            
+        const fallbackClinics = allClinicsData || [];
+        treatmentClinics = fallbackClinics.map((c: any) => ({
+            ...c,
+            treatments: c.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || []
+        }));
         displayCity = 'Stockholm'; // Default fallback city string
     }
 
@@ -94,6 +142,18 @@ export default async function TreatmentPage({ params }: Props) {
             }))
         })
     ];
+
+    // Parse treatment_content if exists
+    let parsedContent: any = null;
+    if (treatment.treatment_content) {
+        try {
+            parsedContent = typeof treatment.treatment_content === 'string'
+                ? JSON.parse(treatment.treatment_content)
+                : treatment.treatment_content;
+        } catch (e) {
+            console.error("Error parsing treatment content for rendering:", e);
+        }
+    }
 
     return (
         <main className="min-h-screen bg-[#fffafa] pt-24 pb-16 px-8 flex flex-col items-center">
@@ -119,9 +179,52 @@ export default async function TreatmentPage({ params }: Props) {
                     </h1>
                 </div>
 
-                <p className="text-xl text-charcoal-600 mb-12 font-medium">
-                    {treatment.description || `Läs mer om ${treatment.name.toLowerCase()} och hitta certifierade experter nära dig.`}
-                </p>
+                {parsedContent ? (
+                    <div className="bg-white rounded-[2rem] p-6 sm:p-10 border border-gray-100 shadow-sm mb-12 space-y-8">
+                        {parsedContent.title && (
+                            <h2 className="text-2xl font-black text-charcoal-900 border-b border-gray-100 pb-4">
+                                {parsedContent.title}
+                            </h2>
+                        )}
+                        {parsedContent.intro && (
+                            <div className="prose max-w-none text-charcoal-600">
+                                {parsedContent.intro.split('\n\n').map((para: string, idx: number) => (
+                                    <p key={idx} className="text-base sm:text-lg leading-relaxed mb-4 last:mb-0">
+                                        {para}
+                                    </p>
+                                ))}
+                            </div>
+                        )}
+                        {(parsedContent.price_section || parsedContent.choice_section) && (
+                            <div className="grid md:grid-cols-2 gap-6 pt-6 border-t border-gray-100">
+                                {parsedContent.price_section && (
+                                    <div className="bg-[#fafaff] rounded-2xl p-6 border border-blue-100/50">
+                                        <h3 className="font-bold text-gray-900 text-lg mb-3">
+                                            {parsedContent.price_section.title}
+                                        </h3>
+                                        <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+                                            {parsedContent.price_section.text}
+                                        </p>
+                                    </div>
+                                )}
+                                {parsedContent.choice_section && (
+                                    <div className="bg-[#fffafa] rounded-2xl p-6 border border-rose-100/50">
+                                        <h3 className="font-bold text-gray-900 text-lg mb-3">
+                                            {parsedContent.choice_section.title}
+                                        </h3>
+                                        <p className="text-gray-700 text-sm sm:text-base leading-relaxed">
+                                            {parsedContent.choice_section.text}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <p className="text-xl text-charcoal-600 mb-12 font-medium">
+                        {treatment.description || `Läs mer om ${treatment.name.toLowerCase()} och hitta certifierade experter nära dig.`}
+                    </p>
+                )}
 
                 <div className="grid gap-6">
                     {treatmentClinics.length > 0 ? (
@@ -166,9 +269,6 @@ export default async function TreatmentPage({ params }: Props) {
                     )}
                 </div>
 
-                {/* Treatment Editorial Content Block */}
-                <TreatmentContentBlock content={(treatment as any).treatment_content} />
-
                 {/* Reverse cross-linking section: Kliniker som erbjuder [treatment.name] */}
                 <div className="mt-20 pt-12 border-t border-gray-100">
                     <h2 className="text-3xl font-black text-charcoal-900 mb-2">
@@ -177,8 +277,7 @@ export default async function TreatmentPage({ params }: Props) {
                     <p className="text-charcoal-500 mb-8">Här listas verifierade och certifierade experter i Sverige.</p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {clinics
-                            .filter(c => c.treatments?.some((t: any) => t.id === treatment.id))
+                        {treatmentClinics
                             .sort((a, b) => {
                                 // Prioritize premium tier clinics
                                 if (a.tier === 'premium' && b.tier !== 'premium') return -1;

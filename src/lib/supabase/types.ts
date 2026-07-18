@@ -6,6 +6,7 @@ export interface Treatment {
     slug: string;
     description?: string;
     image_url?: string;
+    treatment_content?: any;
 }
 
 export interface City {

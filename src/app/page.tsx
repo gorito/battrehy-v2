@@ -28,15 +28,15 @@ export default async function Home() {
     <main className="min-h-screen bg-[#fffafa] flex flex-col items-center">
       {/* Hero Section */}
       <div 
-        className="w-full pt-28 pb-20 px-8 text-center relative bg-cover bg-center"
+        className="w-full pt-28 pb-20 px-4 sm:px-8 text-center relative bg-cover bg-center"
         style={{ backgroundImage: `url('/images/hero-bg.jpg')` }}
       >
         {/* Soft overlay to ensure high contrast and readability of the dark text */}
         <div className="absolute inset-0 bg-white/70 backdrop-blur-[1px]" />
 
         <div className="max-w-4xl mx-auto relative z-10">
-          <h1 className="text-5xl md:text-6xl font-black text-charcoal-900 mb-6 leading-[1.1] tracking-tight">
-            Sveriges tryggaste guide för <span className="text-[#e8234a]">skönhetskliniker</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black text-charcoal-900 mb-6 leading-[1.15] tracking-tight break-words">
+            Sveriges tryggaste guide för <span className="text-[#e8234a] inline-block">skönhetskliniker</span>
           </h1>
           <p className="text-xl text-charcoal-600 mb-10 font-medium">
             Jämför och boka estetiska behandlingar hos certifierade kliniker i din stad.
@@ -47,16 +47,18 @@ export default async function Home() {
       </div>
 
       {/* Featured Clinics Grid */}
-      <div className="max-w-7xl w-full mx-auto px-8 pb-16 mt-8">
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-8 pb-16 mt-8">
         <div className="flex flex-col mb-8">
-          <div className="flex justify-between items-center mb-1">
-            <Link href="/sok" className="text-sm font-bold text-charcoal-400 flex items-center gap-1.5 hover:text-charcoal-600 transition-colors group">
-              <MapPin size={14} className="text-[#e8234a]" />
-              Baserat på din plats &mdash; <span className="text-[#e8234a] border-b border-dashed border-[#e8234a]/30 group-hover:border-[#e8234a] transition-colors">{displayCity}</span>
-              <ChevronDown size={14} className="text-charcoal-400 group-hover:translate-y-0.5 transition-transform" />
+          <div className="flex flex-row justify-between items-center gap-4 mb-2 flex-wrap sm:flex-nowrap">
+            <Link href="/sok" className="text-xs sm:text-sm font-bold text-charcoal-400 flex flex-wrap items-center gap-1 hover:text-charcoal-600 transition-colors group">
+              <MapPin size={14} className="text-[#e8234a] shrink-0" />
+              <span>Baserat på din plats</span>
+              <span className="text-charcoal-300 mx-0.5">&mdash;</span>
+              <span className="text-[#e8234a] border-b border-dashed border-[#e8234a]/30 group-hover:border-[#e8234a] transition-colors">{displayCity}</span>
+              <ChevronDown size={14} className="text-charcoal-400 group-hover:translate-y-0.5 transition-transform shrink-0" />
             </Link>
             
-            <Link href="/sok" className="text-[#e8234a] font-bold text-sm hover:underline flex items-center gap-1.5 group">
+            <Link href="/sok" className="text-[#e8234a] font-bold text-xs sm:text-sm hover:underline flex items-center gap-1.5 group shrink-0">
               Visa alla <span className="group-hover:translate-x-1 transition-transform">&rarr;</span>
             </Link>
           </div>
@@ -111,7 +113,7 @@ export default async function Home() {
       </div>
 
       {/* Popular Treatments Grid */}
-      <div className="max-w-7xl w-full mx-auto px-8 pb-32 mt-16">
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-8 pb-32 mt-16">
         <div className="flex justify-between items-end mb-10">
           <div>
             <h2 className="text-3xl font-black text-charcoal-900 mb-2">Populära behandlingar</h2>
@@ -160,7 +162,7 @@ export default async function Home() {
       </div>
       
       {/* Footer CTA */}
-      <div className="w-full bg-charcoal-900 py-24 px-8 text-center">
+      <div className="w-full bg-charcoal-900 py-24 px-4 sm:px-8 text-center">
         <h2 className="text-4xl font-black text-white mb-8">Redo att hitta din nästa behandling?</h2>
         <div className="flex flex-wrap justify-center gap-4">
           <Link
