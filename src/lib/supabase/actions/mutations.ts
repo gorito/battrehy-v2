@@ -366,6 +366,15 @@ export async function submitContactFormAction(data: { name: string; email: strin
                 }
             });
 
+            const escapeHtml = (unsafe: string) => {
+                return unsafe
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;")
+                    .replace(/"/g, "&quot;")
+                    .replace(/'/g, "&#039;");
+            };
+
             await transporter.sendMail({
                 from: `"Bättrehy Kontakt" <${process.env.SMTP_USER}>`,
                 to: 'info@battrehy.se',
@@ -374,11 +383,11 @@ export async function submitContactFormAction(data: { name: string; email: strin
                 text: `Nytt meddelande från ${data.name} (${data.email}):\n\nÄrende: ${data.subject}\n\nMeddelande:\n${data.message}`,
                 html: `
                     <h2>Nytt kontaktmeddelande från Bättrehy.se</h2>
-                    <p><strong>Namn:</strong> ${data.name}</p>
-                    <p><strong>E-post:</strong> ${data.email}</p>
-                    <p><strong>Ärende:</strong> ${data.subject}</p>
+                    <p><strong>Namn:</strong> ${escapeHtml(data.name)}</p>
+                    <p><strong>E-post:</strong> ${escapeHtml(data.email)}</p>
+                    <p><strong>Ärende:</strong> ${escapeHtml(data.subject)}</p>
                     <p><strong>Meddelande:</strong></p>
-                    <p style="white-space: pre-wrap; background-color: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">${data.message}</p>
+                    <p style="white-space: pre-wrap; background-color: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">${escapeHtml(data.message)}</p>
                 `
             });
         } catch (emailErr) {
