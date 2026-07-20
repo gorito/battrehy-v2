@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 
 const navItems = [
     { href: '/admin', label: 'Översikt', exact: true },
+    { href: '/admin/kontakt', label: 'Kontaktmeddelanden' },
     { href: '/admin/kliniker', label: 'Hantera Kliniker' },
     { href: '/admin/forsaljning', label: 'Försäljning (CRM)' },
     { href: '/admin/google-synlighet', label: 'Google-synlighet' },

@@ -246,3 +246,18 @@ export async function getGBPChecklistForClinic(clinicId: string) {
     }
     return data || [];
 }
+
+export async function getContactSubmissions() {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('contact_submissions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching contact submissions:', error);
+        return [];
+    }
+    return data || [];
+}
+

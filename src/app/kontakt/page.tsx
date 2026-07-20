@@ -4,18 +4,27 @@ import { useState } from 'react';
 import { Mail, MessageSquare, Send, CheckCircle2, ArrowRight } from 'lucide-react';
 import { SchemaScript } from '@/components/SchemaScript';
 import { buildBreadcrumbSchema } from '@/lib/schema';
+import { submitContactFormAction } from '@/lib/supabase/actions/mutations';
 
 export default function KontaktPage() {
     const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setStatus('submitting');
         
-        // Simulate a form submission
-        setTimeout(() => {
+        const formData = new FormData(e.currentTarget);
+        const name = formData.get('name') as string;
+        const email = formData.get('email') as string;
+        const subject = formData.get('subject') as string;
+        const message = formData.get('message') as string;
+
+        const res = await submitContactFormAction({ name, email, subject, message });
+        if (res.success) {
             setStatus('success');
-        }, 1500);
+        } else {
+            setStatus('error');
+        }
     };
 
     if (status === 'success') {
@@ -113,6 +122,7 @@ export default function KontaktPage() {
                                     <input 
                                         type="text" 
                                         id="name" 
+                                        name="name" 
                                         required 
                                         placeholder="Ditt för- och efternamn"
                                         className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all outline-none"
@@ -123,6 +133,7 @@ export default function KontaktPage() {
                                     <input 
                                         type="email" 
                                         id="email" 
+                                        name="email" 
                                         required 
                                         placeholder="namn@exempel.se"
                                         className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all outline-none"
@@ -134,6 +145,7 @@ export default function KontaktPage() {
                                 <label htmlFor="subject" className="text-sm font-bold text-charcoal-700 ml-1">Ärende</label>
                                 <select 
                                     id="subject"
+                                    name="subject"
                                     className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all outline-none"
                                 >
                                     <option>Allmän fråga</option>
@@ -147,12 +159,19 @@ export default function KontaktPage() {
                                 <label htmlFor="message" className="text-sm font-bold text-charcoal-700 ml-1">Meddelande</label>
                                 <textarea 
                                     id="message" 
+                                    name="message" 
                                     required 
                                     rows={5}
                                     placeholder="Vad kan vi hjälpa dig med?"
                                     className="w-full px-6 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 transition-all outline-none resize-none"
                                 />
                             </div>
+
+                            {status === 'error' && (
+                                <div className="p-4 bg-red-50 text-red-600 rounded-2xl text-sm border border-red-100">
+                                    Ett fel uppstod när meddelandet skulle skickas. Vänligen försök igen eller kontakta oss via info@battrehy.se.
+                                </div>
+                            )}
 
                             <button 
                                 type="submit" 

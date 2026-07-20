@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { importExternalImage } from '../storage';
 import { getCorrectedCity } from '@/lib/cityFixes';
 import { slugifyCity } from '@/lib/utils';
+import nodemailer from 'nodemailer';
 
 export async function createClinicAction(formData: FormData) {
     const supabase = await createClient();
@@ -339,3 +340,69 @@ export async function toggleGBPChecklistItemAction(clinicId: string, itemId: str
 
     return { success: true };
 }
+
+export async function submitContactFormAction(data: { name: string; email: string; subject: string; message: string }) {
+    const supabase = await createClient();
+
+    const { error } = await supabase
+        .from('contact_submissions')
+        .insert([data]);
+
+    if (error) {
+        console.error('Error submitting contact form:', error);
+        return { success: false, error: error.message };
+    }
+
+    // Send email notification via SMTP (Loopia) if configured
+    if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+        try {
+            const transporter = nodemailer.createTransport({
+                host: 'mailcluster.loopia.se',
+                port: 465,
+                secure: true, // true for 465, false for other ports
+                auth: {
+                    user: process.env.SMTP_USER,
+                    pass: process.env.SMTP_PASS
+                }
+            });
+
+            await transporter.sendMail({
+                from: `"Bättrehy Kontakt" <${process.env.SMTP_USER}>`,
+                to: 'info@battrehy.se',
+                replyTo: data.email,
+                subject: `Nytt meddelande: ${data.subject}`,
+                text: `Nytt meddelande från ${data.name} (${data.email}):\n\nÄrende: ${data.subject}\n\nMeddelande:\n${data.message}`,
+                html: `
+                    <h2>Nytt kontaktmeddelande från Bättrehy.se</h2>
+                    <p><strong>Namn:</strong> ${data.name}</p>
+                    <p><strong>E-post:</strong> ${data.email}</p>
+                    <p><strong>Ärende:</strong> ${data.subject}</p>
+                    <p><strong>Meddelande:</strong></p>
+                    <p style="white-space: pre-wrap; background-color: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee;">${data.message}</p>
+                `
+            });
+        } catch (emailErr) {
+            console.error('Failed to send email via SMTP:', emailErr);
+        }
+    }
+
+    return { success: true };
+}
+
+export async function updateContactSubmissionStatusAction(id: string, status: string) {
+    const supabase = await createClient();
+    const { error } = await supabase
+        .from('contact_submissions')
+        .update({ status })
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error updating contact submission status:', error);
+        return { success: false, error: error.message };
+    }
+
+    revalidatePath('/admin/kontakt');
+    return { success: true };
+}
+
+
