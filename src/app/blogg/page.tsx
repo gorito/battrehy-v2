@@ -126,6 +126,28 @@ export default function BlogLandingPage() {
                             </div>
                         </div>
                     </Link>
+
+                    {/* Article Card 5 */}
+                    <Link href="/blogg/anti-aging-behandling" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
+                        <div className="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center border-b border-gray-100">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src="/images/blogg/anti-aging-behandling-hero.webp" alt="Kvinna i 50-årsåldern med naturlig, frisk och lätt linjerad hud" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <h2 className="absolute bottom-4 left-6 text-2xl font-bold text-white z-10 drop-shadow-sm">Anti-aging<br/><span className="text-sm font-medium opacity-90">Hudföryngring & guide 2026</span></h2>
+                        </div>
+                        <div className="p-6 flex flex-col flex-grow">
+                            <div className="text-xs text-primary font-bold tracking-wide uppercase mb-2">Guide</div>
+                            <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                                Anti-aging behandling & hudföryngring – guide 2026
+                            </h2>
+                            <p className="text-gray-600 text-sm mb-6 line-clamp-3">
+                                Vilka anti-aging behandlingar fungerar mot rynkor och åldrande hud? Jämför hudföryngring, priser, risker och hur du väljer rätt behandling för din hud.
+                            </p>
+                            <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
+                                Läs hela guiden <ArrowRight size={16} className="ml-1" />
+                            </div>
+                        </div>
+                    </Link>
                 </div>
             </div>
         </main>

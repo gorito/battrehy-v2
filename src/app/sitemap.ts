@@ -25,6 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/blogg/botoxbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/fillerbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/estetisk-klinik`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+        { url: `${baseUrl}/blogg/anti-aging-behandling`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     ];
 
     // Individual Clinic Pages
