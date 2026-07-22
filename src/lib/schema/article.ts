@@ -14,7 +14,7 @@ export interface ArticleOptions {
 export function buildArticleSchema({
     headline,
     description,
-    authorName = 'Battrehys redaktion',
+    authorName = 'Battrehy.se',
     authorUrl = 'https://battrehy.se/om-redaktionen',
     datePublished,
     dateModified,
@@ -33,7 +33,7 @@ export function buildArticleSchema({
         },
         publisher: {
             '@type': 'Organization',
-            name: 'Bättrehy',
+            name: 'Battrehy.se',
             url: 'https://battrehy.se'
         },
         datePublished,

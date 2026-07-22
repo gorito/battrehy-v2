@@ -96,11 +96,16 @@ export default function BlogPost() {
                             Anti-aging behandling och hudföryngring: vad som faktiskt fungerar mot åldrande hud
                         </h1>
                         <div className="flex items-center text-gray-500 text-sm mb-8">
-                            <span className="font-medium">Av Battrehys redaktion</span>
+                            <span className="font-medium">Av Battrehy.se</span>
                             <span className="mx-2">·</span>
                             <span>Publicerad 22 juli 2026</span>
                             <span className="mx-2">·</span>
+                            <span>Senast uppdaterad: 22 juli 2026</span>
+                            <span className="mx-2">·</span>
                             <span>Kategori: Guide</span>
+                        </div>
+                        <div className="text-gray-600 text-sm mb-8 italic">
+                            Granskad av Battrehy.se:s redaktion enligt våra <Link href="/om-redaktionen" className="text-primary hover:underline font-medium">redaktionella riktlinjer</Link>.
                         </div>
                         
                         {/* Main article image - Hero */}
@@ -158,7 +163,7 @@ export default function BlogPost() {
                         <p>För att förstå vad som fungerar hjälper det att veta varför huden åldras. Forskningen brukar dela upp det i två delar:</p>
                         <ul className="list-disc pl-5 mt-2 space-y-1">
                             <li><strong>Inre (biologiskt) åldrande.</strong> Redan från mitten av 20-årsåldern minskar hudens produktion av kollagen och elastin – proteinerna som ger spänst. Det här styrs till stor del av dina gener och går inte att stoppa, men väl att påverka.</li>
-                            <li><strong>Yttre åldrande.</strong> Solens UV-strålning (så kallat foto-åldrande), rökning, stress, sömnbrist och kost står for en stor del av de synliga ålderstecknen. Det här kan du faktiskt påverka mycket – och UV-strålningen är den enskilt största orsaken.</li>
+                            <li><strong>Yttre åldrande.</strong> Solens UV-strålning (så kallat foto-åldrande), rökning, stress, sömnbrist och kost står för en stor del av de synliga ålderstecknen. Det här kan du faktiskt påverka mycket – och UV-strålningen är den enskilt största orsaken.</li>
                         </ul>
                         <p>
                             Det betyder att den mest effektiva anti-aging-strategin börjar långt innan klinikbehandlingar: med skydd och rätt hudvård. Vill du bygga en grund hemma kommer vår guide till en komplett hudvårdsrutin inom kort. Den här artikeln fokuserar på behandlingar – från det du gör själv till det som utförs på klinik.
@@ -332,7 +337,7 @@ export default function BlogPost() {
                         <div className="bg-gray-50 border-l-4 border-primary p-6 my-8 rounded-r-lg">
                             <h3 className="font-bold text-gray-900 mb-2">Hitta rätt klinik</h3>
                             <p className="text-gray-700 text-sm sm:text-base">
-                                På <strong>battrehy.se</strong> samlar vi estetiska kliniker över hela Sverige. <Link href="/behandlingar/anti-aging-behandling" className="text-primary hover:underline font-medium">Jämför kliniker som erbjuder anti-aging behandlingar</Link> och hitta en seriös mottagning nära dig.
+                                På <strong>Battrehy.se</strong> samlar vi estetiska kliniker över hela Sverige. <Link href="/behandlingar/anti-aging-behandling" className="text-primary hover:underline font-medium">Jämför kliniker som erbjuder anti-aging behandlingar</Link> och hitta en seriös mottagning nära dig.
                             </p>
                         </div>
 
@@ -374,7 +379,7 @@ export default function BlogPost() {
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="sakerhet">Säkerhet och att välja klinik</h2>
                         <p>
-                            De flesta anti-aging behandlingar är säkra när de utförs av rätt person – men det förutsätter dat du väljer klinik med omsorg. Injektionsbehandlingar (botox, fillers, skinboosters) får enligt svensk lag endast utföras av legitimerad läkare, tandläkare eller sjuksköterska, och verksamheten ska vara registrerad hos IVO. För injektioner gäller dessutom en lagstadgad betänketid innan behandling.
+                            De flesta anti-aging behandlingar är säkra när de utförs av rätt person – men det förutsätter att du väljer klinik med omsorg. Injektionsbehandlingar (botox, fillers, skinboosters) får enligt svensk lag endast utföras av legitimerad läkare, tandläkare eller sjuksköterska, och verksamheten ska vara registrerad hos IVO. För injektioner gäller dessutom en lagstadgad betänketid innan behandling.
                         </p>
                         <p>
                             Vanliga, övergående biverkningar är rodnad, svullnad och blåmärken. Mer sällsynta komplikationer kan förekomma, särskilt vid injektioner och laser – ytterligare ett skäl att välja en seriös mottagning. Ha också <strong>realistiska förväntningar</strong>: icke-kirurgiska behandlingar kan göra stor skillnad, men ersätter inte ett kirurgiskt ansiktslyft vid kraftig slapphet.
@@ -421,14 +426,14 @@ export default function BlogPost() {
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6" id="kallor">Källor</h2>
                         <ul className="list-disc pl-5 space-y-2 text-sm text-gray-600">
-                            <li>1177 Vårdguiden – om hudens åldrande och hudvård</li>
-                            <li>Läkemedelsverket / dermatologisk konsensus – retinoider och solskydd som evidensbaserad anti-aging</li>
-                            <li>Socialstyrelsen – Lag (2021:363) om estetiska kirurgiska ingrepp och estetiska injektionsbehandlingar (kompetenskrav, betänketid)</li>
-                            <li>IVO – tillsyn och registrering av estetiska verksamheter</li>
+                            <li><a href="https://www.1177.se/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">1177 Vårdguiden</a> – om hudens åldrande och hudvård</li>
+                            <li><a href="https://www.lakemedelsverket.se/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Läkemedelsverket</a> / dermatologisk konsensus – retinoider och solskydd som evidensbaserad anti-aging</li>
+                            <li><a href="https://www.socialstyrelsen.se/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Socialstyrelsen</a> – Lag (2021:363) om estetiska kirurgiska ingrepp och estetiska injektionsbehandlingar (kompetenskrav, betänketid)</li>
+                            <li><a href="https://www.ivo.se/" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">IVO</a> – tillsyn och registrering av estetiska verksamheter</li>
                         </ul>
 
                         <div className="mt-12 text-sm text-gray-500 italic border-t border-gray-200 pt-8">
-                            Den här artikeln är framtagen av Battrehys redaktion i informationssyfte och utgör inte medicinsk rådgivning. Rådgör alltid med legitimerad personal inför en behandling.
+                            Den här artikeln är framtagen av Battrehy.se:s redaktion i informationssyfte och utgör inte medicinsk rådgivning. Rådgör alltid med legitimerad personal inför en behandling.
                         </div>
                     </div>
                 </article>
