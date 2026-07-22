@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect } from 'next/navigation';
-import { getClinicBySlug, getTreatments, getClinics, getCities, getUniqueCities } from '@/lib/supabase/actions/queries';
+import { getClinicBySlug, getTreatments, getClinics, getCities, getUniqueCities, getClinicsByCity } from '@/lib/supabase/actions/queries';
 import { MapPin, Globe, Phone, Calendar, Image as ImageIcon } from 'lucide-react';
 import { slugifyCity } from '@/lib/utils';
 import CityTreatmentView from '@/components/seo/CityTreatmentView';
@@ -116,11 +116,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
     // 2. Check if it's a treatment (Combination Page)
     const resolvedSlugOrTreatment = ALIAS_MAP[slugOrTreatment] || slugOrTreatment;
-    const [treatments, cities, uniqueCityNames, clinicsResponse] = await Promise.all([
+    const [treatments, cities, uniqueCityNames] = await Promise.all([
         getTreatments(),
         getCities(),
-        getUniqueCities(),
-        getClinics({ limit: 1000 })
+        getUniqueCities()
     ]);
 
     let treatment = treatments.find(t => t.slug === resolvedSlugOrTreatment);
@@ -145,9 +144,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
         if (city) {
             // Count matching clinics
-            const filteredClinics = clinicsResponse.data.filter(c => {
+            const cityClinics = await getClinicsByCity(city.name);
+            const filteredClinics = cityClinics.filter(c => {
                 const cityMatch = slugifyCity(c.city).toLowerCase() === citySlug.toLowerCase();
-                const treatmentsArray = (c as any).treatments || (c as any).clinic_treatments?.map((ct: any) => ct.treatments) || [];
+                const treatmentsArray = (c as any).treatments || [];
                 const treatmentMatch = treatmentsArray.some((t: any) => 
                     t.id === treatment!.id || 
                     t.slug === treatment!.slug || 
@@ -209,12 +209,11 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
         permanentRedirect(`/kliniker/${asciiCitySlug}/${asciiSlugOrTreatment}`);
     }
 
-    // 1. Fetch ALL data first to avoid multiple round-trips
-    const [treatments, cities, uniqueCityNames, clinicsResponse] = await Promise.all([
+    // 1. Fetch treatments and cities in parallel
+    const [treatments, cities, uniqueCityNames] = await Promise.all([
         getTreatments(),
         getCities(),
-        getUniqueCities(),
-        getClinics({ limit: 1000 })
+        getUniqueCities()
     ]);
 
     console.log(`[ROUTER] Path: /kliniker/${citySlug}/${slugOrTreatment}`);
@@ -442,9 +441,10 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
         }
 
         if (city) {
-            const filteredClinics = clinicsResponse.data.filter(c => {
+            const cityClinics = await getClinicsByCity(city.name);
+            const filteredClinics = cityClinics.filter(c => {
                 const cityMatch = slugifyCity(c.city).toLowerCase() === citySlug.toLowerCase();
-                const treatmentsArray = (c as any).treatments || (c as any).clinic_treatments?.map((ct: any) => ct.treatments) || [];
+                const treatmentsArray = (c as any).treatments || [];
                 const treatmentMatch = treatmentsArray.some((t: any) => 
                     t.id === treatment!.id || 
                     t.slug === treatment!.slug || 

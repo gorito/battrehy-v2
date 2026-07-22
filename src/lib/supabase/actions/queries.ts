@@ -261,3 +261,27 @@ export async function getContactSubmissions() {
     return data || [];
 }
 
+export async function getClinicsByCity(cityName: string): Promise<Clinic[]> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from('clinics')
+        .select(`
+            *,
+            clinic_treatments (
+                treatments (*)
+            )
+        `)
+        .ilike('city', cityName);
+
+    if (error) {
+        console.error('Error fetching clinics by city:', error);
+        return [];
+    }
+
+    return (data as any[]).map(clinic => ({
+        ...clinic,
+        treatments: clinic.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || []
+    }));
+}
+
+
