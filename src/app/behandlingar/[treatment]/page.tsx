@@ -63,6 +63,49 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     };
 }
 
+const CITY_LINK_MAP: Record<string, { title: string; links: { name: string; url: string }[] }> = {
+    'botoxbehandling': {
+        title: 'Botox i svenska städer',
+        links: [
+            { name: 'Botox i Stockholm', url: '/kliniker/stockholm/botox' },
+            { name: 'Botox i Göteborg', url: '/kliniker/goteborg/botox' },
+            { name: 'Botox i Malmö', url: '/kliniker/malmo/botox' }
+        ]
+    },
+    'fillerbehandling': {
+        title: 'Fillers i svenska städer',
+        links: [
+            { name: 'Fillers i Stockholm', url: '/kliniker/stockholm/fillers' },
+            { name: 'Fillers i Göteborg', url: '/kliniker/goteborg/fillers' },
+            { name: 'Fillers i Malmö', url: '/kliniker/malmo/fillers' }
+        ]
+    },
+    'laserbehandling': {
+        title: 'Laser i svenska städer',
+        links: [
+            { name: 'Laser i Stockholm', url: '/kliniker/stockholm/laser' },
+            { name: 'Laser i Göteborg', url: '/kliniker/goteborg/laser' },
+            { name: 'Laser i Malmö', url: '/kliniker/malmo/laser' }
+        ]
+    },
+    'microneedling': {
+        title: 'Microneedling i svenska städer',
+        links: [
+            { name: 'Microneedling i Stockholm', url: '/kliniker/stockholm/microneedling' },
+            { name: 'Microneedling i Göteborg', url: '/kliniker/goteborg/microneedling' },
+            { name: 'Microneedling i Malmö', url: '/kliniker/malmo/microneedling' }
+        ]
+    },
+    'ansiktsbehandling': {
+        title: 'Ansiktsbehandling i svenska städer',
+        links: [
+            { name: 'Ansiktsbehandling i Stockholm', url: '/kliniker/stockholm/ansiktsbehandling' },
+            { name: 'Ansiktsbehandling i Göteborg', url: '/kliniker/goteborg/ansiktsbehandling' },
+            { name: 'Ansiktsbehandling i Malmö', url: '/kliniker/malmo/ansiktsbehandling' }
+        ]
+    }
+};
+
 export default async function TreatmentPage({ params }: Props) {
     const resolvedParams = await params;
     const headersList = await headers();
@@ -81,6 +124,8 @@ export default async function TreatmentPage({ params }: Props) {
     if (tError || !treatment) {
         notFound();
     }
+
+    const cityLinksConfig = CITY_LINK_MAP[treatment.slug];
 
     // Query clinics that offer this treatment in the user's city
     const { data: clinicsData, error: cError } = await supabase
@@ -315,6 +360,30 @@ export default async function TreatmentPage({ params }: Props) {
                             ))}
                     </div>
                 </div>
+
+                {/* City Landing Pages Sektion */}
+                {cityLinksConfig && (
+                    <div className="mt-20 pt-12 border-t border-gray-100">
+                        <h2 className="text-3xl font-black text-charcoal-900 mb-2">
+                            {cityLinksConfig.title}
+                        </h2>
+                        <p className="text-charcoal-500 mb-8">
+                            Hitta och jämför kliniker som utför {treatment.name.toLowerCase()} i Sveriges tre största städer.
+                        </p>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                            {cityLinksConfig.links.map((link, idx) => (
+                                <Link
+                                    key={idx}
+                                    href={link.url}
+                                    className="bg-white p-6 rounded-[2rem] shadow-[0_4px_20px_rgba(0,0,0,0.03)] hover:shadow-xl transition-all duration-300 border border-gray-100 text-center font-bold text-charcoal-900 hover:text-[#e8234a] flex items-center justify-center gap-2 group block"
+                                >
+                                    <MapPin size={16} className="text-[#e8234a]" />
+                                    {link.name}
+                                </Link>
+                            ))}
+                        </div>
+                    </div>
+                )}
             </div>
         </main>
     );
