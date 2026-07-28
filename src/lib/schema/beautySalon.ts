@@ -33,79 +33,41 @@ function parseOpeningHours(hours: string[]) {
 }
 
 export function buildBeautySalonSchema(clinic: Clinic) {
-  const citySlug = slugifyCity(clinic.city);
-  const url = `${BASE_URL}/kliniker/${citySlug}/${clinic.slug}/`;
+  let postalCode: string | undefined = undefined;
+  let streetAddress = clinic.address;
 
-  // Use dual @type for clinics that provide medical aesthetics
-  const is_medical_aesthetic = clinic.is_rfem_member || clinic.treatments?.some(t => /laser|botox|filler|injektion/i.test(t.name));
-  const schemaType = is_medical_aesthetic
-    ? ['BeautySalon', 'MedicalBusiness']
-    : 'BeautySalon';
+  if (clinic.address) {
+    // Match Swedish postal code (e.g., "111 20" or "11120")
+    const postalMatch = clinic.address.match(/\b\d{3}\s?\d{2}\b/);
+    if (postalMatch) {
+      postalCode = postalMatch[0];
+      const index = clinic.address.indexOf(postalCode);
+      if (index > 0) {
+        streetAddress = clinic.address.substring(0, index).replace(/,\s*$/, '').trim();
+      }
+    }
+  }
+
+  const citySlug = slugifyCity(clinic.city);
+  const profileUrl = `${BASE_URL}/kliniker/${citySlug}/${clinic.slug}`;
 
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
-    '@type': schemaType,
-    '@id': `${url}#clinic`,
+    '@type': 'BeautySalon',
+    '@id': profileUrl,
     name: clinic.name,
-    url,
-    description: clinic.description,
-    image: clinic.primary_image_url,
-    telephone: clinic.phone,
-    email: clinic.email,
-    sameAs: clinic.website ? [clinic.website] : undefined,
-
-    address: clinic.address
-      ? {
-          '@type': 'PostalAddress',
-          streetAddress: clinic.address,
-          addressLocality: clinic.city,
-          addressCountry: 'SE',
-        }
-      : undefined,
-
-    geo: clinic.latitude && clinic.longitude
-      ? {
-          '@type': 'GeoCoordinates',
-          latitude: clinic.latitude,
-          longitude: clinic.longitude,
-        }
-      : undefined,
-
-    openingHoursSpecification: clinic.opening_hours?.length
-      ? parseOpeningHours(clinic.opening_hours)
-      : undefined,
-
-    hasOfferCatalog: clinic.treatments?.length
-      ? {
-          '@type': 'OfferCatalog',
-          name: 'Behandlingar',
-          itemListElement: clinic.treatments.map((t) => ({
-            '@type': 'Offer',
-            itemOffered: {
-              '@type': 'Service',
-              name: t.name, // mapping from Treatment object to name string
-            },
-          })),
-        }
-      : undefined,
-
-    aggregateRating:
-      clinic.rating_value && clinic.rating_count
-        ? {
-            '@type': 'AggregateRating',
-            ratingValue: clinic.rating_value,
-            reviewCount: clinic.rating_count,
-            bestRating: 5,
-            worstRating: 1,
-          }
-        : undefined,
-
-    priceRange: clinic.price_range,
-
-    // Publisher cross-link — see Section 3
-    isPartOf: {
-      '@id': `${BASE_URL}/#organization`,
-    },
+    description: clinic.ai_description || clinic.description || undefined,
+    telephone: clinic.phone || undefined,
+    url: clinic.website || undefined,
+    address: streetAddress ? {
+      '@type': 'PostalAddress',
+      streetAddress: streetAddress,
+      addressLocality: clinic.city,
+      addressCountry: 'SE',
+      postalCode: postalCode || undefined,
+    } : undefined,
+    areaServed: clinic.city || undefined,
+    priceRange: clinic.price_range || undefined,
   };
 
   return stripUndefined(schema);
