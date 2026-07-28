@@ -166,7 +166,7 @@ export default function BlogPost() {
                             <li><strong>Yttre åldrande.</strong> Solens UV-strålning (så kallat foto-åldrande), rökning, stress, sömnbrist och kost står för en stor del av de synliga ålderstecknen. Det här kan du faktiskt påverka mycket – och UV-strålningen är den enskilt största orsaken.</li>
                         </ul>
                         <p>
-                            Det betyder att den mest effektiva anti-aging-strategin börjar långt innan klinikbehandlingar: med skydd och rätt hudvård. Vill du bygga en grund hemma kommer vår guide till en komplett hudvårdsrutin inom kort. Den här artikeln fokuserar på behandlingar – från det du gör själv till det som utförs på klinik.
+                            Det betyder att den mest effektiva anti-aging-strategin börjar långt innan klinikbehandlingar: med skydd och rätt hudvård. Vill du bygga en grund hemma har vi en komplett guide till <Link href="/blogg/hudvardsrutin" className="text-primary hover:underline">hudvårdsrutin steg för steg</Link>. Den här artikeln fokuserar på behandlingar – från det du gör själv till det som utförs på klinik.
                         </p>
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="forebygg">Förebygg själv: det som har bäst evidens</h2>
