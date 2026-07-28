@@ -51,12 +51,22 @@ export function buildBeautySalonSchema(clinic: Clinic) {
   const citySlug = slugifyCity(clinic.city);
   const profileUrl = `${BASE_URL}/kliniker/${citySlug}/${clinic.slug}`;
 
+  let imageUrl: string | undefined = undefined;
+  if (clinic.primary_image_url) {
+    if (clinic.primary_image_url.startsWith('http://') || clinic.primary_image_url.startsWith('https://')) {
+      imageUrl = clinic.primary_image_url;
+    } else {
+      imageUrl = `${BASE_URL}${clinic.primary_image_url.startsWith('/') ? '' : '/'}${clinic.primary_image_url}`;
+    }
+  }
+
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'BeautySalon',
     '@id': profileUrl,
     name: clinic.name,
     description: clinic.ai_description || clinic.description || undefined,
+    image: imageUrl || undefined,
     telephone: clinic.phone || undefined,
     url: clinic.website || undefined,
     address: streetAddress ? {
