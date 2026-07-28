@@ -127,47 +127,36 @@ export default async function TreatmentPage({ params }: Props) {
 
     const cityLinksConfig = CITY_LINK_MAP[treatment.slug];
 
-    // Query clinics that offer this treatment in the user's city
-    const { data: clinicsData, error: cError } = await supabase
-        .from('clinics')
-        .select(`
-            *,
-            clinic_treatments!inner (
-                treatment_id,
-                treatments (*)
-            )
-        `)
-        .eq('clinic_treatments.treatment_id', treatment.id)
-        .ilike('city', userCity);
+    // Query clinic relations first
+    const { data: ctRelations } = await supabase
+        .from('clinic_treatments')
+        .select('clinic_id')
+        .eq('treatment_id', treatment.id);
 
-    let clinics = clinicsData || [];
-    let treatmentClinics = clinics.map((c: any) => ({
-        ...c,
-        treatments: c.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || []
-    }));
-
+    const clinicIds = ctRelations?.map((r: any) => r.clinic_id) || [];
+    let treatmentClinics: any[] = [];
     let displayCity = userCity;
 
-    // Fallback: If no clinics found in the user's city for this treatment, show clinics in Sweden (limit 100)
-    if (treatmentClinics.length === 0) {
-        const { data: allClinicsData, error: allErr } = await supabase
+    if (clinicIds.length > 0) {
+        const { data: clinicsData } = await supabase
             .from('clinics')
-            .select(`
-                *,
-                clinic_treatments!inner (
-                    treatment_id,
-                    treatments (*)
-                )
-            `)
-            .eq('clinic_treatments.treatment_id', treatment.id)
-            .limit(100);
+            .select('*')
+            .in('id', clinicIds)
+            .ilike('city', userCity);
+
+        treatmentClinics = clinicsData || [];
+
+        // Fallback: If no clinics found in the user's city for this treatment, show clinics in Sweden (limit 100)
+        if (treatmentClinics.length === 0) {
+            const { data: allClinicsData } = await supabase
+                .from('clinics')
+                .select('*')
+                .in('id', clinicIds)
+                .limit(100);
             
-        const fallbackClinics = allClinicsData || [];
-        treatmentClinics = fallbackClinics.map((c: any) => ({
-            ...c,
-            treatments: c.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || []
-        }));
-        displayCity = 'Stockholm'; // Default fallback city string
+            treatmentClinics = allClinicsData || [];
+            displayCity = 'Stockholm'; // Default fallback city string
+        }
     }
 
     const schemas = [
