@@ -118,7 +118,7 @@ export default function BlogPost() {
 
                     <div className="text-lg text-gray-700 leading-relaxed space-y-6">
                         <p>
-                            Det finns oändligt med hudvårdsråd – och ännu fler produkter. But en hudvårdsrutin som fungerar behöver varken vara dyr eller komplicerad. Den här guiden visar dig grunderna: rätt ordning morgon och kväll, vad de viktigaste ingredienserna faktiskt gör, och hur du anpassar rutinen efter just din hudtyp. Vi är en oberoende katalog, inte en butik – så här får du råd på ingrediensnivå utan att någon försöker sälja en specifik produkt.
+                            Det finns oändligt med hudvårdsråd – och ännu fler produkter. Men en hudvårdsrutin som fungerar behöver varken vara dyr eller komplicerad. Den här guiden visar dig grunderna: rätt ordning morgon och kväll, vad de viktigaste ingredienserna faktiskt gör, och hur du anpassar rutinen efter just din hudtyp. Vi är en oberoende katalog, inte en butik – så här får du råd på ingrediensnivå utan att någon försöker sälja en specifik produkt.
                         </p>
 
                         <div className="bg-rose-50 border border-rose-100 p-6 rounded-2xl my-8">
@@ -247,7 +247,7 @@ export default function BlogPost() {
                             Det här är kärnan i en rutin som faktiskt fungerar: <strong>samma produkter passar inte alla.</strong> Känn igen din hudtyp och utgå från den.
                         </p>
                         <p>
-                            Ett enkelt sätt å bedöma din hudtyp: tvätta ansiktet med en mild rengöring, vänta en timme utan att applicera något, och känn efter. Spänner och fjällar huden är den torr; glänser den (särskilt i T-zonen) är den fet eller kombinerad; känns den lugn och balanserad är den normal. Kom också ihåg att hudtypen kan förändras med årstid, hormoner och ålder – en rutin får gärna justeras över tid. Är du osäker kan en hudterapeut hjälpa dig att bedöma huden.
+                            Ett enkelt sätt att bedöma din hudtyp: tvätta ansiktet med en mild rengöring, vänta en timme utan att applicera något, och känn efter. Spänner och fjällar huden är den torr; glänser den (särskilt i T-zonen) är den fet eller kombinerad; känns den lugn och balanserad är den normal. Kom också ihåg att hudtypen kan förändras med årstid, hormoner och ålder – en rutin får gärna justeras över tid. Är du osäker kan en hudterapeut hjälpa dig att bedöma huden.
                         </p>
 
                         <div className="space-y-8 mt-6">
@@ -286,7 +286,7 @@ export default function BlogPost() {
                                 <p className="mb-2">Reagerar lätt med rodnad, sveda eller klåda. Fokus: enkelhet och barriär.</p>
                                 <ul className="list-disc pl-5 text-gray-700 text-sm space-y-1">
                                     <li><strong>Nyckelingredienser:</strong> ceramider, niacinamid, lugnande fuktkräm; bakuchiol som skonsammare alternativ till retinol.</li>
-                                    <li><strong>Undvik:</strong> parfym, many aktiva samtidigt och tvära produktbyten. Testa alltid nya produkter på en liten yta först.</li>
+                                    <li><strong>Undvik:</strong> parfym, många aktiva samtidigt och tvära produktbyten. Testa alltid nya produkter på en liten yta först.</li>
                                     <li><strong>Tips:</strong> färre steg är bättre – en mild rengöring, en fuktkräm och SPF räcker långt.</li>
                                 </ul>
                             </div>
@@ -305,7 +305,7 @@ export default function BlogPost() {
                                 <h3 className="text-xl font-bold text-gray-900 mb-2">Aknebenägen hud</h3>
                                 <p className="mb-2">Återkommande finnar och orenheter, ofta även efter tonåren. Fokus: hålla porer rena utan att irritera.</p>
                                 <ul className="list-disc pl-5 text-gray-700 text-sm space-y-1">
-                                    <li><strong>Nyckelingredienser:</strong> salicylsyra (BHA), niacinamid, icke-komedogena (portäppande) produkter; retinoider mot både akne och ärr.</li>
+                                    <li><strong>Nyckelingredienser:</strong> salicylsyra (BHA), niacinamid, icke-komedogena (icke-portäppande) produkter; retinoider mot både akne och ärr.</li>
                                     <li><strong>Undvik:</strong> att övertorka huden och att peta på finnar.</li>
                                     <li><strong>Tips:</strong> var tålmodig – och sök vård för svårare akne, som kan behöva receptbelagd behandling.</li>
                                 </ul>
@@ -431,7 +431,7 @@ export default function BlogPost() {
                             </div>
                             <div>
                                 <h4 className="font-bold text-gray-900 text-lg">När räcker inte hemmavård – behöver jag professionell hudvård?</h4>
-                                <p className="text-gray-700 mt-1">Vid akne eller ärr, pigmentfläckar, jag djupare rynkor eller uttalad slapphet gör professionella behandlingar större skillnad. Då kan det vara värt att boka en konsultation på en seriös klinik.</p>
+                                <p className="text-gray-700 mt-1">Vid akne eller ärr, pigmentfläckar, djupare rynkor eller uttalad slapphet gör professionella behandlingar större skillnad. Då kan det vara värt att boka en konsultation på en seriös klinik.</p>
                             </div>
                         </div>
 
