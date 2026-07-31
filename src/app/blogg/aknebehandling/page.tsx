@@ -169,10 +169,10 @@ export default function BlogPost() {
                         <ul className="list-disc pl-5 mt-2 space-y-1">
                             <li><strong>Komedoner</strong> – pormaskar, både öppna (svarta) och slutna (vita). Den mildaste formen.</li>
                             <li><strong>Inflammatorisk akne</strong> – röda finnar (papler) och varfyllda finnar (pustler).</li>
-                            <li><strong>Djup akne</strong> – ömma knölar (noduli) och cystor som sitter djupt i huden. Den här typen ökar risken för ärr och bör bedömas av läkare.</li>
+                            <li><strong>Djup akne</strong> – ömma knölar (noduli) och cystor som sitter djupt i huden. Den här typen ökar risken för ärr och bör därför bedömas av läkare.</li>
                         </ul>
                         <p>
-                            Akne styrs till stor del av hormoner, vilket är varför den är vanligast i tonåren – men <strong>hormonell akne</strong> drabbar många även i vuxen ålder, ofta längs käklinjen och hakan. Andra faktorer som kan spela in är ärftlighet, vissa läkemedel och stress. Att pilla och klämma förvärrar ofta både inflammationen och risken för ärr.
+                            Akne styrs till stor del av hormoner och är därför vanligast i tonåren – men <strong>hormonell akne</strong> drabbar många även i vuxen ålder, ofta längs käklinjen och hakan. Andra faktorer som kan spela in är ärftlighet, vissa läkemedel och stress. Att pilla och klämma förvärrar ofta både inflammationen och risken för ärr.
                         </p>
                         <p>
                             Akne delas vanligtvis in i <strong>mild, måttlig och svår</strong> – en indelning som styr valet av behandling. Den syns oftast i ansiktet, men förekommer även på rygg, bröst och axlar, där talgkörtlarna är många.
@@ -193,7 +193,7 @@ export default function BlogPost() {
                         {/* Section 2 */}
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="hemma">2. Aktiv akne: hemmavård och receptfritt</h2>
                         <p>
-                            Vid mild akne kan man ofta komma långt med rätt hemmavård. Nyckeln är att välja <strong>icke-komedogena</strong> (icke portäppande) produkter och att ge behandlingen tid – räkna med flera veckor innan du ser effekt. Vanliga receptfria ingredienser:
+                            Vid mild akne kan man ofta komma långt med rätt hemmavård. Nyckeln är att välja <strong>icke-komedogena</strong> (icke-portäppande) produkter och att ge behandlingen tid – räkna med flera veckor innan du ser effekt. Vanliga receptfria ingredienser:
                         </p>
                         <ul className="list-disc pl-5 mt-2 space-y-2">
                             <li><strong>Benzoylperoxid</strong> – minskar bakterier och inflammation. Effektivt mot inflammatorisk akne, men kan torka ut i början.</li>
@@ -203,7 +203,7 @@ export default function BlogPost() {
                             <li><strong>Niacinamid</strong> – lugnar och stärker hudbarriären.</li>
                         </ul>
                         <p>
-                            Undvik att kombinera flera starka aktiva samtidigt i början, och använd alltid <strong>solskydd</strong> dagtid – flera akneingredienser gör huden mer solkänslig, och sol kan dessutom förvärra märken. Vill du bygga en grund hittar du vår <Link href="/blogg/hudvardsrutin" className="text-primary hover:underline font-medium">guide till hudvårdsrutin, inklusive aknebenägen hud</Link>.
+                            Undvik att kombinera flera starka aktiva ingredienser i början, och använd alltid <strong>solskydd</strong> dagtid – flera akneingredienser gör huden mer solkänslig, och sol kan dessutom förvärra märken. Vill du bygga en grund hittar du vår <Link href="/blogg/hudvardsrutin" className="text-primary hover:underline font-medium">guide till hudvårdsrutin, inklusive aknebenägen hud</Link>.
                         </p>
                         <p>
                             <strong>Så börjar du utan att irritera huden:</strong> välj en skonsam rengöring, introducera en aktiv ingrediens i taget och lägg till fler först när huden vant sig. Använd en lätt, oljefri fuktkräm även om huden är fet – uttorkad hud kan trigga mer talgproduktion. Ge varje förändring minst sex till åtta veckor innan du bedömer resultatet, och dokumentera gärna med foto. Blir huden kraftigt irriterad, trappa ner och rådgör med en hudterapeut eller läkare.
@@ -270,7 +270,7 @@ export default function BlogPost() {
                         {/* Section 5 */}
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="aknearr">5. Akneärr: typer och behandlingar</h2>
                         <p>
-                            När aknen väl läkt kan den lämna märken – och det är här de flesta professionella behandlingarna kommer in. Det första steget är att förstå vilken sorts märke du har, eftersom behandlingen skiljer sig åt.
+                            När aknen väl har läkt kan den lämna märken – och det är här de flesta professionella behandlingarna kommer in. Det första steget är att förstå vilken sorts märke du har, eftersom behandlingen skiljer sig åt.
                         </p>
                         <ul className="list-disc pl-5 mt-2 space-y-2">
                             <li><strong>Röda märken (postinflammatoriskt erytem, PIE)</strong> – rodnad som ofta bleknar av sig själv med tiden.</li>
@@ -295,7 +295,7 @@ export default function BlogPost() {
                                 <tbody className="divide-y divide-gray-200 bg-white">
                                     <tr>
                                         <td className="px-4 py-3 font-medium text-gray-900 whitespace-nowrap">Röda märken (PIE)</td>
-                                        <td className="px-4 py-3 text-gray-700">Tid, solskydd, ev. IPL/laser mot kärl</td>
+                                        <td className="px-4 py-3 text-gray-700">Tid, solskydd, eventuellt IPL/laser mot kärl</td>
                                         <td className="px-4 py-3 text-gray-700">Bleknar ofta av sig själv; SPF påskyndar</td>
                                     </tr>
                                     <tr>
