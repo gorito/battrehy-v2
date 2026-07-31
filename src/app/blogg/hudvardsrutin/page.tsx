@@ -382,7 +382,7 @@ export default function BlogPost() {
 
                         <p>Överväg professionell hjälp om du har:</p>
                         <ul className="list-disc pl-5 space-y-2">
-                            <li><strong>Akne och akneärr</strong> som inte svarar på hemmavård – läs mer i vår guide till <Link href="/blogg/ansiktsbehandling-den-kompletta-guiden" className="text-primary hover:underline">ansiktsbehandling</Link>.</li>
+                            <li><strong>Akne och akneärr</strong> som inte svarar på hemmavård – läs mer i <Link href="/blogg/aknebehandling" className="text-primary hover:underline">vår guide till aknebehandling</Link> eller guiden till <Link href="/blogg/ansiktsbehandling-den-kompletta-guiden" className="text-primary hover:underline">ansiktsbehandling</Link>.</li>
                             <li><strong>Pigmentfläckar och solskador</strong> – kan behandlas med t.ex. peeling eller laser.</li>
                             <li><strong>Fina linjer och rynkor</strong> – se vår guide till <Link href="/blogg/anti-aging-behandling" className="text-primary hover:underline">anti-aging behandling</Link>, och vid mimikrynkor <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary hover:underline">botox</Link> eller <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="text-primary hover:underline">fillers</Link> för volym.</li>
                             <li><strong>Uttalad slapphet eller andra bekymmer</strong> där du vill ha en professionell bedömning.</li>

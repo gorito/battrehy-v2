@@ -12,8 +12,9 @@ export function buildOrganizationSchema() {
       height: 60,
     },
     sameAs: [
-      'https://www.instagram.com/battrehy',       // add actual social URLs
-      'https://www.linkedin.com/company/battrehy',
+      'https://se.pinterest.com/battrehy/L',
+      'https://www.instagram.com/battrehy/',
+      'https://www.facebook.com/profile.php?id=61592716316970',
     ],
     publisher: {
       '@type': 'Person',
