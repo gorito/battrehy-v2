@@ -6,6 +6,7 @@ import { updateClinicAction } from '@/lib/supabase/actions/mutations';
 import ImageUpload from '@/components/admin/ImageUpload';
 import EnrichButton from '@/components/admin/EnrichButton';
 import DeleteClinicButton from '@/components/admin/DeleteClinicButton';
+import { slugifyCity } from '@/lib/utils';
 
 interface EditClinicFormProps {
     clinic: any;
@@ -387,7 +388,7 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1',
 
                 <div className="pt-6 border-t border-gray-100 flex justify-between items-center">
                     <Link
-                        href={`/kliniker/${clinic.city}/${clinic.slug}`}
+                        href={`/kliniker/${slugifyCity(clinic.city)}/${clinic.slug}`}
                         target="_blank"
                         className="text-primary hover:underline text-sm font-medium"
                     >

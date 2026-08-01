@@ -73,7 +73,7 @@ export default async function SearchResultsPage({
                                 <div className="flex-1">
                                     <div className="flex items-center gap-3 mb-2">
                                         <h3 className="text-xl font-bold text-gray-900">
-                                            <Link href={`/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`} className="hover:text-primary">
+                                            <Link href={`/kliniker/${slugifyCity(clinic.city)}/${clinic.slug}`} className="hover:text-primary">
                                                 {clinic.name}
                                             </Link>
                                         </h3>

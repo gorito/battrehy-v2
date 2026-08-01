@@ -51,6 +51,13 @@ const nextConfig: any = {
         destination: '/kliniker/lidingo/:slug*',
         permanent: true,
       },
+      // Legacy route redirects
+      { source: '/om-oss', destination: '/om-redaktionen', permanent: true },
+      { source: '/login', destination: '/portal-access', permanent: true },
+      { source: '/signup', destination: '/portal-access', permanent: true },
+      { source: '/for-kliniker', destination: '/portal-access', permanent: true },
+      { source: '/hudvardsguider', destination: '/blogg', permanent: true },
+
       // Swedish city name redirects (URL-encoded) – å, ä, ö → ASCII slugs
       { source: '/kliniker/liding%C3%B6/:path*',          destination: '/kliniker/lidingo/:path*',          permanent: true },
       { source: '/kliniker/malm%C3%B6/:path*',           destination: '/kliniker/malmo/:path*',           permanent: true },
@@ -74,6 +81,20 @@ const nextConfig: any = {
       { source: '/kliniker/hov%C3%A5s/:path*',            destination: '/kliniker/hovas/:path*',            permanent: true },
       { source: '/kliniker/s%C3%B6dert%C3%A4lje/:path*',      destination: '/kliniker/sodertalje/:path*',      permanent: true },
       { source: '/kliniker/bor%C3%A5s/:path*',            destination: '/kliniker/boras/:path*',            permanent: true },
+      { source: '/kliniker/enk%C3%B6ping/:path*',          destination: '/kliniker/enkoping/:path*',         permanent: true },
+
+      // Renamed or relocated clinic redirects
+      { source: '/kliniker/malmo/body-face-i-malmo-sedan-2010', destination: '/kliniker/malmo/body-face-beauty-salon-in-malmo', permanent: true },
+      { source: '/kliniker/vasteras/lifetime-clinic', destination: '/kliniker/skarholmen/lifetime-clinic-skarholmen', permanent: true },
+      { source: '/kliniker/stockholm/doktorsara-stockholm', destination: '/kliniker/sundbyberg/doktorsara-sundbyberg-bokadirekt', permanent: true },
+      { source: '/kliniker/goteborg/elite-clinic-goteborg', destination: '/kliniker/molndal/elite-clinic-plastikkirurgi', permanent: true },
+      { source: '/kliniker/okand/art-clinic', destination: '/kliniker/uppsala/aesthetic-art-clinic', permanent: true },
+      { source: '/kliniker/stockholm/swedesthetic-stockholm', destination: '/kliniker/kista/swedesthetic-klinik-fillers-botox-tradlyft-i-stockholm', permanent: true },
+      { source: '/kliniker/askim/prima-estetik-medicin-askim', destination: '/kliniker/goteborg/prima-estetik-medicin', permanent: true },
+      { source: '/kliniker/malmo/skinglow-clinic-hudvardsklinik-malmo', destination: '/kliniker/malmo/skinglow-clinic', permanent: true },
+      { source: '/kliniker/nacka/stockholm-estetik-halsa-ab', destination: '/kliniker/nacka/stockholm-estetik-halsa', permanent: true },
+      { source: '/kliniker/vasteras/beauty-by', destination: '/kliniker/vasteras/beauty-by-maria-laser-clinic', permanent: true },
+      { source: '/kliniker/malmo/skin-clinic', destination: '/kliniker/malmo/malmo-skin-clinic', permanent: true },
     ];
   },
 };

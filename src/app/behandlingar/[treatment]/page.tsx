@@ -172,7 +172,7 @@ export default async function TreatmentPage({ params }: Props) {
             clinics: treatmentClinics.map(c => ({
                 name: c.name,
                 slug: c.slug,
-                city_slug: c.city.toLowerCase()
+                city_slug: slugifyCity(c.city)
             }))
         })
     ];
@@ -263,7 +263,7 @@ export default async function TreatmentPage({ params }: Props) {
                 <div className="grid gap-6">
                     {treatmentClinics.length > 0 ? (
                         treatmentClinics.map(clinic => (
-                            <Link key={clinic.id} href={`/kliniker/${clinic.city.toLowerCase()}/${clinic.slug}`} className="bg-white p-6 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col sm:flex-row justify-between items-start gap-6 group block">
+                            <Link key={clinic.id} href={`/kliniker/${slugifyCity(clinic.city)}/${clinic.slug}`} className="bg-white p-6 rounded-[2rem] shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col sm:flex-row justify-between items-start gap-6 group block">
                                 <div className="flex-1 flex flex-col h-full">
                                     <div className="flex flex-wrap items-center gap-2 mb-3">
                                         <h2 className="text-2xl font-black text-charcoal-900 group-hover:text-[#e8234a] transition-colors line-clamp-1">
