@@ -459,7 +459,7 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                 return cityMatch && (treatmentMatch || serviceMatch);
             });
             
-            if (filteredClinics.length <= 1) {
+            if (filteredClinics.length === 0) {
                 notFound();
             }
 
