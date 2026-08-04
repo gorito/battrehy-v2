@@ -223,7 +223,7 @@ export default function BlogPost() {
 
                         <h3 className="text-xl font-bold text-gray-900 mt-8 mb-3">Laser och IPL</h3>
                         <p>
-                            <strong>Laser</strong> (t.ex. fraktionerad CO2) och <strong>IPL/Pico</strong> behandlar pigmentfläckar, solskador, ojämn struktur och djupare hudföryngring. Ablativ CO2-laser ger kraftfulla resultat men har några dagars läkningstid, medan IPL och Pico oftast har kortare återhämtning. Vid mörkare hudtoner krävs särskild försiktighet vid val av laser, eftersom risken för pigmentförändringar är högre – ännu ett skäl att välja en erfaren klinik.
+                            <strong>Laser</strong> (t.ex. fraktionerad CO2) och <strong>IPL/Pico</strong> behandlar <Link href="/blogg/pigmentflackar" className="text-primary hover:underline font-medium">pigmentfläckar</Link>, solskador, ojämn struktur och djupare hudföryngring. Ablativ CO2-laser ger kraftfulla resultat men har några dagars läkningstid, medan IPL och Pico oftast har kortare återhämtning. Vid mörkare hudtoner krävs särskild försiktighet vid val av laser, eftersom risken för pigmentförändringar är högre – ännu ett skäl att välja en erfaren klinik.
                         </p>
 
                         <h3 className="text-xl font-bold text-gray-900 mt-8 mb-3">HIFU (fokuserat ultraljud)</h3>

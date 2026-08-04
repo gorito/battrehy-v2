@@ -274,7 +274,7 @@ export default function BlogPost() {
                         </p>
                         <ul className="list-disc pl-5 mt-2 space-y-2">
                             <li><strong>Röda märken (postinflammatoriskt erytem, PIE)</strong> – rodnad som ofta bleknar av sig själv med tiden.</li>
-                            <li><strong>Bruna märken (postinflammatorisk hyperpigmentering, PIH)</strong> – pigmentförändringar, vanligare i mörkare hud.</li>
+                            <li><strong>Bruna märken (postinflammatorisk hyperpigmentering, PIH)</strong> – pigmentförändringar, vanligare i mörkare hud (läs mer i vår <Link href="/blogg/pigmentflackar" className="text-primary hover:underline">guide till pigmentfläckar</Link>).</li>
                             <li><strong>Nedsjunkna (atrofiska) ärr</strong> – de &quot;riktiga&quot; ärren: smala och djupa (ice pick), breda med skarpa kanter (boxcar) eller vågiga (rolling).</li>
                             <li><strong>Upphöjda (hypertrofa) ärr</strong> – vanligare på rygg och bröst.</li>
                         </ul>
