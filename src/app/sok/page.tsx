@@ -5,6 +5,7 @@ import HomeSearch from '@/components/home/HomeSearch';
 import LocationPill from '@/components/search/LocationPill';
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
+import { slugifyCity } from '@/lib/utils';
 
 export const metadata: Metadata = {
     title: 'Sökresultat',
@@ -20,28 +21,52 @@ export default async function SearchResultsPage({
 }: {
     searchParams?: Promise<{ q?: string; city?: string }> | { q?: string; city?: string };
 }) {
-    const resolvedParams = await searchParams;
-    const query = resolvedParams?.q || '';
-    let locationCity = resolvedParams?.city || '';
+    let query = '';
+    let locationCity = '';
+
+    try {
+        const resolvedParams = searchParams ? await searchParams : {};
+        query = resolvedParams?.q || '';
+        locationCity = resolvedParams?.city || '';
+    } catch (e) {
+        console.error('Error resolving searchParams:', e);
+    }
 
     // Fallback to Vercel IP header if no explicit city is provided
     if (!locationCity) {
-        const headersList = await headers();
-        const vercelCity = headersList.get('x-vercel-ip-city');
-        if (vercelCity) {
-            locationCity = decodeURIComponent(vercelCity);
+        try {
+            const headersList = await headers();
+            const vercelCity = headersList.get('x-vercel-ip-city');
+            if (vercelCity) {
+                try {
+                    locationCity = decodeURIComponent(vercelCity);
+                } catch {
+                    locationCity = vercelCity;
+                }
+            }
+        } catch (e) {
+            console.error('Error reading headers:', e);
         }
     }
 
+    locationCity = locationCity || '';
+
     // Use the existing getClinics function which handles text search on name/city
     // We limit to 100 for public search to keep it fast
-    const { data: clinics } = await getClinics({ query, locationCity, limit: 100 });
+    let clinics: any[] = [];
+    try {
+        const res = await getClinics({ query, locationCity, limit: 100 });
+        clinics = res?.data || [];
+    } catch (e) {
+        console.error('Error in getClinics:', e);
+    }
 
     // Determine if there are zero local matches
     let isLocalEmpty = false;
     if (locationCity && clinics.length > 0) {
         // Since matching clinics get rank 0, if the first clinic isn't from the requested city, there are none
-        if (clinics[0].city?.toLowerCase() !== locationCity.toLowerCase()) {
+        const firstClinicCity = clinics[0]?.city || '';
+        if (firstClinicCity.toLowerCase() !== locationCity.toLowerCase()) {
             isLocalEmpty = true;
         }
     }

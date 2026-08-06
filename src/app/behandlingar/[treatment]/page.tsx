@@ -88,6 +88,14 @@ const CITY_LINK_MAP: Record<string, { title: string; links: { name: string; url:
             { name: 'Laser i Malmö', url: '/kliniker/malmo/laser' }
         ]
     },
+    'laser-harborttagning': {
+        title: 'Laserhårborttagning i svenska städer',
+        links: [
+            { name: 'Laserhårborttagning i Stockholm', url: '/kliniker/stockholm/laser-harborttagning' },
+            { name: 'Laserhårborttagning i Göteborg', url: '/kliniker/goteborg/laser-harborttagning' },
+            { name: 'Laserhårborttagning i Malmö', url: '/kliniker/malmo/laser-harborttagning' }
+        ]
+    },
     'microneedling': {
         title: 'Microneedling i svenska städer',
         links: [
