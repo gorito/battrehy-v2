@@ -30,6 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/blogg/aknebehandling`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/pigmentflackar`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/laserharborttagning`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+        { url: `${baseUrl}/blogg/estetik-for-man`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     ];
 
     // Individual Clinic Pages
