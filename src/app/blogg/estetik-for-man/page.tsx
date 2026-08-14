@@ -125,7 +125,7 @@ export default function BlogPost() {
                             Estetiska behandlingar har länge betraktats som något främst för kvinnor, men den bilden håller på att lösas upp. Allt fler män söker sig till kliniker – dels för hudvård och föryngring, dels för subtila justeringar som en mer definierad käklinje eller mindre trötta ögon. Drivkrafterna är ofta desamma som för alla andra: att se pigg, frisk och utvilad ut.
                         </p>
                         <p>
-                            Två saker är utmärkande för hur män närmar sig estetik. Det första är <strong>kravet på naturliga resultat</strong> – de allra flesta män vill inte se behandlade ut, utan som en piggare version av sig själva. Det andra är <strong>effektivitet</strong>: icke-invasiva behandlingar med kort återhämtning passar en vardag som inte tillåter långa avbrott. Med rätt förväntningar och en seriös klinik är det fallt möjligt att uppnå just det.
+                            Två saker är utmärkande för hur män närmar sig estetik. Det första är <strong>kravet på naturliga resultat</strong> – de allra flesta män vill inte se behandlade ut, utan som en piggare version av sig själva. Det andra är <strong>effektivitet</strong>: icke-invasiva behandlingar med kort återhämtning passar en vardag som inte tillåter långa avbrott. Med rätt förväntningar och en seriös klinik är det fullt möjligt att uppnå just det.
                         </p>
                         <p>
                             Intresset för icke-kirurgiska behandlingar bland män har ökat stadigt de senaste åren, och kliniker rapporterar allt fler manliga kunder. Samtidigt är många män nya i sammanhanget och vill kunna läsa på i lugn och ro innan de bokar – därför den här guiden.
@@ -146,7 +146,7 @@ export default function BlogPost() {
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="hudvard">Grundläggande hudvård för män</h2>
                         <p>
-                            Den bästa och billigaste &quot;anti-aging&quot; som finns är en ساده, konsekvent hudvårdsrutin – och den behöver inte vara komplicerad. Mäns hud är i genomsnitt något tjockare och fetare än kvinnors, och daglig rakning kan irritera och torka ut. En bra grundrutin:
+                            Den bästa och billigaste &quot;anti-aging&quot; som finns är en konsekvent hudvårdsrutin – och den behöver inte vara komplicerad. Mäns hud är i genomsnitt något tjockare och fetare än kvinnors, och daglig rakning kan irritera och torka ut. En bra grundrutin:
                         </p>
                         <ul className="list-disc pl-5 mt-2 space-y-1">
                             <li><strong>Rengöring</strong> morgon och kväll med en skonsam produkt.</li>
