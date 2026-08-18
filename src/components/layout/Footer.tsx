@@ -12,17 +12,17 @@ export default function Footer() {
                     {/* Brand Section */}
                     <div className="space-y-6">
                         <Link href="/" className="text-2xl font-bold flex items-center">
-                            <span className="text-rose-500">Bättre</span><span className="text-charcoal-900">hy.se</span>
+                            <span className="text-rose-500">Battre</span><span className="text-charcoal-900">hy.se</span>
                         </Link>
                         <p className="text-gray-500 text-sm leading-relaxed">
                             Sveriges personliga guide till de bästa skönhetsklinikerna. Vi hjälper dig hitta rätt behandling hos certifierade experter.
                         </p>
                         <div className="flex flex-wrap gap-4 items-center">
                             <a 
-                                href="https://se.pinterest.com/battrehy/L" 
+                                href="https://se.pinterest.com/battrehy/" 
                                 target="_blank" 
                                 rel="noopener" 
-                                aria-label="Bättrehy på Pinterest" 
+                                aria-label="Battrehy på Pinterest" 
                                 className="text-gray-400 hover:text-[#E8365D] transition-colors p-1"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -33,7 +33,7 @@ export default function Footer() {
                                 href="https://www.instagram.com/battrehy/" 
                                 target="_blank" 
                                 rel="noopener" 
-                                aria-label="Bättrehy på Instagram" 
+                                aria-label="Battrehy på Instagram" 
                                 className="text-gray-400 hover:text-[#E8365D] transition-colors p-1"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -44,7 +44,7 @@ export default function Footer() {
                                 href="https://www.facebook.com/profile.php?id=61592716316970" 
                                 target="_blank" 
                                 rel="noopener" 
-                                aria-label="Bättrehy på Facebook" 
+                                aria-label="Battrehy på Facebook" 
                                 className="text-gray-400 hover:text-[#E8365D] transition-colors p-1"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
@@ -80,12 +80,12 @@ export default function Footer() {
                     <div>
                         <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider">Botox & Fillers</h4>
                         <ul className="space-y-2">
-                            <li><Link href="/kliniker/stockholm/botox" className="hover:text-[#e8234a] font-medium text-gray-900">Botox Stockholm</Link></li>
-                            <li><Link href="/kliniker/goteborg/botox" className="hover:text-[#e8234a] font-medium text-gray-900">Botox Göteborg</Link></li>
-                            <li><Link href="/kliniker/malmo/botox" className="hover:text-[#e8234a] font-medium text-gray-900">Botox Malmö</Link></li>
-                            <li className="pt-1"><Link href="/kliniker/stockholm/fillers" className="hover:text-[#e8234a] font-medium text-gray-900">Fillers Stockholm</Link></li>
-                            <li><Link href="/kliniker/goteborg/fillers" className="hover:text-[#e8234a] font-medium text-gray-900">Fillers Göteborg</Link></li>
-                            <li><Link href="/kliniker/malmo/fillers" className="hover:text-[#e8234a] font-medium text-gray-900">Fillers Malmö</Link></li>
+                            <li><Link href="/kliniker/stockholm/botoxbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Botox Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/botoxbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Botox Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/botoxbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Botox Malmö</Link></li>
+                            <li className="pt-1"><Link href="/kliniker/stockholm/fillerbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Fillers Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/fillerbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Fillers Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/fillerbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Fillers Malmö</Link></li>
                             
                             <li className="pt-2 border-t border-gray-50 text-[10px] text-gray-400 uppercase tracking-wider font-semibold">Fler städer</li>
                             <li><Link href="/kliniker/uppsala/botoxbehandling" className="hover:text-[#e8234a]">Botox Uppsala</Link></li>
@@ -104,9 +104,9 @@ export default function Footer() {
                     <div>
                         <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider">Laser & Nålar</h4>
                         <ul className="space-y-2">
-                            <li><Link href="/kliniker/stockholm/laser" className="hover:text-[#e8234a] font-medium text-gray-900">Laser Stockholm</Link></li>
-                            <li><Link href="/kliniker/goteborg/laser" className="hover:text-[#e8234a] font-medium text-gray-900">Laser Göteborg</Link></li>
-                            <li><Link href="/kliniker/malmo/laser" className="hover:text-[#e8234a] font-medium text-gray-900">Laser Malmö</Link></li>
+                            <li><Link href="/kliniker/stockholm/laserbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Laser Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/laserbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Laser Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/laserbehandling" className="hover:text-[#e8234a] font-medium text-gray-900">Laser Malmö</Link></li>
                             <li className="pt-1"><Link href="/kliniker/stockholm/microneedling" className="hover:text-[#e8234a] font-medium text-gray-900">Microneedling Stockholm</Link></li>
                             <li><Link href="/kliniker/goteborg/microneedling" className="hover:text-[#e8234a] font-medium text-gray-900">Microneedling Göteborg</Link></li>
                             <li><Link href="/kliniker/malmo/microneedling" className="hover:text-[#e8234a] font-medium text-gray-900">Microneedling Malmö</Link></li>
@@ -172,14 +172,14 @@ export default function Footer() {
                     <div>
                         <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider">Huvudstäder & Hudvård</h4>
                         <ul className="space-y-2 mb-6">
-                            <li><Link href="/kliniker/stockholm/hudvard" className="hover:text-[#e8234a]">Hudvård Stockholm</Link></li>
-                            <li><Link href="/kliniker/goteborg/hudvard" className="hover:text-[#e8234a]">Hudvård Göteborg</Link></li>
-                            <li><Link href="/kliniker/malmo/hudvard" className="hover:text-[#e8234a]">Hudvård Malmö</Link></li>
-                            <li><Link href="/kliniker/uppsala/hudvard" className="hover:text-[#e8234a]">Hudvård Uppsala</Link></li>
-                            <li><Link href="/kliniker/vasteras/hudvard" className="hover:text-[#e8234a]">Hudvård Västerås</Link></li>
-                            <li><Link href="/kliniker/helsingborg/hudvard" className="hover:text-[#e8234a]">Hudvård Helsingborg</Link></li>
-                            <li><Link href="/kliniker/linkoping/hudvard" className="hover:text-[#e8234a]">Hudvård Linköping</Link></li>
-                            <li><Link href="/kliniker/lund/hudvard" className="hover:text-[#e8234a]">Hudvård Lund</Link></li>
+                            <li><Link href="/kliniker/stockholm/hudterapeut" className="hover:text-[#e8234a]">Hudvård Stockholm</Link></li>
+                            <li><Link href="/kliniker/goteborg/hudterapeut" className="hover:text-[#e8234a]">Hudvård Göteborg</Link></li>
+                            <li><Link href="/kliniker/malmo/hudterapeut" className="hover:text-[#e8234a]">Hudvård Malmö</Link></li>
+                            <li><Link href="/kliniker/uppsala/hudterapeut" className="hover:text-[#e8234a]">Hudvård Uppsala</Link></li>
+                            <li><Link href="/kliniker/vasteras/hudterapeut" className="hover:text-[#e8234a]">Hudvård Västerås</Link></li>
+                            <li><Link href="/kliniker/helsingborg/hudterapeut" className="hover:text-[#e8234a]">Hudvård Helsingborg</Link></li>
+                            <li><Link href="/kliniker/linkoping/hudterapeut" className="hover:text-[#e8234a]">Hudvård Linköping</Link></li>
+                            <li><Link href="/kliniker/lund/hudterapeut" className="hover:text-[#e8234a]">Hudvård Lund</Link></li>
                         </ul>
                         
                         <h4 className="font-bold text-gray-900 mb-4 uppercase tracking-wider border-t border-gray-100 pt-4">Städer</h4>

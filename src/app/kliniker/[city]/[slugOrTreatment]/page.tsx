@@ -205,8 +205,9 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
     const asciiCitySlug = slugifyCity(citySlug);
     const asciiSlugOrTreatment = slugifyCity(slugOrTreatment);
 
-    if (citySlug !== asciiCitySlug || slugOrTreatment !== asciiSlugOrTreatment) {
-        permanentRedirect(`/kliniker/${asciiCitySlug}/${asciiSlugOrTreatment}`);
+    const resolvedSlugOrTreatment = ALIAS_MAP[slugOrTreatment] || slugOrTreatment;
+    if (citySlug !== asciiCitySlug || slugOrTreatment !== asciiSlugOrTreatment || ALIAS_MAP[slugOrTreatment]) {
+        permanentRedirect(`/kliniker/${asciiCitySlug}/${resolvedSlugOrTreatment}`);
     }
 
     // 1. Fetch treatments and cities in parallel
@@ -411,8 +412,7 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
         );
     }
 
-    // Resolve alias if needed
-    const resolvedSlugOrTreatment = ALIAS_MAP[slugOrTreatment] || slugOrTreatment;
+    // already resolved at function top
 
     // Step B: Is it a treatment combination? (FALLBACK)
     let treatment = treatments.find(t => t.slug === resolvedSlugOrTreatment);

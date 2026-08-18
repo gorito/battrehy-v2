@@ -69,10 +69,18 @@ export default function BlogPost() {
                         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight mb-6">
                             Botox, filler, HIFU eller laser? Så väljer du rätt behandling
                         </h1>
-                        <div className="flex items-center text-gray-500 text-sm mb-8">
+                        <div className="flex items-center text-gray-500 text-sm mb-4">
                             <span className="font-medium">Av Battrehys redaktion</span>
                             <span className="mx-2">·</span>
                             <span>Publicerad 28 juli 2026</span>
+                        </div>
+                        <div className="flex flex-col gap-1 text-gray-500 text-sm mb-8 border-t border-gray-100 pt-4">
+                            <div>
+                                Granskad av Battrehys redaktion enligt våra <Link href="/om-redaktionen" className="text-primary hover:underline font-medium">redaktionella riktlinjer</Link>.
+                            </div>
+                            <div>
+                                Senast uppdaterad: 28 juli 2026
+                            </div>
                         </div>
                         
                         <div className="w-full rounded-2xl overflow-hidden bg-gray-100 mb-10 border border-gray-200">
@@ -235,7 +243,7 @@ export default function BlogPost() {
                             <li><strong>Akne och akneärr</strong> → se <Link href="/blogg/aknebehandling" className="text-primary hover:underline font-medium">aknebehandling</Link></li>
                         </ul>
                         <p className="mt-4">
-                            And kom ihåg: grunden för allt är en bra <Link href="/blogg/hudvardsrutin" className="text-primary hover:underline font-medium">hudvårdsrutin</Link> och dagligt solskydd.
+                            Och kom ihåg: grunden för allt är en bra <Link href="/blogg/hudvardsrutin" className="text-primary hover:underline font-medium">hudvårdsrutin</Link> och dagligt solskydd.
                         </p>
 
                         <div className="w-full rounded-2xl overflow-hidden bg-gray-100 my-8 border border-gray-200">
@@ -296,10 +304,10 @@ export default function BlogPost() {
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="klinik">Att välja klinik</h2>
                         <p>
-                            Oavsett behandling gäller samma grundregler. Kontrollera att injektionsbehandlingar utförs av <strong>legitimerad läkare, tandläkare eller sjuksköterska</strong> och att kliniken är registrerad hos <strong>IVO</strong>. (För laser- och IPL-behandlingar är det i stället <strong>Strålsäkerhetsmyndigheten</strong> som är tillsynsmyndighet sedan 2026.) Se till att du får en <strong>konsultation</strong> där behandlaren utgår från ditt problem – inte från en enskild produkt de vill sälja.
+                            Oavsett behandling gäller samma grundregler. Kontrollera att injektionsbehandlingar utförs av <strong>legitimerad läkare, tandläkare eller sjuksköterska</strong> och att kliniken är registrerad hos <strong>IVO</strong>. (För behandlingar med laser, IPL och ultraljud – som HIFU – är det i stället <strong>Strålsäkerhetsmyndigheten</strong> som är tillsynsmyndighet, med anmälningsplikt sedan maj 2026.) Se till att du får en <strong>konsultation</strong> där behandlaren utgår från ditt problem – inte från en enskild produkt de vill sälja.
                         </p>
                         <p>
-                            Läs vår guide <Link href="/blogg/estetisk-klinik" className="text-primary hover:underline font-medium">Så väljer du en seriös estetisk klinik</Link> för en komplett checklista, och <Link href="/behandlingar/hudvard" className="text-primary hover:underline font-medium">jämför kliniker på battrehy.se</Link>.
+                            Läs vår guide <Link href="/blogg/estetisk-klinik" className="text-primary hover:underline font-medium">Så väljer du en seriös estetisk klinik</Link> för en komplett checklista, och <Link href="/behandlingar/anti-aging-behandling" className="text-primary hover:underline font-medium">jämför kliniker på battrehy.se</Link>.
                         </p>
 
                         <div className="bg-gray-50 border-l-4 border-primary p-6 mt-8 rounded-r-lg">
@@ -307,8 +315,8 @@ export default function BlogPost() {
                             <p className="text-gray-700 text-sm sm:text-base mb-4">
                                 På <strong>battrehy.se</strong> samlar vi kliniker som utför hudvård och estetiska behandlingar i hela Sverige. Hitta och jämför verifierade kliniker i ditt område.
                             </p>
-                            <Link href="/behandlingar/hudvard" className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-primary hover:bg-rose-600 transition-colors">
-                                Hitta kliniker för hudvård
+                            <Link href="/behandlingar/anti-aging-behandling" className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-primary hover:bg-rose-600 transition-colors">
+                                Hitta kliniker för anti-aging
                             </Link>
                         </div>
 
@@ -324,7 +332,7 @@ export default function BlogPost() {
                             </div>
                             <div>
                                 <h4 className="font-bold text-gray-900">HIFU eller laser – vad ska jag välja?</h4>
-                                <p className="text-gray-700 mt-1">HIFU for uppstramning vid slapphet, laser för pigment, kärl och ytförnyelse. De har olika mål och utesluter inte varandra.</p>
+                                <p className="text-gray-700 mt-1">HIFU för uppstramning vid slapphet, laser för pigment, kärl och ytförnyelse. De har olika mål och utesluter inte varandra.</p>
                             </div>
                             <div>
                                 <h4 className="font-bold text-gray-900">Kan man kombinera flera behandlingar?</h4>
@@ -342,8 +350,8 @@ export default function BlogPost() {
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6" id="kallor">Källor</h2>
                         <ul className="list-disc pl-5 space-y-2 text-sm text-gray-600">
-                            <li>1177 Vårdguiden – information inför estetiska behandlingar</li>
-                            <li>Socialstyrelsen – Lag (2021:363) om estetiska injektioner och kirurgi; Strålsäkerhetsmyndigheten – laser/IPL</li>
+                            <li><a href="https://www.1177.se" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">1177 Vårdguiden</a> – information inför estetiska behandlingar</li>
+                            <li><a href="https://www.socialstyrelsen.se" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Socialstyrelsen</a> – Lag (2021:363) om estetiska injektioner och kirurgi; <a href="https://www.stralsakerhetsmyndigheten.se" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Strålsäkerhetsmyndigheten</a> – laser, IPL och ultraljud (HIFU)</li>
                             <li>Dermatologisk konsensus – metoder, effekt och säkerhet</li>
                         </ul>
 

@@ -6,19 +6,19 @@ export interface SeoContent {
 }
 
 export const stockholmSeoData: Record<string, SeoContent> = {
-    "stockholm/botox": {
+    "stockholm/botoxbehandling": {
         "title": "Botox Stockholm – Hitta och jämför kliniker | Battrehy.se",
         "description": "Söker du botoxbehandling i Stockholm? Jämför certifierade kliniker, priser och behandlingsområden. Hitta legitimerade läkare och sjuksköterskor nära dig.",
         "h1": "Botox i Stockholm – Jämför kliniker och boka",
         "editorial": "Botox (botulinumtoxin) är en av Sveriges mest populära estetiska behandlingar för att reducera dynamiska rynkor och fina linjer. I Stockholm finns ett stort utbud av kliniker som erbjuder botoxbehandlingar för områden som panna, glabella (bekymmersrynkan), kråksparkar runt ögonen samt medicinska indikationer som bruxism (tandgnissling) och hyperhidros (svettningar). När du söker efter botox i Stockholm är det av yttersta vikt att du väljer en klinik med legitimerad personal – sedan 2021 kräver svensk lag att endast legitimerade läkare, tandläkare eller sjuksköterskor får utföra injektionsbehandlingar. På Battrehy.se samlar vi Stockholms ledande kliniker på ett ställe så att du enkelt kan jämföra priser, certifieringar och tidigare patientomdömen. Vi rekommenderar alltid att du bokar en lagstadgad konsultation minst 48 timmar före ditt planerade ingrepp. Jämför klinikerna och boka din tid för botox i Stockholm hos en trygg och säker behandlare idag."
     },
-    "stockholm/fillers": {
+    "stockholm/fillerbehandling": {
         "title": "Fillers Stockholm – Hitta och jämför kliniker | Battrehy.se",
         "description": "Vill du göra fillers i Stockholm? Jämför priser, omdömen och certifierade kliniker. Hitta experter på läppfiller, kindben och käklinje nära dig.",
         "h1": "Fillers i Stockholm – Jämför kliniker och boka",
         "editorial": "Injektionsbehandlingar med fillers (hyaluronsyra) används för att återställa volym, skulptera ansiktsdrag och släta ut rynkor. I Stockholm erbjuds behandlingar för läppförstoring, kindben, käklinje, nasolabialveck och mörka ringar under ögonen (tear trough). Utbudet av kliniker i Stockholm är enormt, från nischade specialistmottagningar på Östermalm till hemtrevliga kliniker i närförort. Eftersom fillers är ett semi-permanent ingrepp är det avgörande att behandlaren har god anatomisk kännedom och använder välkända varumärken som Juvéderm, Restylane eller Teosyal. Sedan den estetiska lagen trädde i kraft får fillers endast injiceras av legitimerad hälso- och sjukvårdspersonal. På Battrehy.se hjälper vi dig att navigera bland Stockholms kliniker genom att lista priser, certifikat och medlemskap i branschorganisationer. Ta dig tid att läsa igenom villkoren och glöm inte att boka din obligatoriska konsultation i förväg för att säkerställa ett naturligt och säkert resultat."
     },
-    "stockholm/laser": {
+    "stockholm/laserbehandling": {
         "title": "Laserbehandling Stockholm – Hitta & jämför kliniker | Battrehy.se",
         "description": "Jämför kliniker som erbjuder laserbehandling i Stockholm. Hitta rätt klinik för hårborttagning, hudföryngring eller ärrbehandling nära dig.",
         "h1": "Laserbehandling i Stockholm – Jämför kliniker och boka",
@@ -96,12 +96,7 @@ export const stockholmSeoData: Record<string, SeoContent> = {
         "h1": "Ansiktsbehandling i Malmö – Jämför kliniker och boka",
         "editorial": "En ansiktsbehandling i Malmö är ett utmärkt sätt att vårda din hud och samtidigt få en stunds avkoppling. Malmös salonger erbjuder allt från djuprengöring med portömning och peeling till lyxiga ekologiska ansiktsbehandlingar och avancerade apparatbehandlingar som ger omedelbart lyft och lyster. Vid en professionell behandling gör hudterapeuten en noggrann analys av din hud och anpassar produkterna efter dina behov, oavsett om du har torr hy, akne eller vill förebygga fina linjer. Battrehy.se listar Malmös bästa hudvårdssalonger och kliniker med auktoriserade hudterapeuter. Vi samlar priser, recensioner och behandlingsdetaljer för att göra det enkelt för dig att välja rätt hudvård. Boka din ansiktsbehandling i Malmö hos en verifierad salong idag."
     },
-    "stockholm/filler": {
-        "title": "Filler i Stockholm — Jämför kliniker & priser | Battrehy.se",
-        "description": "Hitta verifierade kliniker för filler i Stockholm. Jämför priser, läs recensioner och boka läppfiller, kindfiller och nasolabialfiller hos hudterapeuter du kan lita på.",
-        "h1": "Filler i Stockholm — jämför kliniker och boka säkert",
-        "editorial": "Letar du efter filler i Stockholm? Battrehy samlar verifierade estetiska kliniker och hudterapeuter över hela Stockholms innerstad och förorter. Här jämför du läppfiller, kindfiller och nasolabialfiller på en plats, med tydliga priser och information om vilka produkter klinikerna använder (Restylane, Juvederm, Teosyal). Alla kliniker i katalogen är listade med kvalitetsmärkning för att du tryggt ska kunna välja behandlare. Boka direkt via klinikens hemsida eller hör av dig för en kostnadsfri konsultation."
-    },
+
     "stockholm/profhilo": {
         "title": "Profhilo i Stockholm — Kliniker, priser & recensioner | Battrehy.se",
         "description": "Profhilo-behandling i Stockholm. Jämför verifierade kliniker, priser och behandlingsplaner. Hitta en hudterapeut som erbjuder Profhilo nära dig.",
