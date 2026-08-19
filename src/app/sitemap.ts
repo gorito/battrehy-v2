@@ -32,6 +32,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/blogg/laserharborttagning`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/estetik-for-man`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/jamfor-behandlingar`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+        { url: `${baseUrl}/blogg/rosacea`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     ];
 
     // Individual Clinic Pages
