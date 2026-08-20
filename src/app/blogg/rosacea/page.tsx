@@ -100,7 +100,7 @@ export default function BlogPost() {
 
                     <div className="text-lg text-gray-700 leading-relaxed space-y-6">
                         <p>
-                            Rosacea är en vanlig, kronisk hudåkomma som ger rodnad och ibland knottror i ansiktet – och som ofta misstas för akne eller &quot;känslig hud&quot;. Den går inte å bota, men den går att hålla i schack. Den här guiden förklarar symtom och triggers, vilken hudvård som hjälper, vilka medicinska behandlingar som finns, och när IPL och laser kan dämpa rodnaden – samt när du bör söka läkare. Vi är en oberoende katalog, inte en klinik, så du får en neutral översikt.
+                            Rosacea är en vanlig, kronisk hudåkomma som ger rodnad och ibland knottror i ansiktet – och som ofta misstas för akne eller &quot;känslig hud&quot;. Den går inte att bota, men den går att hålla i schack. Den här guiden förklarar symtom och triggers, vilken hudvård som hjälper, vilka medicinska behandlingar som finns, och när IPL och laser kan dämpa rodnaden – samt när du bör söka läkare. Vi är en oberoende katalog, inte en klinik, så du får en neutral översikt.
                         </p>
 
                         <div className="bg-rose-50 border border-rose-100 p-6 rounded-2xl my-8">
@@ -216,7 +216,7 @@ export default function BlogPost() {
                             Rosacea-hud är känslig, så mindre är mer. Målet är att stärka hudbarriären och undvika irritation:
                         </p>
                         <ul className="list-disc pl-5 mt-2 space-y-1">
-                            <li><strong>Mild, parfymfri rengöring</strong> med ljummet (inte hett) water.</li>
+                            <li><strong>Mild, parfymfri rengöring</strong> med ljummet (inte hett) vatten.</li>
                             <li><strong>Barriärstärkande fuktkräm</strong> med t.ex. ceramider och niacinamid.</li>
                             <li><strong>Azelainsyra</strong> tolereras ofta väl och kan minska både rodnad och knottror.</li>
                             <li><strong>Dagligt solskydd</strong> – mineraliskt (zink/titan) upplevs ofta som skonsammare.</li>
@@ -336,8 +336,9 @@ export default function BlogPost() {
 
                         <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6" id="kallor">Källor</h2>
                         <ul className="list-disc pl-5 space-y-2 text-sm text-gray-600">
-                            <li><a href="https://www.1177.se" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">1177 Vårdguiden</a> – Rosacea (rosaceados)</li>
-                            <li><a href="https://www.internetmedicin.se" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Internetmedicin / Läkemedelsboken</a> – rosacea, diagnos och behandling</li>
+                            <li><a href="https://www.1177.se" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">1177 Vårdguiden</a> – Rosacea</li>
+                            <li><a href="https://lakemedelsboken.se" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Läkemedelsboken</a> – Rosacea (diagnos och behandling)</li>
+                            <li><a href="https://www.internetmedicin.se" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">Internetmedicin</a> – Rosacea (klinisk översikt)</li>
                             <li>Dermatologisk konsensus – IPL och vaskulär laser vid rodnad och telangiektasier</li>
                         </ul>
 
