@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { notFound, permanentRedirect } from 'next/navigation';
+import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { getClinicBySlug, getTreatments, getClinics, getCities, getUniqueCities, getClinicsByCity } from '@/lib/supabase/actions/queries';
 import { MapPin, Globe, Phone, Calendar, Image as ImageIcon } from 'lucide-react';
 import { slugifyCity } from '@/lib/utils';
@@ -233,7 +233,7 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
         // Ensure city in URL matches clinic city (case-insensitive)
         if (clinicCitySlug.toLowerCase() !== citySlug.toLowerCase()) {
             console.log(`[ROUTER] City mismatch! URL: ${citySlug}, Clinic: ${clinicCitySlug}`);
-            notFound();
+            permanentRedirect(`/kliniker/${clinicCitySlug}/${clinic.slug}`);
         }
 
         console.log(`[ROUTER] Clinic found: ${clinic.name}`);
@@ -460,7 +460,8 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
             });
             
             if (filteredClinics.length === 0) {
-                notFound();
+                console.log(`[ROUTER] No clinics offering ${treatment.name} in ${city.name}. Redirecting to /kliniker/${citySlug}`);
+                redirect(`/kliniker/${citySlug}`);
             }
 
             const seoKey = `${citySlug.toLowerCase()}/${slugOrTreatment.toLowerCase()}`;
@@ -477,5 +478,20 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
             );
         }
     }
-    notFound();
+    
+    // If route is completely unresolved, check if the city is valid to redirect to city page,
+    // otherwise redirect to homepage to avoid 404s.
+    let city = cities.find(c => slugifyCity(c.name) === citySlug || c.slug === citySlug);
+    if (!city) {
+        const cityName = uniqueCityNames.find(name => slugifyCity(name) === citySlug);
+        if (cityName) city = { name: cityName, slug: slugifyCity(cityName) } as any;
+    }
+
+    if (city) {
+        console.log(`[ROUTER] Route unresolved. Redirecting to city page /kliniker/${citySlug}`);
+        redirect(`/kliniker/${citySlug}`);
+    }
+
+    console.log(`[ROUTER] City and Route unresolved. Redirecting to home page`);
+    redirect('/');
 }
