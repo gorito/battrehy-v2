@@ -6,3 +6,4 @@ export * from './breadcrumb';
 export * from './article';
 export * from './faq';
 export * from './utils';
+export * from "./howTo";

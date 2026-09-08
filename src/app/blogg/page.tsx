@@ -87,17 +87,17 @@ export default function BlogLandingPage() {
                     <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
                         <div className="h-48 bg-gray-100 relative overflow-hidden flex items-center justify-center border-b border-gray-100">
                             {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img src="/images/blogg/fillerbehandling-hero.jpeg" alt="Professionell fillerbehandling utförs av legitimerad personal" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <img src="/images/blogg/01-hero-lappar-fore-efter.jpg" alt="Före och efter naturlig läppfiller 2026 – subtil volym och kontur" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                             <h2 className="absolute bottom-4 left-6 text-2xl font-bold text-white z-10 drop-shadow-sm">Fillerbehandling<br/><span className="text-sm font-medium opacity-90">Den kompletta guiden 2026</span></h2>
                         </div>
                         <div className="p-6 flex flex-col flex-grow">
                             <div className="text-xs text-primary font-bold tracking-wide uppercase mb-2">Guide</div>
                             <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                                Fillerbehandling i Sverige 2026 — den kompletta guiden till priser, hållbarhet och säkerhet
+                                Fillerbehandling i Sverige 2026 — den kompletta guiden till priser, hållbarhet, områden och kliniker
                             </h2>
                             <p className="text-gray-600 text-sm mb-6 line-clamp-3">
-                                Allt om fillerbehandling i Sverige 2026: områden, priser, hållbarhet, IVO-regler och hur du väljer en seriös klinik.
+                                Komplett guide till fillers 2026 – priser per ml och stad, läppar, tårränna, kinder, käklinje, risker, eftervård och lagkrav. Uppdaterad sept 2026. Hitta trygga kliniker.
                             </p>
                             <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
                                 Läs hela guiden <ArrowRight size={16} className="ml-1" />
