@@ -39,6 +39,28 @@ export default function BlogLandingPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {/* Article Card: Patientsäkerhet 2026 (Aktuellt) */}
+                    <Link href="/blogg/patientsakerhet-skonhetsbehandlingar-2026" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full ring-1 ring-rose-100">
+                        <div className="h-48 bg-gray-100 relative overflow-hidden">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img src="/images/blogg/01-hero-patientsakerhet.jpg" alt="Patientsäkerhet vid skönhetsbehandlingar i Sverige 2026" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            <h2 className="absolute bottom-4 left-6 text-2xl font-bold text-white z-10 drop-shadow-sm">Patientsäkerhet<br/><span className="text-sm font-medium opacity-90">Skydd & regler i Sverige 2026</span></h2>
+                        </div>
+                        <div className="p-6 flex flex-col flex-grow">
+                            <div className="text-xs text-rose-600 font-bold tracking-wide uppercase mb-2">Aktuellt & Patientsäkerhet</div>
+                            <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                                Efter tragedin i Helsingfors: Så skyddar du dig vid skönhetsbehandlingar i Sverige 2026
+                            </h2>
+                            <p className="text-gray-600 text-sm mb-6 line-clamp-3">
+                                En grundlig guide till svensk patientsäkerhet, lag 2021:363, 48 timmars betänketid och 12 saker du måste kontrollera innan du bokar en behandling.
+                            </p>
+                            <div className="mt-auto flex items-center text-primary font-medium text-sm group-hover:underline">
+                                Läs hela artikeln <ArrowRight size={16} className="ml-1" />
+                            </div>
+                        </div>
+                    </Link>
+
                     {/* Article Card */}
                     <Link href="/blogg/ansiktsbehandling-den-kompletta-guiden" className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow group flex flex-col h-full">
                         <div className="h-48 bg-gray-100 relative overflow-hidden">

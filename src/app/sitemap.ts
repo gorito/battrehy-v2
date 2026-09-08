@@ -24,6 +24,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         { url: `${baseUrl}/blogg/ansiktsbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/botoxbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/fillerbehandling-den-kompletta-guiden`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
+        { url: `${baseUrl}/blogg/patientsakerhet-skonhetsbehandlingar-2026`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.8 },
         { url: `${baseUrl}/blogg/estetisk-klinik`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/anti-aging-behandling`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
         { url: `${baseUrl}/blogg/hudvardsrutin`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
