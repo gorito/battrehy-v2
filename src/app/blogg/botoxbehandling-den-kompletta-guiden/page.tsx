@@ -5,14 +5,16 @@ import { SchemaScript } from '@/components/SchemaScript';
 import { buildBreadcrumbSchema, buildArticleSchema, buildFAQSchema } from '@/lib/schema';
 
 export const metadata: Metadata = {
-    title: 'Botoxbehandling i Sverige 2026: Priser, Regler & Komplett Guide',
-    description: 'Komplett guide till botox i Sverige 2026. Se aktuella priser per stad & område (snitt 3 064 kr), 48 h betänketid enligt lag 2021:363, eftervård och IVO-godkända kliniker.',
+    title: {
+        absolute: 'Botoxbehandling i Sverige 2026 – Priser & Regler | Bättrehy',
+    },
+    description: 'Komplett guide till botox i Sverige 2026. Se priser per stad & område (snitt 3 064 kr), 48 h betänketid (lag 2021:363), eftervård och IVO-godkända kliniker.',
     alternates: {
         canonical: 'https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden',
     },
     openGraph: {
-        title: 'Botoxbehandling i Sverige 2026: Priser, Regler & Komplett Guide',
-        description: 'Komplett guide till botox i Sverige 2026. Se aktuella priser per stad & område (snitt 3 064 kr), 48 h betänketid enligt lag 2021:363, eftervård och IVO-godkända kliniker.',
+        title: 'Botoxbehandling i Sverige 2026 – Priser & Regler | Bättrehy',
+        description: 'Komplett guide till botox i Sverige 2026. Se priser per stad & område (snitt 3 064 kr), 48 h betänketid (lag 2021:363), eftervård och IVO-godkända kliniker.',
         type: 'article',
         locale: 'sv_SE',
         url: 'https://battrehy.se/blogg/botoxbehandling-den-kompletta-guiden',
@@ -24,13 +26,20 @@ export const metadata: Metadata = {
     },
     twitter: {
         card: 'summary_large_image',
-        title: 'Botoxbehandling i Sverige 2026: Priser, Regler & Komplett Guide',
-        description: 'Komplett guide till botox i Sverige 2026. Se aktuella priser per stad & område (snitt 3 064 kr), 48 h betänketid enligt lag 2021:363, eftervård och IVO-godkända kliniker.',
+        title: 'Botoxbehandling i Sverige 2026 – Priser & Regler | Bättrehy',
+        description: 'Komplett guide till botox i Sverige 2026. Se priser per stad & område (snitt 3 064 kr), 48 h betänketid (lag 2021:363), eftervård och IVO-godkända kliniker.',
         images: ['https://battrehy.se/images/blogg/botox_hero.jpeg'],
     }
 };
 
 export default function BotoxBlogPost() {
+    // Granskarens uppgifter (lämnas name tomt används den generiska fallback-texten)
+    const reviewer = {
+        name: undefined as string | undefined,
+        credentials: "Legitimerad sjuksköterska med specialistkompetens inom estetisk dermatologi och certifierad av Estetiska Injektionsrådet (EIR)",
+        profileUrl: undefined as string | undefined,
+    };
+
     const schemas = [
         buildBreadcrumbSchema([
             { name: 'Hem', url: 'https://battrehy.se' },
@@ -40,6 +49,11 @@ export default function BotoxBlogPost() {
         buildArticleSchema({
             headline: "Botoxbehandling i Sverige 2026 — den kompletta guiden till priser, säkerhet och kliniker",
             description: "Allt om botoxbehandling i Sverige 2026: priser, säkerhet, IVO-regler, områden och hur du väljer en seriös klinik.",
+            reviewer: reviewer.name ? {
+                name: reviewer.name,
+                credentials: reviewer.credentials,
+                profileUrl: reviewer.profileUrl,
+            } : undefined,
             datePublished: "2026-05-01T08:00:00+02:00",
             dateModified: "2026-09-07T08:00:00+02:00",
             imageUrl: "https://battrehy.se/images/blogg/botox_hero.jpeg",
@@ -90,7 +104,11 @@ export default function BotoxBlogPost() {
                             <span className="mx-2">·</span>
                             <span className="inline-flex items-center text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full text-xs font-medium">
                                 <Sparkles size={12} className="mr-1 text-emerald-600" />
-                                Medicinskt granskad
+                                {reviewer.name ? (
+                                    <>Medicinskt granskad av {reviewer.name}</>
+                                ) : (
+                                    <>Medicinskt granskad</>
+                                )}
                             </span>
                             <span className="mx-2">·</span>
                             <span>Senast uppdaterad: 7 september 2026</span>
@@ -117,7 +135,7 @@ export default function BotoxBlogPost() {
                                 <span className="mr-2">📌</span> Snabb sammanfattning – Botox i Sverige 2026
                             </h2>
                             <ul className="list-disc pl-5 space-y-2 text-gray-700 text-base sm:text-lg">
-                                <li><strong>Botox är botulinumtoxin typ A:</strong> En injektion som tillfälligt blockerar nervsignaler till en muskel för att släppa spänningar och släta ut dynamiska mimiklinjer.</li>
+                                <li><strong>Botox är botulinumtoxin typ A:</strong> En injektion med tillfällig blockering av nervsignaler till en muskel för att släppa spänningar och släta ut dynamiska mimiklinjer.</li>
                                 <li><strong>Nationellt snittpris 2026:</strong> ca <strong>3 064 kr</strong> för en standardbehandling (enligt Skönhetskollens prisrapport över 550+ kliniker).</li>
                                 <li><strong>Pris per zon:</strong> 1 område median ca <strong>2 500–2 700 kr</strong> (lägst 1 800 kr, högst 3 500 kr); 3 områden ca <strong>4 000–5 800 kr</strong> (median 5 500 kr).</li>
                                 <li><strong>Hållbarhet:</strong> Typiskt <strong>3–6 månader</strong> (ofta ca 3 månader vid första behandlingen; förlängs successivt till 4–6 månader vid regelbundet underhåll).</li>
@@ -934,7 +952,21 @@ export default function BotoxBlogPost() {
                                     <strong>Medicinsk ansvarsfriskrivning:</strong> Innehållet i denna guide är uteslutande avsett i allmänbildande och konsumentupplysande syfte och ersätter inte professionell medicinsk rådgivning eller individuell bedömning av legitimerad hälso- och sjukvårdspersonal.
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                    <strong>Medicinskt granskad av:</strong> Legitimerad sjuksköterska med specialistkompetens inom estetisk dermatologi och certifierad av Estetiska Injektionsrådet (EIR).
+                                    <strong>Medicinskt granskad av:</strong>{' '}
+                                    {reviewer.name ? (
+                                        <>
+                                            {reviewer.profileUrl ? (
+                                                <a href={reviewer.profileUrl} className="text-primary hover:underline font-medium">
+                                                    {reviewer.name}
+                                                </a>
+                                            ) : (
+                                                <span className="font-medium text-gray-700">{reviewer.name}</span>
+                                            )}
+                                            {reviewer.credentials && <> – {reviewer.credentials}</>}
+                                        </>
+                                    ) : (
+                                        <>Legitimerad sjuksköterska med specialistkompetens inom estetisk dermatologi och certifierad av Estetiska Injektionsrådet (EIR).</>
+                                    )}
                                 </p>
                             </div>
 

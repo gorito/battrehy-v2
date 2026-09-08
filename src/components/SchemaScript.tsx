@@ -1,20 +1,17 @@
-import Script from 'next/script';
-
 interface SchemaScriptProps {
-  schemas: object | object[];
+  schemas: (object | undefined | null) | (object | undefined | null)[];
 }
 
 export function SchemaScript({ schemas }: SchemaScriptProps) {
-  const schemaArray = Array.isArray(schemas) ? schemas : [schemas];
+  const rawArray = Array.isArray(schemas) ? schemas : [schemas];
+  const schemaArray = rawArray.filter((s): s is object => Boolean(s));
 
   return (
     <>
       {schemaArray.map((schema, i) => (
-        <Script
+        <script
           key={i}
-          id={`schema-${i}`}
           type="application/ld+json"
-          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}

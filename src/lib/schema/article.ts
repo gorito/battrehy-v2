@@ -1,10 +1,17 @@
 import { stripUndefined } from './utils';
 
+export interface ReviewerOptions {
+    name?: string;
+    credentials?: string;
+    profileUrl?: string;
+}
+
 export interface ArticleOptions {
     headline: string;
     description: string;
     authorName?: string;
     authorUrl?: string;
+    reviewer?: ReviewerOptions;
     datePublished: string;
     dateModified: string;
     imageUrl: string;
@@ -16,6 +23,7 @@ export function buildArticleSchema({
     description,
     authorName = 'Battrehy.se',
     authorUrl = 'https://battrehy.se/om-redaktionen',
+    reviewer,
     datePublished,
     dateModified,
     imageUrl,
@@ -31,6 +39,12 @@ export function buildArticleSchema({
             name: authorName,
             url: authorUrl
         },
+        reviewedBy: reviewer?.name ? {
+            '@type': 'Person',
+            name: reviewer.name,
+            jobTitle: reviewer.credentials,
+            url: reviewer.profileUrl
+        } : undefined,
         publisher: {
             '@type': 'Organization',
             name: 'Battrehy.se',
