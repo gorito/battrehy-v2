@@ -192,8 +192,14 @@ export default function PatientSafetyBlogPost() {
 
                     <div className="text-lg text-gray-700 leading-relaxed space-y-6">
                         <p className="text-xl leading-relaxed text-gray-800 mb-6 font-medium">
-                            Den 3 september 2026 avled den 27-åriga finländska influencern Olivia Oras efter allvarliga komplikationer i samband med en fettsugning på en privat skönhetsklinik i Helsingfors. Hon förlorade medvetandet under bedövningen och avled senare på sjukhus. Polisen i Finland har inlett en förundersökning.
+                            Den 3 september 2026 avled den 27-åriga finländska influencern Olivia Oras efter allvarliga komplikationer i samband med en fettransplantation på en privat skönhetsklinik i Helsingfors. Hon förlorade medvetandet under bedövningen och avled senare på sjukhus. Polisen i Finland har inlett en förundersökning.
                         </p>
+
+                        {/* Utredningsnotis */}
+                        <div className="bg-gray-50 border border-gray-200/80 rounded-xl p-4 my-6 text-sm text-gray-600 leading-relaxed italic">
+                            Polisens förundersökning pågår fortfarande i skrivande stund, och uppgifter i det finska fallet kan komma att ändras eller kompletteras allteftersom utredningen fortskrider. Våra tankar går till Olivia Oras familj och närstående.
+                        </div>
+
                         <p>
                             Det inträffade är en fruktansvärd tragedi som väckt stark oro i hela Norden. Samtidigt utgör händelsen en allvarlig påminnelse om hur avgörande patientsäkerhet, medicinsk kompetens och strikta rutiner är inom estetisk medicin.
                         </p>
@@ -208,7 +214,7 @@ export default function PatientSafetyBlogPost() {
                                 Viktig distinktion: Kirurgiska ingrepp vs injektionsbehandlingar
                             </h3>
                             <p className="text-sm text-amber-900 leading-relaxed mb-2">
-                                Olivia Oras genomgick en <strong>kirurgisk fettsugning under bedövning</strong>. Kirurgiska ingrepp innebär alltid helt andra medicinska risker avseende anestesi, cirkulationspåverkan och vävnadstrauma än vanliga icke-kirurgiska skönhetsbehandlingar som botox, fillers, microneedling och hudlaser.
+                                Olivia Oras genomgick en <strong>kirurgisk fettransplantation under bedövning</strong>. Kirurgiska ingrepp innebär alltid helt andra medicinska risker avseende anestesi, cirkulationspåverkan och vävnadstrauma än vanliga icke-kirurgiska skönhetsbehandlingar som botox, fillers, microneedling och hudlaser.
                             </p>
                             <p className="text-sm text-amber-900 leading-relaxed">
                                 I Sverige är det framför allt de icke-kirurgiska behandlingarna som flest genomför. Men även vid injektioner existerar risker om kliniken eller behandlaren saknar legitimation, använder undermåliga preparat eller bryter mot gällande lagar.
@@ -223,8 +229,8 @@ export default function PatientSafetyBlogPost() {
                                 <li><a href="#checklista" className="text-primary hover:underline font-medium">2. Checklista: 12 saker du måste kontrollera</a></li>
                                 <li><a href="#kirurgi-vs-injektioner" className="text-primary hover:underline">3. Kirurgi vs injektioner – när är risken högst?</a></li>
                                 <li><a href="#faq" className="text-primary hover:underline font-medium">4. Vanliga frågor om säkerhet (FAQ 2026)</a></li>
-                                <li><a href="#battrehy-hjalper" className="text-primary hover:underline">5. Så hjälper Bättrehy dig att välja tryggt</a></li>
-                                <li><a href="#kallor" className="text-primary hover:underline">6. Källor & medicinsk granskning</a></li>
+                                <li><a href="#kallor" className="text-primary hover:underline">5. Källor & medicinsk granskning</a></li>
+                                <li><a href="#kontrollerad-klinik" className="text-primary hover:underline">Så hittar du en kontrollerad klinik</a></li>
                             </ul>
                         </nav>
 
@@ -360,7 +366,7 @@ export default function PatientSafetyBlogPost() {
                                         <td className="px-4 py-3 text-gray-800">Mer invasivt ingrepp som fordrar djup anatomisk erfarenhet.</td>
                                     </tr>
                                     <tr className="bg-gray-50/40">
-                                        <td className="px-4 py-3 font-semibold text-gray-900 bg-gray-50/70">Fettsugning & Plastikkirurgi</td>
+                                        <td className="px-4 py-3 font-semibold text-gray-900 bg-gray-50/70">Fettransplantation & Plastikkirurgi</td>
                                         <td className="px-4 py-3 text-rose-700 font-semibold">Hög</td>
                                         <td className="px-4 py-3 text-gray-800">Specialistkompetens + operationsavdelning</td>
                                         <td className="px-4 py-3 text-gray-800">Samma risknivå som i händelsen i Helsingfors. Kräver narkos/sedationsövervakning.</td>
@@ -370,7 +376,7 @@ export default function PatientSafetyBlogPost() {
                         </div>
 
                         <p>
-                            Inför ett <strong>kirurgiskt ingrepp</strong> (såsom fettsugning, bröstoperation, bukplastik eller näsplastik) ska du alltid kräva:
+                            Inför ett <strong>kirurgiskt ingrepp</strong> (såsom fettransplantation, fettsugning, bröstoperation, bukplastik eller näsplastik) ska du alltid kräva:
                         </p>
                         <ul className="list-disc pl-5 space-y-2 text-gray-800">
                             <li>Att kirurgen har svensk <strong>specialistkompetens i plastikkirurgi</strong>.</li>
@@ -395,62 +401,6 @@ export default function PatientSafetyBlogPost() {
                                     </p>
                                 </div>
                             ))}
-                        </div>
-
-                        {/* Sektion 5: Så hjälper Bättrehy */}
-                        <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-4" id="battrehy-hjalper">
-                            5. Så hjälper Bättrehy.se dig att välja tryggt
-                        </h2>
-                        <p>
-                            På <strong>Bättrehy.se</strong> är vår mission att skapa transparens och öka patientsäkerheten inom svensk skönhetsvård. Vi granskar och kvalitetssäkrar kliniker så att du slipper oroa dig.
-                        </p>
-                        <p>
-                            På Bättrehy kan du:
-                        </p>
-                        <ul className="list-disc pl-5 space-y-2 mb-6">
-                            <li>Jämföra verifierade kliniker som uppfyller kraven i <strong>Lag 2021:363</strong>.</li>
-                            <li>Filtrera efter stad, behandlingsform och oberoende kundrecensioner.</li>
-                            <li>Få tillgång till fördjupande, medicinskt granskade guider om risker och eftervård.</li>
-                        </ul>
-
-                        {/* CTA Box */}
-                        <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 sm:p-8 my-8 text-center">
-                            <h3 className="text-xl font-bold text-gray-900 mb-2">Hitta trygga och verifierade kliniker nära dig</h3>
-                            <p className="text-gray-600 text-sm max-w-md mx-auto mb-6">
-                                Utforska legitimerade behandlare med goda omdömen och kontrollera att kliniken följer alla gällande lagkrav.
-                            </p>
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-lg mx-auto mb-6">
-                                <Link href="/kliniker/stockholm" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
-                                    <MapPin size={14} className="text-primary" /> Stockholm
-                                </Link>
-                                <Link href="/kliniker/goteborg" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
-                                    <MapPin size={14} className="text-primary" /> Göteborg
-                                </Link>
-                                <Link href="/kliniker/malmo" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
-                                    <MapPin size={14} className="text-primary" /> Malmö
-                                </Link>
-                                <Link href="/kliniker" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
-                                    <MapPin size={14} className="text-primary" /> Alla städer
-                                </Link>
-                                <Link href="/behandlingar/botoxbehandling" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
-                                    Botoxkliniker
-                                </Link>
-                                <Link href="/behandlingar/fillerbehandling" className="bg-primary hover:bg-primary/90 px-3 py-2.5 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-1 shadow-sm">
-                                    Fillerskliniker <ChevronRight size={16} />
-                                </Link>
-                            </div>
-                            <div className="text-xs text-gray-500 space-y-1">
-                                <p>Läs även våra kompletta guider:</p>
-                                <div className="flex flex-wrap justify-center gap-3">
-                                    <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="text-primary underline font-medium">
-                                        Fillersguiden 2026
-                                    </Link>
-                                    <span>·</span>
-                                    <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary underline font-medium">
-                                        Botoxguiden 2026
-                                    </Link>
-                                </div>
-                            </div>
                         </div>
 
                         {/* Avslutning */}
@@ -486,6 +436,64 @@ export default function PatientSafetyBlogPost() {
                                 <p className="text-xs text-gray-500 font-medium">
                                     Senast faktagranskad och publicerad: 8 september 2026.
                                 </p>
+                            </div>
+                        </div>
+
+                        {/* Konsumentvägledning: Hitta kontrollerad klinik */}
+                        <div className="border-t border-gray-200 pt-10 mt-10" id="kontrollerad-klinik">
+                            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+                                Så hittar du en kontrollerad klinik i Sverige
+                            </h2>
+                            <p className="text-gray-700 leading-relaxed mb-4">
+                                För dig som söker en skönhetsbehandling är det avgörande att själv kontrollera att verksamheten följer lagstiftningen. Via Bättrehy.se kan du söka fram kliniker som uppfyller kraven i <strong>Lag (2021:363)</strong> och har legitimerad hälso- och sjukvårdspersonal.
+                            </p>
+                            <p className="text-gray-700 leading-relaxed mb-6">
+                                Konsumentinformation på plattformen gör det möjligt att:
+                            </p>
+                            <ul className="list-disc pl-5 space-y-2 mb-8 text-gray-700">
+                                <li>Verifiera att kliniken har anmält verksamheten och uppfyller lagstadgade krav.</li>
+                                <li>Filtrera efter ort, behandlingsform och oberoende patientomdömen.</li>
+                                <li>Ta del av saklig information och medicinskt granskade guider om risker, betänketid och eftervård.</li>
+                            </ul>
+
+                            {/* CTA Box */}
+                            <div className="bg-gray-50 border border-gray-200 rounded-2xl p-6 sm:p-8 my-8 text-center">
+                                <h3 className="text-xl font-bold text-gray-900 mb-2">Hitta trygga och verifierade kliniker nära dig</h3>
+                                <p className="text-gray-600 text-sm max-w-md mx-auto mb-6">
+                                    Utforska legitimerade behandlare med goda omdömen och kontrollera att kliniken följer alla gällande lagkrav.
+                                </p>
+                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-lg mx-auto mb-6">
+                                    <Link href="/kliniker/stockholm" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
+                                        <MapPin size={14} className="text-primary" /> Stockholm
+                                    </Link>
+                                    <Link href="/kliniker/goteborg" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
+                                        <MapPin size={14} className="text-primary" /> Göteborg
+                                    </Link>
+                                    <Link href="/kliniker/malmo" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
+                                        <MapPin size={14} className="text-primary" /> Malmö
+                                    </Link>
+                                    <Link href="/kliniker" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
+                                        <MapPin size={14} className="text-primary" /> Alla städer
+                                    </Link>
+                                    <Link href="/behandlingar/botoxbehandling" className="bg-white border border-gray-200 hover:border-primary px-3 py-2.5 rounded-xl text-sm font-medium text-gray-800 hover:text-primary transition-colors flex items-center justify-center gap-1">
+                                        Botoxkliniker
+                                    </Link>
+                                    <Link href="/behandlingar/fillerbehandling" className="bg-primary hover:bg-primary/90 px-3 py-2.5 rounded-xl text-sm font-medium text-white transition-colors flex items-center justify-center gap-1 shadow-sm">
+                                        Fillerskliniker <ChevronRight size={16} />
+                                    </Link>
+                                </div>
+                                <div className="text-xs text-gray-500 space-y-1">
+                                    <p>Läs även våra kompletta guider:</p>
+                                    <div className="flex flex-wrap justify-center gap-3">
+                                        <Link href="/blogg/fillerbehandling-den-kompletta-guiden" className="text-primary underline font-medium">
+                                            Fillersguiden 2026
+                                        </Link>
+                                        <span>·</span>
+                                        <Link href="/blogg/botoxbehandling-den-kompletta-guiden" className="text-primary underline font-medium">
+                                            Botoxguiden 2026
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
