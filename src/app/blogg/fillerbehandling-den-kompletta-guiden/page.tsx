@@ -237,39 +237,32 @@ export default function FillerBlogPost() {
                         </p>
 
                         {/* Snabb sammanfattning Callout Box */}
-                        <div className="bg-rose-50 border border-rose-100 p-6 sm:p-7 rounded-2xl my-8">
+                        <div className="bg-rose-50/60 border border-rose-100 rounded-2xl p-6 sm:p-7 my-8">
                             <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                                <Sparkles className="text-rose-600 w-5 h-5" />
+                                <Sparkles className="text-rose-600 w-5 h-5 flex-shrink-0" />
                                 Snabb sammanfattning 2026
                             </h2>
-                            <ul className="space-y-2.5 text-base text-gray-800">
-                                <li className="flex items-start">
-                                    <span className="font-semibold mr-2 text-rose-900">• Vad det är:</span>
-                                    <span>Injektion av hyaluronsyra (eller biostimulerande filler) som tillför volym, fukt och vävnadsstöd.</span>
+                            <ul className="list-disc pl-5 space-y-3 text-gray-700 text-base leading-relaxed marker:text-rose-500">
+                                <li>
+                                    <strong className="text-gray-900 font-semibold">Vad det är:</strong> Injektion av hyaluronsyra (eller biostimulerande filler) som tillför volym, fukt och vävnadsstöd.
                                 </li>
-                                <li className="flex items-start">
-                                    <span className="font-semibold mr-2 text-rose-900">• Nationellt snittpris:</span>
-                                    <span>Ca <strong>4 255–4 279 kr</strong> per behandling i Sverige.</span>
+                                <li>
+                                    <strong className="text-gray-900 font-semibold">Nationellt snittpris:</strong> Ca <strong>4 255–4 279 kr</strong> per behandling i Sverige.
                                 </li>
-                                <li className="flex items-start">
-                                    <span className="font-semibold mr-2 text-rose-900">• 1 ml HA-filler:</span>
-                                    <span>Median ca <strong>3 800–4 200 kr</strong> (normalt spann 2 800–5 500 kr beroende på märke).</span>
+                                <li>
+                                    <strong className="text-gray-900 font-semibold">1 ml HA-filler:</strong> Median ca <strong>3 800–4 200 kr</strong> (normalt spann 2 800–5 500 kr beroende på märke).
                                 </li>
-                                <li className="flex items-start">
-                                    <span className="font-semibold mr-2 text-rose-900">• Hållbarhet:</span>
-                                    <span>6–18 månader beroende på behandlat område, produktegenskaper och individuell metabolism.</span>
+                                <li>
+                                    <strong className="text-gray-900 font-semibold">Hållbarhet:</strong> 6–18 månader beroende på behandlat område, produktegenskaper och individuell ämnesomsättning.
                                 </li>
-                                <li className="flex items-start">
-                                    <span className="font-semibold mr-2 text-rose-900">• Lag 2021:363:</span>
-                                    <span>Lagkrav på minst 48 timmars betänketid, legitimerad läkare/tandläkare/sjuksköterska, IVO-registrering och patientförsäkring.</span>
+                                <li>
+                                    <strong className="text-gray-900 font-semibold">Lag 2021:363:</strong> Minst 48 timmars obligatorisk betänketid, legitimerad personal (läkare, tandläkare, sjuksköterska), IVO-registrering och patientförsäkring.
                                 </li>
-                                <li className="flex items-start">
-                                    <span className="font-semibold mr-2 text-rose-900">• Vanligaste områden:</span>
-                                    <span>Läppar, tårränna (under ögonen), kinder/mellanansikte, käklinje (jawline) och haka.</span>
+                                <li>
+                                    <strong className="text-gray-900 font-semibold">Vanligaste områden:</strong> Läppar, tårränna (under ögonen), kinder/mellanansikte, käklinje (jawline) och haka.
                                 </li>
-                                <li className="flex items-start">
-                                    <span className="font-semibold mr-2 text-rose-900">• Reversibelt:</span>
-                                    <span>Hyaluronsyrefillers kan lösas upp snabbt och säkert med enzymet hyaluronidas (Hyalase).</span>
+                                <li>
+                                    <strong className="text-gray-900 font-semibold">Reversibelt:</strong> Hyaluronsyrefillers kan lösas upp snabbt och säkert med enzymet hyaluronidas (Hyalase).
                                 </li>
                             </ul>
                         </div>
