@@ -634,7 +634,19 @@ export default function BotoxBlogPost() {
                             <img 
                                 src="/images/blogg/konsultation_botox.jpeg" 
                                 alt="Konsultation inför botoxbehandling" 
-                                cla                        <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6" id="valja-klinik">
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+
+                        <ol className="list-decimal pl-5 space-y-3 my-6">
+                            <li><strong>48 timmars betänketid.</strong> Vid din första behandling måste det gå minst 48 timmar mellan konsultation och själva behandlingen. Denna tid är till för att du ska hinna reflektera och avboka utan kostnad om du ångrar dig.</li>
+                            <li><strong>Legitimerad personal.</strong> Botox får endast utföras av legitimerad sjuksköterska, läkare eller tandläkare. Behandlaren ska kunna visa legitimation från Socialstyrelsen vid förfrågan.</li>
+                            <li><strong>IVO-registrerad klinik.</strong> Kliniker som utför estetiska injektioner ska finnas i IVO:s vårdgivarregister. Kontrollera alltid detta i förväg på ivo.se.</li>
+                            <li><strong>Patientförsäkring.</strong> Kliniken är skyldig att ha en gällande patientförsäkring som täcker eventuella skador eller komplikationer.</li>
+                            <li><strong>18-årsgräns.</strong> Estetiska injektioner får under inga omständigheter utföras på personer under 18 år. Seriösa kliniker kräver giltig legitimation.</li>
+                        </ol>
+
+                        <h2 className="text-2xl font-bold text-gray-900 mt-12 mb-6" id="valja-klinik">
                             Så väljer du en seriös klinik: 10-punkters checklistan 2026
                         </h2>
                         <p>
