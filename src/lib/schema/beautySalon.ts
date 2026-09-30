@@ -60,6 +60,9 @@ export function buildBeautySalonSchema(clinic: Clinic) {
     }
   }
 
+  // Clinic email: only include if clinic has its own email and it is NOT battrehy's info email
+  const clinicEmail = clinic.email && !clinic.email.toLowerCase().includes('battrehy.se') ? clinic.email : undefined;
+
   const schema: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'BeautySalon',
@@ -68,6 +71,7 @@ export function buildBeautySalonSchema(clinic: Clinic) {
     description: clinic.ai_description || clinic.description || undefined,
     image: imageUrl || undefined,
     telephone: clinic.phone || undefined,
+    email: clinicEmail,
     url: clinic.website || undefined,
     address: streetAddress ? {
       '@type': 'PostalAddress',

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Mail, MessageSquare, Send, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Mail, MessageSquare, Send, CheckCircle2, ArrowRight, Info } from 'lucide-react';
 import { SchemaScript } from '@/components/SchemaScript';
 import { buildBreadcrumbSchema } from '@/lib/schema';
 import { submitContactFormAction } from '@/lib/supabase/actions/mutations';
@@ -108,6 +108,14 @@ export default function KontaktPage() {
 
                     {/* Contact Form */}
                     <div className="lg:col-span-2 bg-white p-8 md:p-12 rounded-3xl border border-gray-100 shadow-2xl shadow-gray-200/50">
+                        {/* Notice Banner */}
+                        <div className="p-4 sm:p-5 bg-amber-50/80 border border-amber-200/70 rounded-2xl mb-8 flex items-start gap-3.5 text-amber-900">
+                            <Info className="text-amber-600 shrink-0 mt-0.5" size={20} />
+                            <p className="text-sm sm:text-base leading-relaxed font-medium">
+                                Bättrehy är en oberoende katalog. Vi kan inte boka, ändra eller avboka tider hos kliniker – kontakta kliniken direkt.
+                            </p>
+                        </div>
+
                         <div className="flex items-center gap-3 mb-8">
                             <div className="p-3 bg-blue-50 text-blue-500 rounded-xl">
                                 <MessageSquare size={24} />

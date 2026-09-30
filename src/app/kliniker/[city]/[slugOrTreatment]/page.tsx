@@ -249,6 +249,8 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
             buildOrganizationSchema()
         ];
 
+        const contactUrl = clinic.website || clinic.booking_url;
+
         return (
             <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
                 <SchemaScript schemas={schemas} />
@@ -270,66 +272,81 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                     />
 
                     {/* Profile Header */}
-                    <div className="bg-white rounded-b-2xl shadow-sm p-6 sm:p-8 mb-8 border border-gray-100 flex flex-col md:flex-row justify-between items-start gap-6">
-                        <div className="flex-1 w-full">
-                            <div className="flex flex-wrap items-center gap-3 mb-3">
-                                <h1 className="text-3xl font-bold text-gray-900">{clinic.name}</h1>
-                                {clinic.tier === 'premium' && (
-                                    <span className="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Premium</span>
+                    <div className="bg-white rounded-b-2xl shadow-sm p-6 sm:p-8 mb-8 border border-gray-100">
+                        <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
+                            <div className="flex-1 w-full">
+                                <div className="flex flex-wrap items-center gap-3 mb-3">
+                                    <h1 className="text-3xl font-bold text-gray-900">{clinic.name}</h1>
+                                    {clinic.tier === 'premium' && (
+                                        <span className="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Premium</span>
+                                    )}
+                                    {clinic.is_verified && (
+                                        <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">✓ Verifierad</span>
+                                    )}
+                                    {clinic.is_shr_member && (
+                                        <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ SHR-medlem</span>
+                                    )}
+                                    {clinic.is_rfem_member && (
+                                        <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ RFEM-medlem</span>
+                                    )}
+                                </div>
+                                <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap mb-6">
+                                    {clinic.description || `${clinic.name} är en klinik belägen i ${clinic.city}.`}
+                                </p>
+                            </div>
+
+                            {/* Prominent Primary Contact Button with Phone Beside It */}
+                            <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto shrink-0">
+                                {contactUrl ? (
+                                    <TrackedLink 
+                                        clinicId={clinic.id}
+                                        eventType={clinic.website ? 'website_click' : 'booking_click'}
+                                        href={contactUrl} 
+                                        className="bg-primary hover:bg-primary-hover text-white px-6 sm:px-8 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-md w-full sm:w-auto text-base"
+                                    >
+                                        <Globe size={18} />
+                                        Kontakta {clinic.name}
+                                    </TrackedLink>
+                                ) : (
+                                    <div className="bg-gray-100 text-gray-400 px-6 sm:px-8 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 w-full sm:w-auto cursor-not-allowed text-base">
+                                        Kontakta {clinic.name}
+                                    </div>
                                 )}
-                                {clinic.is_verified && (
-                                    <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">✓ Verifierad</span>
-                                )}
-                                {clinic.is_shr_member && (
-                                    <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ SHR-medlem</span>
-                                )}
-                                {clinic.is_rfem_member && (
-                                    <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ RFEM-medlem</span>
+
+                                {clinic.phone && (
+                                    <a 
+                                        href={`tel:${clinic.phone}`}
+                                        className="inline-flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 px-5 py-3.5 rounded-xl font-semibold transition-colors w-full sm:w-auto shadow-sm text-base"
+                                    >
+                                        <Phone size={18} className="text-primary" />
+                                        <span>{clinic.phone}</span>
+                                    </a>
                                 )}
                             </div>
-                            <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap mb-6">
-                                {clinic.description || `${clinic.name} är en klinik belägen i ${clinic.city}.`}
-                            </p>
-
-                            {/* AI Description Section */}
-                            {clinic.ai_description && (
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <h2 className="text-xl font-bold text-gray-900 mb-3">Om kliniken</h2>
-                                    <p className="text-gray-600 text-base leading-relaxed whitespace-pre-wrap">
-                                        {clinic.ai_description}
-                                    </p>
-                                </div>
-                            )}
-
-                            {/* FAQ Section */}
-                            {clinic.ai_faq && (
-                                <div className="mt-6 pt-6 border-t border-gray-100">
-                                    <h2 className="text-xl font-bold text-gray-900 mb-4">Vanliga frågor</h2>
-                                    <div className="space-y-5">
-                                        {parseFaq(clinic.ai_faq).map((item, idx) => (
-                                            <div key={idx} className="space-y-1">
-                                                <h3 className="font-semibold text-gray-900 text-base">{item.question}</h3>
-                                                <p className="text-gray-600 text-sm sm:text-base leading-relaxed whitespace-pre-wrap">{item.answer}</p>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
                         </div>
 
-                        {clinic.booking_url ? (
-                            <TrackedLink 
-                                clinicId={clinic.id}
-                                eventType="booking_click"
-                                href={clinic.booking_url} 
-                                className="bg-primary hover:bg-primary-hover text-white px-8 py-4 rounded-xl font-bold flex items-center gap-2 transition-all shadow-md w-full md:w-auto justify-center shrink-0"
-                            >
-                                <Calendar size={20} />
-                                Boka tid
-                            </TrackedLink>
-                        ) : (
-                            <div className="bg-gray-100 text-gray-400 px-8 py-4 rounded-xl font-bold flex items-center gap-2 w-full md:w-auto justify-center shrink-0 cursor-not-allowed">
-                                Ingen bokningslänk
+                        {/* AI Description Section */}
+                        {clinic.ai_description && (
+                            <div className="mt-8 pt-6 border-t border-gray-100">
+                                <h2 className="text-xl font-bold text-gray-900 mb-3">Om kliniken</h2>
+                                <p className="text-gray-600 text-base leading-relaxed whitespace-pre-wrap">
+                                    {clinic.ai_description}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* FAQ Section */}
+                        {clinic.ai_faq && (
+                            <div className="mt-6 pt-6 border-t border-gray-100">
+                                <h2 className="text-xl font-bold text-gray-900 mb-4">Vanliga frågor</h2>
+                                <div className="space-y-5">
+                                    {parseFaq(clinic.ai_faq).map((item, idx) => (
+                                        <div key={idx} className="space-y-1">
+                                            <h3 className="font-semibold text-gray-900 text-base">{item.question}</h3>
+                                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed whitespace-pre-wrap">{item.answer}</p>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         )}
                     </div>
@@ -368,9 +385,19 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                                         <Calendar size={18} />
                                         Boka tid
                                     </TrackedLink>
+                                ) : contactUrl ? (
+                                    <TrackedLink 
+                                        clinicId={clinic.id}
+                                        eventType={clinic.website ? 'website_click' : 'booking_click'}
+                                        href={contactUrl} 
+                                        className="bg-primary hover:bg-primary-hover text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-md inline-flex justify-center"
+                                    >
+                                        <Globe size={18} />
+                                        Kontakta {clinic.name}
+                                    </TrackedLink>
                                 ) : (
                                     <div className="bg-gray-100 text-gray-400 px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 inline-flex justify-center cursor-not-allowed">
-                                        Ingen bokningslänk
+                                        Ingen kontaktlänk
                                     </div>
                                 )}
                             </section>
@@ -404,6 +431,15 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                                         </li>
                                     )}
                                 </ul>
+                            </div>
+
+                            <div className="text-center sm:text-left px-1">
+                                <Link 
+                                    href="/kontakt" 
+                                    className="text-sm text-gray-500 hover:text-primary transition-colors inline-block"
+                                >
+                                    Frågor om Bättrehy? Kontakta oss
+                                </Link>
                             </div>
                         </div>
                     </div>
