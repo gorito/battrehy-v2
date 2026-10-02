@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { getClinicBySlug, getTreatments, getClinics, getCities, getUniqueCities, getClinicsByCity } from '@/lib/supabase/actions/queries';
-import { MapPin, Globe, Phone, Calendar, Image as ImageIcon } from 'lucide-react';
+import { MapPin, Globe, Phone, Calendar, Image as ImageIcon, Sparkles, CheckCircle2, ShieldCheck, ExternalLink } from 'lucide-react';
 import { slugifyCity } from '@/lib/utils';
 import CityTreatmentView from '@/components/seo/CityTreatmentView';
 import ClinicTracker from '@/components/analytics/ClinicTracker';
@@ -249,199 +249,284 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
             buildOrganizationSchema()
         ];
 
-        const contactUrl = clinic.website || clinic.booking_url;
+        const contactUrl = clinic.booking_url || clinic.website;
+        const parsedFaqs = parseFaq(clinic.ai_faq);
 
         return (
-            <main className="min-h-screen bg-gray-50 p-4 sm:p-8 pb-24">
+            <main className="min-h-screen bg-[#fafaf9] p-4 sm:p-8 pb-24">
                 <SchemaScript schemas={schemas} />
                 <ClinicTracker clinicId={clinic.id} />
-                <div className="max-w-4xl mx-auto">
+                <div className="max-w-6xl mx-auto">
                     {/* Breadcrumbs */}
                     <nav className="text-sm text-gray-500 mb-6 flex flex-wrap gap-2 items-center">
-                        <Link href="/" className="hover:text-primary transition-colors">Hem</Link>
-                        <span>&gt;</span>
-                        <Link href={`/kliniker/${citySlug}`} className="hover:text-primary capitalize">{clinic.city}</Link>
-                        <span>&gt;</span>
+                        <Link href="/" className="hover:text-gray-900 transition-colors">Hem</Link>
+                        <span className="text-gray-400">/</span>
+                        <Link href={`/kliniker/${citySlug}`} className="hover:text-gray-900 capitalize">{clinic.city}</Link>
+                        <span className="text-gray-400">/</span>
                         <span className="text-gray-900 font-medium truncate max-w-[200px] sm:max-w-none">{clinic.name}</span>
                     </nav>
 
-                    {/* Profile Header Image */}
-                    <div
-                        className="w-full h-56 sm:h-72 md:h-[26rem] bg-cover bg-center rounded-t-2xl border-x border-t border-gray-100/50 bg-gray-100"
-                        style={primaryImage ? { backgroundImage: `url(${primaryImage})` } : {}}
-                    />
+                    {/* Profile Header Image (Only if available) */}
+                    {primaryImage && (
+                        <div className="w-full h-60 sm:h-80 md:h-[22rem] rounded-2xl overflow-hidden border border-gray-100 shadow-xs mb-8">
+                            <img
+                                src={primaryImage}
+                                alt={clinic.name}
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                    )}
 
-                    {/* Profile Header */}
-                    <div className="bg-white rounded-b-2xl shadow-sm p-6 sm:p-8 mb-8 border border-gray-100">
-                        <div className="flex flex-col lg:flex-row justify-between items-start gap-6">
-                            <div className="flex-1 w-full">
-                                <div className="flex flex-wrap items-center gap-3 mb-3">
-                                    <h1 className="text-3xl font-bold text-gray-900">{clinic.name}</h1>
+                    {/* Main Layout Grid */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+                        {/* Left Column: Story, About, Treatments, FAQ */}
+                        <div className="lg:col-span-7 xl:col-span-8 space-y-6 sm:space-y-8">
+                            {/* Header Card */}
+                            <div className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-xs space-y-5">
+                                {/* Badges */}
+                                <div className="flex flex-wrap items-center gap-2">
                                     {clinic.tier === 'premium' && (
-                                        <span className="bg-rose-100 text-rose-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">Premium</span>
+                                        <span className="inline-flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-100 px-3 py-1 rounded-full text-xs font-semibold tracking-wide">
+                                            <Sparkles size={13} className="text-rose-500" />
+                                            Premium
+                                        </span>
                                     )}
                                     {clinic.is_verified && (
-                                        <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">✓ Verifierad</span>
+                                        <span className="inline-flex items-center gap-1.5 bg-sky-50 text-sky-700 border border-sky-100 px-3 py-1 rounded-full text-xs font-semibold">
+                                            <CheckCircle2 size={13} className="text-sky-500" />
+                                            Verifierad
+                                        </span>
                                     )}
                                     {clinic.is_shr_member && (
-                                        <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ SHR-medlem</span>
+                                        <span className="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200/70 px-3 py-1 rounded-full text-xs font-semibold">
+                                            <ShieldCheck size={13} className="text-emerald-600" />
+                                            SHR-medlem
+                                        </span>
                                     )}
                                     {clinic.is_rfem_member && (
-                                        <span className="bg-amber-50 text-amber-700 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">🛡️ RFEM-medlem</span>
+                                        <span className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-800 border border-amber-200/70 px-3 py-1 rounded-full text-xs font-semibold">
+                                            <ShieldCheck size={13} className="text-amber-600" />
+                                            RFEM-medlem
+                                        </span>
                                     )}
                                 </div>
-                                <p className="text-gray-600 text-lg leading-relaxed whitespace-pre-wrap mb-6">
+
+                                {/* Title & Location */}
+                                <div>
+                                    <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight mb-2">
+                                        {clinic.name}
+                                    </h1>
+                                    <div className="flex items-center gap-1.5 text-gray-500 text-sm sm:text-base">
+                                        <MapPin size={16} className="text-gray-400 shrink-0" />
+                                        <span>{clinic.address ? `${clinic.address}, ` : ''}{clinic.city}</span>
+                                    </div>
+                                </div>
+
+                                {/* Lead description */}
+                                <p className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-wrap font-normal pt-2 border-t border-gray-100">
                                     {clinic.description || `${clinic.name} är en klinik belägen i ${clinic.city}.`}
                                 </p>
-                            </div>
 
-                            {/* Prominent Primary Contact Button with Phone Beside It */}
-                            <div className="flex flex-wrap items-center gap-3 w-full lg:w-auto shrink-0">
-                                {contactUrl ? (
-                                    <TrackedLink 
-                                        clinicId={clinic.id}
-                                        eventType={clinic.website ? 'website_click' : 'booking_click'}
-                                        href={contactUrl} 
-                                        className="bg-primary hover:bg-primary-hover text-white px-6 sm:px-8 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shadow-md w-full sm:w-auto text-base"
-                                    >
-                                        <Globe size={18} />
-                                        Kontakta {clinic.name}
-                                    </TrackedLink>
-                                ) : (
-                                    <div className="bg-gray-100 text-gray-400 px-6 sm:px-8 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 w-full sm:w-auto cursor-not-allowed text-base">
-                                        Kontakta {clinic.name}
-                                    </div>
-                                )}
-
-                                {clinic.phone && (
-                                    <a 
-                                        href={`tel:${clinic.phone}`}
-                                        className="inline-flex items-center justify-center gap-2 bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 px-5 py-3.5 rounded-xl font-semibold transition-colors w-full sm:w-auto shadow-sm text-base"
-                                    >
-                                        <Phone size={18} className="text-primary" />
-                                        <span>{clinic.phone}</span>
-                                    </a>
-                                )}
-                            </div>
-                        </div>
-
-                        {/* AI Description Section */}
-                        {clinic.ai_description && (
-                            <div className="mt-8 pt-6 border-t border-gray-100">
-                                <h2 className="text-xl font-bold text-gray-900 mb-3">Om kliniken</h2>
-                                <p className="text-gray-600 text-base leading-relaxed whitespace-pre-wrap">
-                                    {clinic.ai_description}
-                                </p>
-                            </div>
-                        )}
-
-                        {/* FAQ Section */}
-                        {clinic.ai_faq && (
-                            <div className="mt-6 pt-6 border-t border-gray-100">
-                                <h2 className="text-xl font-bold text-gray-900 mb-4">Vanliga frågor</h2>
-                                <div className="space-y-5">
-                                    {parseFaq(clinic.ai_faq).map((item, idx) => (
-                                        <div key={idx} className="space-y-1">
-                                            <h3 className="font-semibold text-gray-900 text-base">{item.question}</h3>
-                                            <p className="text-gray-600 text-sm sm:text-base leading-relaxed whitespace-pre-wrap">{item.answer}</p>
-                                        </div>
-                                    ))}
+                                {/* Mobile Quick Contact Bar */}
+                                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-gray-100 lg:hidden">
+                                    {contactUrl ? (
+                                        <TrackedLink 
+                                            clinicId={clinic.id}
+                                            eventType={clinic.booking_url ? 'booking_click' : 'website_click'}
+                                            href={contactUrl} 
+                                            className="bg-primary hover:bg-primary-hover text-white font-semibold py-3 px-5 rounded-xl shadow-xs text-center flex items-center justify-center gap-2 transition-all text-sm"
+                                        >
+                                            {clinic.booking_url ? <Calendar size={16} /> : <Globe size={16} />}
+                                            {clinic.booking_url ? 'Boka tid' : `Besök ${clinic.name}`}
+                                        </TrackedLink>
+                                    ) : null}
+                                    {clinic.phone && (
+                                        <a 
+                                            href={`tel:${clinic.phone}`}
+                                            className="bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200 py-3 px-4 rounded-xl font-medium text-center flex items-center justify-center gap-2 transition-colors text-sm"
+                                        >
+                                            <Phone size={16} className="text-primary" />
+                                            Ring {clinic.phone}
+                                        </a>
+                                    )}
                                 </div>
                             </div>
-                        )}
-                    </div>
 
-                    <div className="grid md:grid-cols-3 gap-8">
-                        <div className="md:col-span-2 space-y-8">
-                            <section className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100">
-                                <h2 className="text-2xl font-bold text-gray-900 mb-6">Behandlingar</h2>
-                                <div className="flex flex-wrap gap-3">
+                            {/* Om kliniken Section */}
+                            {clinic.ai_description && (
+                                <section className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-xs">
+                                    <h2 className="text-xl font-bold text-gray-900 mb-4">Om kliniken</h2>
+                                    <p className="text-gray-600 text-base leading-relaxed whitespace-pre-wrap font-normal">
+                                        {clinic.ai_description}
+                                    </p>
+                                </section>
+                            )}
+
+                            {/* Behandlingar Section */}
+                            <section className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-xs">
+                                <div className="flex items-center justify-between mb-5">
+                                    <h2 className="text-xl font-bold text-gray-900">Behandlingar</h2>
+                                    {clinic.treatments && clinic.treatments.length > 0 && (
+                                        <span className="text-xs font-semibold text-gray-500 bg-gray-50 px-2.5 py-1 rounded-full border border-gray-200/60">
+                                            {clinic.treatments.length} st
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="flex flex-wrap gap-2.5">
                                     {clinic.treatments && clinic.treatments.length > 0 ? (
                                         clinic.treatments.map((t: any) => (
-                                            <Link key={t.id} href={`/behandlingar/${t.slug}`} className="bg-rose-50 hover:bg-rose-100 text-rose-700 px-4 py-2 rounded-full font-medium transition-colors">
+                                            <Link 
+                                                key={t.id} 
+                                                href={`/behandlingar/${t.slug}`} 
+                                                className="inline-flex items-center px-4 py-2 rounded-xl text-sm font-medium bg-gray-50/80 hover:bg-rose-50 text-gray-700 hover:text-rose-600 border border-gray-200/70 hover:border-rose-200 transition-all shadow-2xs"
+                                            >
                                                 {t.name}
                                             </Link>
                                         ))
                                     ) : (
-                                        <p className="text-gray-500 italic">Denna klinik har inte angett sina behandlingar ännu.</p>
+                                        <p className="text-gray-500 italic text-sm">Denna klinik har inte angett sina behandlingar ännu.</p>
                                     )}
                                 </div>
                             </section>
 
-                            {/* CTA Boka Tid Card */}
-                            <section className="bg-rose-50/50 rounded-2xl p-8 border border-rose-100/50 mt-8 flex flex-col items-center text-center">
-                                <Calendar className="text-rose-500 mb-4" size={40} />
-                                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Redo att boka din behandling?</h2>
-                                <p className="text-gray-600 text-sm sm:text-base mb-6">
-                                    Välj tid och behandling direkt hos {clinic.name}
-                                </p>
-                                {clinic.booking_url ? (
-                                    <TrackedLink 
-                                        clinicId={clinic.id}
-                                        eventType="booking_click"
-                                        href={clinic.booking_url} 
-                                        className="bg-primary hover:bg-primary-hover text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-md inline-flex justify-center"
-                                    >
-                                        <Calendar size={18} />
-                                        Boka tid
-                                    </TrackedLink>
-                                ) : contactUrl ? (
-                                    <TrackedLink 
-                                        clinicId={clinic.id}
-                                        eventType={clinic.website ? 'website_click' : 'booking_click'}
-                                        href={contactUrl} 
-                                        className="bg-primary hover:bg-primary-hover text-white px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 transition-all shadow-md inline-flex justify-center"
-                                    >
-                                        <Globe size={18} />
-                                        Kontakta {clinic.name}
-                                    </TrackedLink>
-                                ) : (
-                                    <div className="bg-gray-100 text-gray-400 px-8 py-3.5 rounded-xl font-bold flex items-center gap-2 inline-flex justify-center cursor-not-allowed">
-                                        Ingen kontaktlänk
+                            {/* Vanliga frågor (FAQ) Section */}
+                            {parsedFaqs.length > 0 && (
+                                <section className="bg-white rounded-2xl p-6 sm:p-8 border border-gray-100 shadow-xs">
+                                    <h2 className="text-xl font-bold text-gray-900 mb-6">Vanliga frågor</h2>
+                                    <div className="space-y-4 divide-y divide-gray-100">
+                                        {parsedFaqs.map((item, idx) => (
+                                            <div key={idx} className={idx > 0 ? 'pt-4 space-y-1.5' : 'space-y-1.5'}>
+                                                <h3 className="font-semibold text-gray-900 text-base flex items-start gap-2">
+                                                    <span className="text-primary font-bold">Q:</span>
+                                                    <span>{item.question}</span>
+                                                </h3>
+                                                <p className="text-gray-600 text-sm sm:text-base leading-relaxed pl-6 whitespace-pre-wrap">
+                                                    {item.answer}
+                                                </p>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </section>
+                            )}
+                        </div>
+
+                        {/* Right Column: Sticky Action & Info Sidebar */}
+                        <aside className="lg:col-span-5 xl:col-span-4 lg:sticky lg:top-8 space-y-5">
+                            <div className="bg-white rounded-2xl p-6 sm:p-7 border border-gray-100 shadow-xs space-y-6">
+                                {/* Sidebar Header */}
+                                <div>
+                                    <span className="text-xs font-bold uppercase tracking-wider text-gray-400">Kontakt & Bokning</span>
+                                    <h3 className="text-lg font-bold text-gray-900 mt-1 truncate">{clinic.name}</h3>
+                                </div>
+
+                                {/* Main Action Buttons */}
+                                <div className="space-y-3">
+                                    {contactUrl ? (
+                                        <TrackedLink 
+                                            clinicId={clinic.id}
+                                            eventType={clinic.booking_url ? 'booking_click' : 'website_click'}
+                                            href={contactUrl} 
+                                            className="w-full bg-primary hover:bg-primary-hover text-white font-semibold py-3.5 px-5 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 text-base text-center"
+                                        >
+                                            {clinic.booking_url ? <Calendar size={18} /> : <Globe size={18} />}
+                                            {clinic.booking_url ? 'Boka tid online' : 'Besök hemsida'}
+                                        </TrackedLink>
+                                    ) : (
+                                        <div className="w-full bg-gray-100 text-gray-400 font-medium py-3 px-4 rounded-xl text-center cursor-not-allowed text-sm">
+                                            Ingen webblänk tillgänglig
+                                        </div>
+                                    )}
+
+                                    {clinic.phone && (
+                                        <a 
+                                            href={`tel:${clinic.phone}`}
+                                            className="w-full bg-gray-50 hover:bg-gray-100 text-gray-800 border border-gray-200/80 font-semibold py-3 px-4 rounded-xl transition-colors flex items-center justify-center gap-2 text-sm text-center"
+                                        >
+                                            <Phone size={16} className="text-primary shrink-0" />
+                                            <span>{clinic.phone}</span>
+                                        </a>
+                                    )}
+                                </div>
+
+                                {/* Clinic Details List */}
+                                <div className="border-t border-gray-100 pt-5 space-y-4">
+                                    <div className="text-xs font-bold uppercase tracking-wider text-gray-400">Klinikinformation</div>
+                                    <ul className="space-y-3.5 text-sm text-gray-600">
+                                        <li className="flex items-start gap-3">
+                                            <MapPin className="text-gray-400 shrink-0 mt-0.5" size={18} />
+                                            <div>
+                                                <div className="text-gray-900 font-medium">{clinic.city}</div>
+                                                {clinic.address && <div className="text-gray-500 text-xs mt-0.5">{clinic.address}</div>}
+                                            </div>
+                                        </li>
+                                        {clinic.phone && (
+                                            <li className="flex items-center gap-3">
+                                                <Phone className="text-gray-400 shrink-0" size={18} />
+                                                <a href={`tel:${clinic.phone}`} className="hover:text-primary transition-colors font-medium text-gray-900">
+                                                    {clinic.phone}
+                                                </a>
+                                            </li>
+                                        )}
+                                        {clinic.website && (
+                                            <li className="flex items-center gap-3">
+                                                <Globe className="text-gray-400 shrink-0" size={18} />
+                                                <TrackedLink 
+                                                    clinicId={clinic.id}
+                                                    eventType="website_click"
+                                                    href={clinic.website} 
+                                                    className="text-primary hover:underline font-medium truncate inline-flex items-center gap-1"
+                                                >
+                                                    <span>{clinic.website.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '')}</span>
+                                                    <ExternalLink size={12} className="shrink-0" />
+                                                </TrackedLink>
+                                            </li>
+                                        )}
+                                    </ul>
+                                </div>
+
+                                {/* Certifications & Memberships */}
+                                {(clinic.is_shr_member || clinic.is_rfem_member || clinic.is_verified) && (
+                                    <div className="border-t border-gray-100 pt-5 space-y-3">
+                                        <div className="text-xs font-bold uppercase tracking-wider text-gray-400">Kvalitet & Certifiering</div>
+                                        <div className="space-y-2">
+                                            {clinic.is_shr_member && (
+                                                <div className="flex items-center gap-2 text-xs font-medium text-emerald-800 bg-emerald-50/70 border border-emerald-200/60 p-2.5 rounded-xl">
+                                                    <ShieldCheck size={16} className="text-emerald-600 shrink-0" />
+                                                    <span>SHR-auktoriserad hudterapeut</span>
+                                                </div>
+                                            )}
+                                            {clinic.is_rfem_member && (
+                                                <div className="flex items-center gap-2 text-xs font-medium text-amber-800 bg-amber-50/70 border border-amber-200/60 p-2.5 rounded-xl">
+                                                    <ShieldCheck size={16} className="text-amber-600 shrink-0" />
+                                                    <span>RFEM-ansluten klinik</span>
+                                                </div>
+                                            )}
+                                            {clinic.is_verified && (
+                                                <div className="flex items-center gap-2 text-xs font-medium text-sky-800 bg-sky-50/70 border border-sky-200/60 p-2.5 rounded-xl">
+                                                    <CheckCircle2 size={16} className="text-sky-600 shrink-0" />
+                                                    <span>Verifierad profil</span>
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                 )}
-                            </section>
-                        </div>
 
-                        <div className="space-y-8">
-                            <div className="bg-white rounded-2xl p-6 border border-gray-100">
-                                <h3 className="font-bold text-gray-900 mb-4 pb-4 border-b border-gray-50">Kontakt</h3>
-                                <ul className="space-y-4 text-gray-600">
-                                    <li className="flex items-start gap-3">
-                                        <MapPin className="text-gray-400 shrink-0 mt-0.5" size={20} />
-                                        <span>{clinic.address ? `${clinic.address}, ` : ''}{clinic.city}</span>
-                                    </li>
-                                    {clinic.phone && (
-                                        <li className="flex items-center gap-3">
-                                            <Phone className="text-gray-400 shrink-0" size={20} />
-                                            <a href={`tel:${clinic.phone}`} className="hover:text-primary transition-colors">{clinic.phone}</a>
-                                        </li>
-                                    )}
-                                    {clinic.website && (
-                                        <li className="flex items-center gap-3">
-                                            <Globe className="text-gray-400 shrink-0" size={20} />
-                                            <TrackedLink 
-                                                clinicId={clinic.id}
-                                                eventType="website_click"
-                                                href={clinic.website} 
-                                                className="text-primary hover:underline truncate"
-                                            >
-                                                Besök hemsida
-                                            </TrackedLink>
-                                        </li>
-                                    )}
-                                </ul>
+                                {/* Subtle booking notice */}
+                                <div className="pt-2 text-xs text-gray-400 text-center leading-normal">
+                                    Bokning och rådgivning sker direkt hos kliniken via deras officiella kanaler.
+                                </div>
                             </div>
 
-                            <div className="text-center sm:text-left px-1">
-                                <Link 
-                                    href="/kontakt" 
-                                    className="text-sm text-gray-500 hover:text-primary transition-colors inline-block"
-                                >
-                                    Frågor om Bättrehy? Kontakta oss
-                                </Link>
+                            {/* Support card */}
+                            <div className="bg-white/80 rounded-xl p-4 border border-gray-150 text-center">
+                                <p className="text-xs text-gray-500">
+                                    Representerar du {clinic.name}?{' '}
+                                    <Link href="/kontakt" className="text-primary hover:underline font-medium">
+                                        Uppdatera uppgifter
+                                    </Link>
+                                </p>
                             </div>
-                        </div>
+                        </aside>
                     </div>
                 </div>
             </main>
