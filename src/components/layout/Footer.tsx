@@ -91,11 +91,13 @@ export default function Footer() {
                             <li><Link href="/kliniker/uppsala/botoxbehandling" className="hover:text-[#e8234a]">Botox Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras/botoxbehandling" className="hover:text-[#e8234a]">Botox Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/botoxbehandling" className="hover:text-[#e8234a]">Botox Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/botoxbehandling" className="hover:text-[#e8234a]">Botox Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/botoxbehandling" className="hover:text-[#e8234a]">Botox Linköping</Link></li>
                             <li><Link href="/kliniker/lund/botoxbehandling" className="hover:text-[#e8234a]">Botox Lund</Link></li>
                             <li><Link href="/kliniker/uppsala/fillerbehandling" className="hover:text-[#e8234a]">Fillers Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras/fillerbehandling" className="hover:text-[#e8234a]">Fillers Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/fillerbehandling" className="hover:text-[#e8234a]">Fillers Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/fillerbehandling" className="hover:text-[#e8234a]">Fillers Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/fillerbehandling" className="hover:text-[#e8234a]">Fillers Linköping</Link></li>
                             <li><Link href="/kliniker/lund/fillerbehandling" className="hover:text-[#e8234a]">Fillers Lund</Link></li>
                         </ul>
@@ -115,11 +117,13 @@ export default function Footer() {
                             <li><Link href="/kliniker/uppsala/laserbehandling" className="hover:text-[#e8234a]">Laser Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras/laserbehandling" className="hover:text-[#e8234a]">Laser Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/laserbehandling" className="hover:text-[#e8234a]">Laser Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/laserbehandling" className="hover:text-[#e8234a]">Laser Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/laserbehandling" className="hover:text-[#e8234a]">Laser Linköping</Link></li>
                             <li><Link href="/kliniker/lund/laserbehandling" className="hover:text-[#e8234a]">Laser Lund</Link></li>
                             <li><Link href="/kliniker/uppsala/microneedling" className="hover:text-[#e8234a]">Microneedling Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras/microneedling" className="hover:text-[#e8234a]">Microneedling Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/microneedling" className="hover:text-[#e8234a]">Microneedling Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/microneedling" className="hover:text-[#e8234a]">Microneedling Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/microneedling" className="hover:text-[#e8234a]">Microneedling Linköping</Link></li>
                             <li><Link href="/kliniker/lund/microneedling" className="hover:text-[#e8234a]">Microneedling Lund</Link></li>
                         </ul>
@@ -139,11 +143,13 @@ export default function Footer() {
                             <li><Link href="/kliniker/uppsala/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Linköping</Link></li>
                             <li><Link href="/kliniker/lund/ansiktsbehandling" className="hover:text-[#e8234a]">Ansiktsbehandling Lund</Link></li>
                             <li><Link href="/kliniker/uppsala/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Linköping</Link></li>
                             <li><Link href="/kliniker/lund/anti-aging-behandling" className="hover:text-[#e8234a]">Anti-aging Lund</Link></li>
                         </ul>
@@ -158,6 +164,7 @@ export default function Footer() {
                             <li><Link href="/kliniker/uppsala/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Linköping</Link></li>
                             <li><Link href="/kliniker/lund/kemisk-peeling" className="hover:text-[#e8234a]">Kemisk peeling Lund</Link></li>
                             <li className="pt-2"><Link href="/kliniker/stockholm/lappfiller" className="hover:text-[#e8234a] font-medium border-t border-gray-50 pt-2 block">Läppfillers Stockholm</Link></li>
@@ -165,6 +172,7 @@ export default function Footer() {
                             <li><Link href="/kliniker/malmo/lappfiller" className="hover:text-[#e8234a]">Läppfillers Malmö</Link></li>
                             <li><Link href="/kliniker/vasteras/lappfiller" className="hover:text-[#e8234a]">Läppfillers Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/lappfiller" className="hover:text-[#e8234a]">Läppfillers Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/lappfiller" className="hover:text-[#e8234a]">Läppfillers Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/lappfiller" className="hover:text-[#e8234a]">Läppfillers Linköping</Link></li>
                         </ul>
                     </div>
@@ -178,6 +186,7 @@ export default function Footer() {
                             <li><Link href="/kliniker/uppsala/hudterapeut" className="hover:text-[#e8234a]">Hudvård Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras/hudterapeut" className="hover:text-[#e8234a]">Hudvård Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg/hudterapeut" className="hover:text-[#e8234a]">Hudvård Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping/hudterapeut" className="hover:text-[#e8234a]">Hudvård Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping/hudterapeut" className="hover:text-[#e8234a]">Hudvård Linköping</Link></li>
                             <li><Link href="/kliniker/lund/hudterapeut" className="hover:text-[#e8234a]">Hudvård Lund</Link></li>
                         </ul>
@@ -190,6 +199,7 @@ export default function Footer() {
                             <li><Link href="/kliniker/uppsala" className="hover:text-[#e8234a]">Uppsala</Link></li>
                             <li><Link href="/kliniker/vasteras" className="hover:text-[#e8234a]">Västerås</Link></li>
                             <li><Link href="/kliniker/helsingborg" className="hover:text-[#e8234a]">Helsingborg</Link></li>
+                            <li><Link href="/kliniker/jonkoping" className="hover:text-[#e8234a]">Jönköping</Link></li>
                             <li><Link href="/kliniker/linkoping" className="hover:text-[#e8234a]">Linköping</Link></li>
                             <li><Link href="/kliniker/lund" className="hover:text-[#e8234a]">Lund</Link></li>
                         </ul>
