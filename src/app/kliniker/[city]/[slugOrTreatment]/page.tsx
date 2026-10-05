@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound, permanentRedirect, redirect } from 'next/navigation';
 import { getClinicBySlug, getTreatments, getClinics, getCities, getUniqueCities, getClinicsByCity } from '@/lib/supabase/actions/queries';
-import { MapPin, Globe, Phone, Calendar, Image as ImageIcon, Sparkles, CheckCircle2, ShieldCheck, ExternalLink } from 'lucide-react';
+import { MapPin, Globe, Phone, Mail, Calendar, Image as ImageIcon, Sparkles, CheckCircle2, ShieldCheck, ExternalLink } from 'lucide-react';
 import { slugifyCity } from '@/lib/utils';
 import CityTreatmentView from '@/components/seo/CityTreatmentView';
 import ClinicTracker from '@/components/analytics/ClinicTracker';
@@ -464,6 +464,14 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
                                                 <Phone className="text-gray-400 shrink-0" size={18} />
                                                 <a href={`tel:${clinic.phone}`} className="hover:text-primary transition-colors font-medium text-gray-900">
                                                     {clinic.phone}
+                                                </a>
+                                            </li>
+                                        )}
+                                        {clinic.email && (
+                                            <li className="flex items-center gap-3">
+                                                <Mail className="text-gray-400 shrink-0" size={18} />
+                                                <a href={`mailto:${clinic.email}`} className="hover:text-primary transition-colors font-medium text-gray-900 truncate">
+                                                    {clinic.email}
                                                 </a>
                                             </li>
                                         )}
