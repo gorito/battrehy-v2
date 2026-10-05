@@ -268,11 +268,11 @@ export default async function SlugOrTreatmentPage({ params }: Props) {
 
                     {/* Profile Header Image (Only if available) */}
                     {primaryImage && (
-                        <div className="w-full h-60 sm:h-80 md:h-[22rem] rounded-2xl overflow-hidden border border-gray-100 shadow-xs mb-8">
+                        <div className="w-full h-64 sm:h-80 md:h-[26rem] lg:h-[28rem] rounded-2xl overflow-hidden border border-gray-100 shadow-xs mb-8 bg-gray-50">
                             <img
                                 src={primaryImage}
                                 alt={clinic.name}
-                                className="w-full h-full object-cover"
+                                className="w-full h-full object-cover object-top md:object-[center_15%]"
                             />
                         </div>
                     )}
