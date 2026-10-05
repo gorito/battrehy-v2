@@ -17,34 +17,39 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
     const cityParam = decodeURIComponent(resolvedParams.city);
-    const [cities, uniqueCityNames] = await Promise.all([getCities(), getUniqueCities()]);
-    
-    // Try to find the city in our cities table first
-    let city: Partial<City> | undefined = cities.find(c => slugifyCity(c.name) === cityParam);
-    
-    // If not found in cities table, check if it exists in clinics by name
-    if (!city) {
-        const cityName = uniqueCityNames.find(name => slugifyCity(name) === cityParam);
-        if (cityName) {
-            city = {
-                name: cityName,
-                slug: slugifyCity(cityName),
-            };
-        }
+    const asciiCitySlug = slugifyCity(cityParam);
+    const supabase = await createClient();
+
+    // Fast lookup in cities table
+    const { data: dbCity } = await supabase
+        .from('cities')
+        .select('name, slug, description')
+        .eq('slug', asciiCitySlug)
+        .maybeSingle();
+
+    let cityName = dbCity?.name;
+    let cityDescription = dbCity?.description;
+
+    if (!cityName) {
+        const { data: clinicMatch } = await supabase
+            .from('clinics')
+            .select('city')
+            .ilike('city', cityParam.replace(/-/g, ' '))
+            .limit(1)
+            .maybeSingle();
+        cityName = clinicMatch?.city;
     }
 
-    if (!city) return { title: 'Skönhetskliniker' };
+    if (!cityName) return { title: 'Skönhetskliniker' };
 
-    const cityName = city.name!;
-    const supabase = await createClient();
     const { count } = await supabase.from('clinics').select('id', { count: 'exact', head: true }).ilike('city', cityName);
     const clinicCount = count || 0;
 
     return {
         title: `${clinicCount || ''} Skönhetskliniker i ${cityName}`,
-        description: city.description || `Hitta och jämför ${clinicCount ? `de ${clinicCount} ` : ''}bästa skönhetsklinikerna i ${cityName}. Certifierade kliniker med omdömen och bokningsinformation på battrehy.se.`,
+        description: cityDescription || `Hitta och jämför ${clinicCount ? `de ${clinicCount} ` : ''}bästa skönhetsklinikerna i ${cityName}. Certifierade kliniker med omdömen och bokningsinformation på battrehy.se.`,
         alternates: {
-            canonical: `/kliniker/${cityParam}`,
+            canonical: `/kliniker/${asciiCitySlug}`,
         },
         robots: {
             index: clinicCount > 1,
@@ -53,7 +58,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         openGraph: {
             title: `Skönhetskliniker i ${cityName}`,
             description: `Hitta certifierade kliniker i ${cityName}.`,
-            url: `https://battrehy.se/kliniker/${cityParam}`,
+            url: `https://battrehy.se/kliniker/${asciiCitySlug}`,
         }
     };
 }
@@ -67,41 +72,58 @@ export default async function CityPage({ params }: Props) {
         permanentRedirect(`/kliniker/${asciiCitySlug}`);
     }
 
-    // Fetch data for the page
-    const [cities, clinicsResponse, uniqueCityNames, treatments] = await Promise.all([
-        getCities(), 
-        getClinics({ limit: 1000 }),
-        getUniqueCities(),
-        getTreatments()
-    ]);
-    const clinics = clinicsResponse.data;
+    const supabase = await createClient();
 
-    // Try to find the city
-    let city: Partial<City> | undefined = cities.find(c => slugifyCity(c.name) === citySlug);
-    
-    if (!city) {
-        const cityName = uniqueCityNames.find(name => slugifyCity(name) === citySlug);
-        if (cityName) {
-            city = {
-                name: cityName,
-                slug: slugifyCity(cityName),
-            };
-        }
+    // Fast direct lookup
+    const { data: dbCity } = await supabase
+        .from('cities')
+        .select('name, slug, description')
+        .eq('slug', asciiCitySlug)
+        .maybeSingle();
+
+    let cityName = dbCity?.name;
+    let cityDescription = dbCity?.description;
+
+    if (!cityName) {
+        const { data: sampleClinic } = await supabase
+            .from('clinics')
+            .select('city')
+            .ilike('city', citySlug.replace(/-/g, ' '))
+            .limit(1)
+            .maybeSingle();
+        cityName = sampleClinic?.city;
     }
 
-    if (!city) {
+    if (!cityName) {
         notFound();
     }
 
-    const cityName = city.name!;
-    const cityClinics = clinics.filter(
-        c => c.city.toLowerCase() === cityName.toLowerCase()
-    );
+    // Direct, fast indexed query for this city only
+    const { data: clinicsData, error } = await supabase
+        .from('clinics')
+        .select(`
+            *,
+            clinic_treatments (
+                treatments (*)
+            )
+        `)
+        .ilike('city', cityName)
+        .order('tier', { ascending: false })
+        .order('created_at', { ascending: false });
+
+    if (error || !clinicsData || clinicsData.length === 0) {
+        notFound();
+    }
+
+    const cityClinics = clinicsData.map(clinic => ({
+        ...clinic,
+        treatments: clinic.clinic_treatments?.map((ct: any) => ct.treatments).filter(Boolean) || []
+    }));
 
     // Get treatments available in this city for cross-linking
     const cityTreatments = Array.from(new Set(
-        cityClinics.flatMap(c => c.treatments?.map(t => ({ id: t.id, name: t.name, slug: t.slug })) || [])
-    )).filter((v, i, a) => v && a.findIndex(t => t.id === v.id) === i);
+        cityClinics.flatMap(c => c.treatments?.map((t: any) => ({ id: t.id, name: t.name, slug: t.slug })) || [])
+    )).filter((v, i, a) => v && a.findIndex((t: any) => t.id === (v as any).id) === i);
 
     const schemas = [
         buildBreadcrumbSchema([

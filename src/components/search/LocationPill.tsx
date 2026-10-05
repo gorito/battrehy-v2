@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { MapPin, ChevronDown, Check } from 'lucide-react';
 
 interface LocationPillProps {
@@ -11,6 +11,7 @@ interface LocationPillProps {
 
 export default function LocationPill({ initialCity, isLocalEmpty }: LocationPillProps) {
     const router = useRouter();
+    const searchParams = useSearchParams();
     const [city, setCity] = useState(initialCity);
     const [isOpen, setIsOpen] = useState(false);
     const [inputValue, setInputValue] = useState('');
@@ -24,12 +25,14 @@ export default function LocationPill({ initialCity, isLocalEmpty }: LocationPill
     // Handle local storage override on mount
     useEffect(() => {
         const storedCity = localStorage.getItem('battrehy_city_preference');
-        // If there's a stored city and it doesn't match the current URL/detected city
-        // AND the user hasn't actively cleared it, we should navigate to it
-        if (storedCity && storedCity !== initialCity) {
-            router.push(`/sok?city=${encodeURIComponent(storedCity)}`);
+        // Only redirect if no explicit city is set in URL and storedCity differs from detected initialCity
+        const urlCity = searchParams.get('city');
+        if (storedCity && !urlCity && storedCity !== initialCity) {
+            const params = new URLSearchParams(searchParams.toString());
+            params.set('city', storedCity);
+            router.push(`/sok?${params.toString()}`);
         }
-    }, [initialCity, router]);
+    }, [initialCity, router, searchParams]);
 
     // Close dropdown on click outside
     useEffect(() => {
@@ -48,14 +51,19 @@ export default function LocationPill({ initialCity, isLocalEmpty }: LocationPill
         if (newCity) {
             localStorage.setItem('battrehy_city_preference', newCity);
             setIsOpen(false);
-            router.push(`/sok?city=${encodeURIComponent(newCity)}`);
+            const params = new URLSearchParams(searchParams.toString());
+            params.set('city', newCity);
+            router.push(`/sok?${params.toString()}`);
         }
     };
 
     const handleClear = () => {
         localStorage.removeItem('battrehy_city_preference');
         setIsOpen(false);
-        router.push('/sok');
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete('city');
+        const qs = params.toString();
+        router.push(qs ? `/sok?${qs}` : '/sok');
     };
 
     let message = '';
