@@ -15,6 +15,7 @@ export async function createClinicAction(formData: FormData) {
   const correctedCity = getCorrectedCity(name, city);
     const address = (formData.get('address') as string)?.trim();
     const phone = (formData.get('phone') as string)?.trim();
+    const email = (formData.get('email') as string)?.trim() || null;
     const website = (formData.get('website') as string)?.trim();
     const booking_url = (formData.get('booking_url') as string)?.trim();
     const description = (formData.get('description') as string)?.trim();
@@ -34,6 +35,7 @@ export async function createClinicAction(formData: FormData) {
             city: correctedCity,
             address,
             phone,
+            email,
             website,
             booking_url,
             description,
@@ -113,6 +115,7 @@ export async function updateClinicAction(formData: FormData) {
   const correctedCity = getCorrectedCity(name, city);
     const address = (formData.get('address') as string)?.trim();
     const phone = (formData.get('phone') as string)?.trim();
+    const email = (formData.get('email') as string)?.trim() || null;
     const website = (formData.get('website') as string)?.trim();
     const booking_url = (formData.get('booking_url') as string)?.trim();
     const description = (formData.get('description') as string)?.trim();
@@ -143,6 +146,7 @@ export async function updateClinicAction(formData: FormData) {
             city: correctedCity,
             address,
             phone,
+            email,
             website,
             booking_url,
             description,

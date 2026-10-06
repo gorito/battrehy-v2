@@ -174,7 +174,7 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1',
                     />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">Adress</label>
                         <input
@@ -190,6 +190,16 @@ export default function EditClinicForm({ clinic, uniqueCities, returnPage = '1',
                             name="phone"
                             type="text"
                             defaultValue={clinic.phone || ''}
+                            className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">E-post</label>
+                        <input
+                            name="email"
+                            type="email"
+                            defaultValue={clinic.email || ''}
+                            placeholder="info@klinik.se"
                             className="w-full border border-gray-300 rounded-lg p-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-rose-500"
                         />
                     </div>
