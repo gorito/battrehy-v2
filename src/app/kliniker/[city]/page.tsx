@@ -157,7 +157,7 @@ export default async function CityPage({ params }: Props) {
                         Skönhetskliniker i {cityName}
                     </h1>
                     <p className="text-lg text-gray-600 leading-relaxed max-w-3xl">
-                        {city.description || `Hitta och jämför Sveriges bästa skönhetskliniker i ${cityName}. Här listar vi certifierade kliniker som erbjuder professionella estetiska behandlingar med fokus på kvalitet och säkerhet.`}
+                        {cityDescription || `Hitta och jämför Sveriges bästa skönhetskliniker i ${cityName}. Här listar vi certifierade kliniker som erbjuder professionella estetiska behandlingar med fokus på kvalitet och säkerhet.`}
                     </p>
                 </div>
 
